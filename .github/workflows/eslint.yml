@@ -1,4 +1,4 @@
-name: CI
+name: Run ESLint
 on: push
 jobs:
   build:
