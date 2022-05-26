@@ -1,5 +1,6 @@
 import React, { Dispatch, SetStateAction } from "react";
-import { BrandH1, MainDiv } from "./styled";
+import { BrandH1, Button, MainDiv } from "./styled";
+import themes from "../../themes/schema.json";
 
 interface Props {
   setSelectedTheme: Dispatch<
@@ -31,9 +32,18 @@ interface Props {
 }
 
 const Navbar: React.FC<Props> = ({ setSelectedTheme, selectedTheme }) => {
+  type voidFunc = () => void;
+  const handleClick: voidFunc = () => {
+    setSelectedTheme(
+      selectedTheme.name === "dark" ? themes.data.light : themes.data.dark
+    );
+  };
   return (
     <MainDiv>
       <BrandH1>Mohio</BrandH1>
+      <Button onClick={handleClick}>
+        {selectedTheme.name === "light" ? "Dark" : "Light"}
+      </Button>
     </MainDiv>
   );
 };
