@@ -1,6 +1,17 @@
-import React, { Dispatch, SetStateAction } from "react";
-import { BrandH1, Button, MainDiv } from "./styled";
+import React, { Dispatch, SetStateAction, useState } from "react";
+import MenuIcon from "@mui/icons-material/Menu";
+import {
+  BrandH1,
+  Button,
+  ButtonsDiv,
+  ContainerStyled,
+  LinkButton,
+  MainDiv,
+  MenuButton,
+  MobileMainDiv,
+} from "./styled";
 import themes from "../../themes/schema.json";
+import { Container } from "../Container";
 
 type Theme = {
   name: string;
@@ -21,20 +32,59 @@ interface Props {
 }
 
 const Navbar: React.FC<Props> = ({ setSelectedTheme, selectedTheme }) => {
+  const [displayMenu, setDisplayMenu] = useState(false);
+
   type voidFunc = () => void;
+
+  const toggleMenu: voidFunc = () => {
+    setDisplayMenu(!displayMenu);
+  };
+
   const handleClick: voidFunc = () => {
     const theme: Theme =
       selectedTheme.name === "dark" ? themes.data.light : themes.data.dark;
     setSelectedTheme(theme);
     localStorage.setItem("theme", JSON.stringify(theme));
   };
+
   return (
-    <MainDiv>
-      <BrandH1>Mohio</BrandH1>
-      <Button onClick={handleClick}>
-        {selectedTheme.name === "light" ? "Dark" : "Light"}
-      </Button>
-    </MainDiv>
+    <>
+      <MainDiv>
+        <Container style={{ display: "flex", justifyContent: "space-between" }}>
+          <BrandH1>Mohio</BrandH1>
+          <ButtonsDiv>
+            <Button onClick={handleClick}>
+              {selectedTheme.name === "light" ? "Dark" : "Light"}
+            </Button>
+            <LinkButton to="/login">Login</LinkButton>
+            <LinkButton to="/register">Register</LinkButton>
+          </ButtonsDiv>
+        </Container>
+      </MainDiv>
+      <MobileMainDiv>
+        <Container
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <BrandH1>Mohio</BrandH1>
+          <MenuButton onClick={toggleMenu}>
+            <MenuIcon />
+          </MenuButton>
+        </Container>
+        {displayMenu && (
+          <ContainerStyled>
+            <Button onClick={handleClick}>
+              {selectedTheme.name === "light" ? "Dark" : "Light"}
+            </Button>
+            <LinkButton to="/login">Login</LinkButton>
+            <LinkButton to="/register">Register</LinkButton>
+          </ContainerStyled>
+        )}
+      </MobileMainDiv>
+    </>
   );
 };
 
