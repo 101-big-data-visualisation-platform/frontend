@@ -7,8 +7,10 @@ declare module "styled-components" {
     name: string;
     colors: {
       primary: string;
+      primary2: string;
       primaryHover: string;
       secondary: string;
+      secondary2: string;
       secondaryHover: string;
       tertiary: string;
       tertiary2: string;

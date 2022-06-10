@@ -3,25 +3,29 @@
     "light": {
       "name": "light",
       "colors": {
-        "primary": "white",
+        "primary": "#F8F8F8",
+        "primary2": "white",
         "primaryHover": "#cfcfcf",
-        "secondary": "black",
+        "secondary": "#252525",
+        "secondary2": "black",
         "secondaryHover": "#575757",
-        "tertiary": "#8000FF",
-        "tertiary2": "#9830ff",
-        "tertiary3": "#7100E2"
+        "tertiary": "#0036F6",
+        "tertiary2": "#0036F6",
+        "tertiary3": "#0036F6"
       }
     },
     "dark": {
       "name": "dark",
       "colors": {
-        "primary": "black",
+        "primary": "#252525",
+        "primary2": "black",
         "primaryHover": "#575757",
-        "secondary": "white",
+        "secondary": "#F8F8F8",
+        "secondary2": "white",
         "secondaryHover": "#cfcfcf",
-        "tertiary": "#ae5cff",
-        "tertiary2": "#9830ff",
-        "tertiary3": "#944ddb"
+        "tertiary": "#0036F6",
+        "tertiary2": "#0036F6",
+        "tertiary3": "#0036F6"
       }
     }
   }
