@@ -86,11 +86,29 @@ export const ButtonsDiv = styled("div")`
     margin-left: 10px;
   }
 `;
-
+export const PageLink = styled(Link)`
+  font-size: 1.3rem;
+  color: ${({ theme }) => theme.colors.secondary};
+  transition: 300ms;
+  text-decoration: none;
+  &:hover {
+    color: ${({ theme }) => theme.colors.secondaryHover};
+  }
+`;
 export const ContainerStyled = styled(Container)`
   display: flex;
   flex-direction: column;
-  ${Button},${LinkButton} {
+  ${Button},${LinkButton},${PageLink} {
     margin-bottom: 10px;
+  }
+`;
+export const PagesDiv = styled("div")`
+  display: flex;
+  align-items: center;
+  ${BrandH1} {
+    margin-right: 50px;
+  }
+  ${PageLink} {
+    margin-right: 20px;
   }
 `;

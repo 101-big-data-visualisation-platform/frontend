@@ -1,5 +1,6 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
 import {
   BrandH1,
   Button,
@@ -9,6 +10,8 @@ import {
   MainDiv,
   MenuButton,
   MobileMainDiv,
+  PageLink,
+  PagesDiv,
 } from "./styled";
 import themes from "../../themes/schema.json";
 import { Container } from "../Container";
@@ -17,8 +20,10 @@ type Theme = {
   name: string;
   colors: {
     primary: string;
+    primary2: string;
     primaryHover: string;
     secondary: string;
+    secondary2: string;
     secondaryHover: string;
     tertiary: string;
     tertiary2: string;
@@ -51,7 +56,11 @@ const Navbar: React.FC<Props> = ({ setSelectedTheme, selectedTheme }) => {
     <>
       <MainDiv>
         <Container style={{ display: "flex", justifyContent: "space-between" }}>
-          <BrandH1>Mohio</BrandH1>
+          <PagesDiv>
+            <BrandH1>Mohio</BrandH1>
+            <PageLink to="/">Home</PageLink>
+            <PageLink to="/dashboard">Dashboard</PageLink>
+          </PagesDiv>
           <ButtonsDiv>
             <Button onClick={handleClick}>
               {selectedTheme.name === "light" ? "Dark" : "Light"}
@@ -71,11 +80,13 @@ const Navbar: React.FC<Props> = ({ setSelectedTheme, selectedTheme }) => {
         >
           <BrandH1>Mohio</BrandH1>
           <MenuButton onClick={toggleMenu}>
-            <MenuIcon />
+            {displayMenu ? <CloseIcon /> : <MenuIcon />}
           </MenuButton>
         </Container>
         {displayMenu && (
           <ContainerStyled>
+            <PageLink to="/">Home</PageLink>
+            <PageLink to="/dashboard">Dashboard</PageLink>
             <Button onClick={handleClick}>
               {selectedTheme.name === "light" ? "Dark" : "Light"}
             </Button>
