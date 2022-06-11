@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const SVG = styled("svg")`
-  width: 70%;
+  width: 80%;
   height: auto;
   position: absolute;
   right: 0;
