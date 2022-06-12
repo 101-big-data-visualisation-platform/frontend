@@ -20,7 +20,7 @@ import {
   SubHeading,
 } from "./styled";
 
-const Home = () => {
+const Home: React.FC = () => {
   const theme = useContext(ThemeContext);
   return (
     <MainDiv>
