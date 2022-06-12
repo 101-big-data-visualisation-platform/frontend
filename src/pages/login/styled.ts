@@ -69,7 +69,7 @@ export const StyledDiv2 = styled("div")`
 `;
 
 export const StyledDiv1 = styled("div")`
-  width: 100vw;
+  width: 98vw;
   height: calc(100vh - ${navbarHeight});
   display: flex;
   align-items: center;
