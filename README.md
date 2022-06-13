@@ -1,3 +1,6 @@
+# Deployed on AWS S3 Bucket via CodePipeline CI/CD from this repository
+http://101-frontend.s3-website-ap-southeast-2.amazonaws.com/
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
