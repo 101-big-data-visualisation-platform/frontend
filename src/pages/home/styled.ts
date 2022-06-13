@@ -3,8 +3,8 @@ import styled from "styled-components";
 import AssessmentIcon from "@mui/icons-material/Assessment";
 import SpeedIcon from "@mui/icons-material/Speed";
 import QueryBuilderIcon from "@mui/icons-material/QueryBuilder";
+import { navbarHeight } from "../../constants";
 
-const navbarHeight: string = "79.88px";
 const breakpoint1: string = "1000px";
 const breakpoint2: string = "500px";
 
