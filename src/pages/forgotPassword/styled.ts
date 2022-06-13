@@ -3,9 +3,13 @@ import styled from "styled-components";
 import { navbarHeight } from "../../constants";
 
 const breakpoint1: string = "400px";
+const breakpoint2: string = "800px";
 
 export const StyledDiv2 = styled("div")`
   width: 700px;
+  @media (max-width: ${breakpoint2}) {
+    width: 100%;
+  }
 `;
 export const StyledDiv1 = styled("div")`
   width: 100%;
