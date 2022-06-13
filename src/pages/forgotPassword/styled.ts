@@ -4,6 +4,9 @@ import { navbarHeight } from "../../constants";
 
 const breakpoint1: string = "400px";
 
+export const StyledDiv2 = styled("div")`
+  width: 700px;
+`;
 export const StyledDiv1 = styled("div")`
   width: 100%;
   height: calc(100vh - ${navbarHeight});
