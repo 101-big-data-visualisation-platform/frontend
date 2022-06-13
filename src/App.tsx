@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import Navbar from "./components/Navbar";
 import Dashboard from "./pages/dashboard";
+import ForgotPassword from "./pages/forgotPassword";
 import Home from "./pages/home";
 import Login from "./pages/login";
 import Register from "./pages/register";
@@ -24,6 +25,7 @@ const App = () => {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/forgotpassword" element={<ForgotPassword />} />
       </Routes>
     </ThemeProvider>
   );
