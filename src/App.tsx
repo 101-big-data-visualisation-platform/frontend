@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar";
 import Dashboard from "./pages/dashboard";
 import Home from "./pages/home";
 import Login from "./pages/login";
+import Register from "./pages/register";
 import { GlobalStyles } from "./themes/globalStyles";
 import themes from "./themes/schema.json";
 const App = () => {
@@ -22,6 +23,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
     </ThemeProvider>
   );
