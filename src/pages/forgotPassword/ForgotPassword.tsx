@@ -86,14 +86,14 @@ const ForgotPassword: React.FC = () => {
                 {errorSubmitting && (
                   <Alert severity="error">
                     <AlertTitle>Error</AlertTitle>
-                    You were unable to log in due to an incorrect combination of
-                    username and password.
+                    The email provided has not been registered.
                   </Alert>
                 )}
                 {isSubmitting && (
                   <Alert severity="info">
-                    <AlertTitle>Logging In</AlertTitle>
-                    We are verifying your credentials.
+                    <AlertTitle>Sending</AlertTitle>
+                    We are trying to send your old password to your registered
+                    email.
                     <LinearProgress
                       color="primary"
                       style={{
@@ -105,7 +105,7 @@ const ForgotPassword: React.FC = () => {
                 {submitted && (
                   <Alert severity="success">
                     <AlertTitle>Success</AlertTitle>
-                    Credentials successfully verified.
+                    Your password has successfully been sent to {values.email}
                   </Alert>
                 )}
               </form>
