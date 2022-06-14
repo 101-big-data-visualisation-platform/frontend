@@ -5,6 +5,7 @@
       "colors": {
         "primary": "#F8F8F8",
         "primary2": "white",
+        "primary3": "#c7c7c7",
         "primaryHover": "#cfcfcf",
         "secondary": "#252525",
         "secondary2": "black",
@@ -19,6 +20,7 @@
       "colors": {
         "primary": "#252525",
         "primary2": "black",
+        "primary3": "#666666",
         "primaryHover": "#575757",
         "secondary": "#F8F8F8",
         "secondary2": "white",

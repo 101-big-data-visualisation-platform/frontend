@@ -21,6 +21,7 @@ type Theme = {
   colors: {
     primary: string;
     primary2: string;
+    primary3: string;
     primaryHover: string;
     secondary: string;
     secondary2: string;

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Line } from "react-chartjs-2";
 import {
   Chart as Chartjs,
@@ -6,39 +6,53 @@ import {
   ChartOptions,
   ChartData,
 } from "chart.js";
-import { getData } from "../../api/dashboard";
+import { getBatteryData, getTankData } from "../../api/dashboard";
 import zoomPlugin from "chartjs-plugin-zoom";
 import "chartjs-adapter-moment";
+import { Container } from "../../components/Container";
+import { ThemeContext } from "styled-components";
 Chartjs.register(...registerables);
 Chartjs.register(zoomPlugin);
 
 const Dashboard: React.FC = () => {
   const chartRef = useRef(this);
+  const theme = useContext(ThemeContext);
   const [data, setData] = useState<ChartData<"line">>({
     datasets: [],
   });
   const getData1 = async () => {
-    const dataArray: [] = await getData();
+    const dataArray1: [] = await getBatteryData();
+    const dataArray2: [] = await getTankData();
     setData({
       datasets: [
         {
-          data: dataArray,
-          label: "Dataset 1",
+          data: dataArray1,
+          label: "Battery",
           backgroundColor: "blue",
           borderColor: "blue",
+          yAxisID: "y",
+        },
+        {
+          data: dataArray2,
+          label: "Tank",
+          backgroundColor: "red",
+          borderColor: "red",
+          yAxisID: "y1",
         },
       ],
     });
   };
+
   useEffect(() => {
     getData1();
   }, []);
-  const options: ChartOptions<"line"> = {
+  const options1: ChartOptions<"line"> = {
     elements: {
       line: {
         tension: 0,
       },
     },
+    responsive: true,
     animation: false,
     parsing: false,
     scales: {
@@ -47,12 +61,45 @@ const Dashboard: React.FC = () => {
         title: {
           text: "time",
           display: true,
+          color: theme.colors.secondary,
+        },
+        grid: {
+          color: theme.colors.primary3,
+        },
+        ticks: {
+          color: theme.colors.secondary,
         },
       },
       y: {
+        type: "linear",
+        display: true,
+        position: "left",
         title: {
-          text: "value",
+          text: "Battery Level",
           display: true,
+          color: theme.colors.secondary,
+        },
+        grid: {
+          color: theme.colors.primary3,
+        },
+        ticks: {
+          color: theme.colors.secondary,
+        },
+      },
+      y1: {
+        type: "linear",
+        display: true,
+        position: "right",
+        title: {
+          text: "Tank Level",
+          display: true,
+          color: theme.colors.secondary,
+        },
+        grid: {
+          color: theme.colors.primary3,
+        },
+        ticks: {
+          color: theme.colors.secondary,
         },
       },
     },
@@ -63,7 +110,8 @@ const Dashboard: React.FC = () => {
     plugins: {
       title: {
         display: true,
-        text: "Graph Title",
+        text: "Battery Data VS Tank Data",
+        color: theme.colors.secondary,
         font: {
           size: 30,
         },
@@ -100,12 +148,12 @@ const Dashboard: React.FC = () => {
       },
     },
   };
+
   return (
-    <>
+    <Container>
       <h1>Dashboard</h1>
-      <p>{JSON.stringify(data)}</p>
-      <Line data={data} options={options} ref={chartRef} />
-    </>
+      <Line data={data} options={options1} ref={chartRef} />
+    </Container>
   );
 };
 
