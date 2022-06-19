@@ -11,8 +11,15 @@ import zoomPlugin from "chartjs-plugin-zoom";
 import "chartjs-adapter-moment";
 import { Container } from "../../components/Container";
 import { ThemeContext } from "styled-components";
+import Switch from "@mui/material/Switch";
+import { StyledDiv1 } from "./styled";
 Chartjs.register(...registerables);
 Chartjs.register(zoomPlugin);
+
+let arrayOfGraphs: number[] = [];
+for (let i = 0; i < 9; i++) {
+  arrayOfGraphs.push(i);
+}
 
 const Dashboard: React.FC = () => {
   const chartRef = useRef(this);
@@ -103,23 +110,19 @@ const Dashboard: React.FC = () => {
         },
       },
     },
-    interaction: {
-      intersect: false,
-      mode: "index",
-    },
     plugins: {
       title: {
         display: true,
         text: "Battery Data VS Tank Data",
         color: theme.colors.secondary,
         font: {
-          size: 30,
+          size: 20,
         },
       },
       decimation: {
         enabled: true,
         algorithm: "lttb",
-        samples: 3500,
+        samples: 300,
       },
       zoom: {
         zoom: {
@@ -152,7 +155,40 @@ const Dashboard: React.FC = () => {
   return (
     <Container>
       <h1>Dashboard</h1>
-      <Line data={data} options={options1} ref={chartRef} />
+      {data.datasets.map((dataset) => {
+        console.log(dataset);
+        return (
+          <>
+            <p>{dataset.label}</p>
+            <Switch
+              defaultChecked={true}
+              onChange={(evt) => {
+                setData({
+                  datasets: data.datasets.map((datasetObj) => {
+                    if (datasetObj.label === dataset.label) {
+                      return {
+                        ...datasetObj,
+                        hidden: !evt.target.checked,
+                      };
+                    } else {
+                      return {
+                        ...datasetObj,
+                      };
+                    }
+                  }),
+                });
+              }}
+            />
+          </>
+        );
+      })}
+      <div style={{ display: "flex", flexWrap: "wrap" }}>
+        {arrayOfGraphs.map(() => (
+          <StyledDiv1>
+            <Line data={data} options={options1} ref={chartRef} />
+          </StyledDiv1>
+        ))}
+      </div>
     </Container>
   );
 };
