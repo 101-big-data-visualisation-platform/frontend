@@ -6,7 +6,7 @@ import {
   ChartOptions,
   ChartData,
 } from "chart.js";
-import { getBatteryData, getTankData } from "../../api/dashboard";
+import { getWeatherData } from "../../api/dashboard";
 import zoomPlugin from "chartjs-plugin-zoom";
 import "chartjs-adapter-moment";
 import { Container } from "../../components/Container";
@@ -28,23 +28,29 @@ const Dashboard: React.FC = () => {
     datasets: [],
   });
   const getData1 = async () => {
-    const dataArray1: [] = await getBatteryData();
-    const dataArray2: [] = await getTankData();
+    const dataObj = await getWeatherData("IALBAN25", 15000000000000);
+    console.log(dataObj);
+    const itemsArray: [] = dataObj.Items;
+    type Item = {
+      timeStamp: string;
+      inTemp: string;
+    };
+    console.log(itemsArray);
+    const processedItems = itemsArray.map((item: Item) => {
+      return {
+        x: parseInt(item.timeStamp),
+        y: parseFloat(item.inTemp),
+      };
+    });
+    console.log(dataObj);
     setData({
       datasets: [
         {
-          data: dataArray1,
-          label: "Battery",
+          data: processedItems,
+          label: "Temp",
           backgroundColor: "blue",
           borderColor: "blue",
           yAxisID: "y",
-        },
-        {
-          data: dataArray2,
-          label: "Tank",
-          backgroundColor: "red",
-          borderColor: "red",
-          yAxisID: "y1",
         },
       ],
     });
@@ -82,23 +88,7 @@ const Dashboard: React.FC = () => {
         display: true,
         position: "left",
         title: {
-          text: "Battery Level",
-          display: true,
-          color: theme.colors.secondary,
-        },
-        grid: {
-          color: theme.colors.primary3,
-        },
-        ticks: {
-          color: theme.colors.secondary,
-        },
-      },
-      y1: {
-        type: "linear",
-        display: true,
-        position: "right",
-        title: {
-          text: "Tank Level",
+          text: "Temperature Data",
           display: true,
           color: theme.colors.secondary,
         },
@@ -113,7 +103,7 @@ const Dashboard: React.FC = () => {
     plugins: {
       title: {
         display: true,
-        text: "Battery Data VS Tank Data",
+        text: "Temperature Data",
         color: theme.colors.secondary,
         font: {
           size: 20,
