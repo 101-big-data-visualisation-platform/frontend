@@ -99,7 +99,7 @@ const Register: React.FC = () => {
               }}
               onSubmit={async (values, { setSubmitting }): Promise<void> => {
                 setLoggedIn(false);
-
+                setRegisterError(false);
                 try {
                   const { user } = await Auth.signUp({
                     username: values.username,
