@@ -25,6 +25,8 @@ import { Alert, AlertTitle, LinearProgress } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { Auth } from "aws-amplify";
+import { Link } from "react-router-dom";
 
 const Register: React.FC = () => {
   const theme = useContext(ThemeContext);
@@ -93,14 +95,25 @@ const Register: React.FC = () => {
                   return {};
                 }
               }}
-              onSubmit={(values, { setSubmitting }): void => {
+              onSubmit={async (values, { setSubmitting }): Promise<void> => {
                 setLoggedIn(false);
-                setTimeout(() => {
-                  alert(JSON.stringify(values, null, 2));
+
+                try {
+                  const { user } = await Auth.signUp({
+                    username: values.username,
+                    password: values.password,
+                    attributes: {
+                      email: values.email, // optional
+                    },
+                  });
+                  alert(JSON.stringify(user, null, 2));
                   setRegisterError(false);
                   setSubmitting(false);
                   setLoggedIn(true);
-                }, 400);
+                } catch (error) {
+                  setRegisterError(true);
+                  setSubmitting(false);
+                }
               }}
             >
               {({
@@ -210,8 +223,9 @@ const Register: React.FC = () => {
                   {loggedIn && (
                     <Alert severity="success">
                       <AlertTitle>Success</AlertTitle>
-                      Credentials successfully registered. You have been logged
-                      in.
+                      You must now verify your account from your email. Click{" "}
+                      <Link to="/verify">here</Link> to be redirected to the
+                      verification page.
                     </Alert>
                   )}
                 </StyledForm>
