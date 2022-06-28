@@ -83,6 +83,8 @@ const Register: React.FC = () => {
                 }
                 if (!values.password) {
                   errors.password = "Required";
+                } else if(values.password.length < 8) {
+                  errors.password = "Must be at least 8 characters long."
                 }
 
                 if (
@@ -204,8 +206,8 @@ const Register: React.FC = () => {
                   {registerError && (
                     <Alert severity="error">
                       <AlertTitle>Error</AlertTitle>
-                      You were unable to register because this username and
-                      email were already taken.
+                      You were unable to register either because this username and
+                      email were already taken, or your password is not strong enough.
                     </Alert>
                   )}
                   {isSubmitting && (
