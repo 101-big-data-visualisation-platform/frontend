@@ -66,35 +66,39 @@ const Verify: React.FC = () => {
         }) => (
           <>
             <form onSubmit={handleSubmit} style={{ marginBottom: "10px" }}>
-              <span style={{ color: "orange" }}>
-                {errors.username && touched.username && errors.username}
-              </span>
-              <StyledInput
-                type="text"
-                placeholder="enter username"
-                value={values.username}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                name="username"
-              />
-              <span style={{ color: "orange" }}>
-                {errors.code && touched.code && errors.code}
-              </span>
-              <StyledInput
-                type="text"
-                placeholder="enter code from email"
-                value={values.code}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                name="code"
-              />
+              <h1>Verify Account</h1>
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <span style={{ color: "orange" }}>
+                  {errors.username && touched.username && errors.username}
+                </span>
+                <StyledInput
+                  type="text"
+                  placeholder="enter username"
+                  value={values.username}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  name="username"
+                />
+                <span style={{ color: "orange" }}>
+                  {errors.code && touched.code && errors.code}
+                </span>
+                <StyledInput
+                  type="text"
+                  placeholder="enter code from email"
+                  value={values.code}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  name="code"
+                />
+              </div>
+
               <SendButton type="submit" disabled={isSubmitting}>
-                Send
+                Verify
               </SendButton>
               {errorSubmitting && (
                 <Alert severity="error">
                   <AlertTitle>Error</AlertTitle>
-                  Invalid code or email provided. You may try again.
+                  Invalid code or username provided. You may try again.
                 </Alert>
               )}
               {isSubmitting && (

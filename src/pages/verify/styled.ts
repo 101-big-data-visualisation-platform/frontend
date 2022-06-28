@@ -37,7 +37,7 @@ export const SendButton = styled("button")`
   border: none;
   transition: 300ms;
   height: 40px;
-  margin-left: 10px;
+  margin-bottom: 20px;
   cursor: pointer;
   &:hover {
     background: ${({ theme }) => theme.colors.tertiary};

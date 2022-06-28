@@ -19,6 +19,7 @@ import {
   StyledIconButton,
   StyledInput,
   StyledP,
+  StyledLink,
 } from "./styled";
 import { Formik } from "formik";
 import { Alert, AlertTitle, LinearProgress } from "@mui/material";
@@ -83,8 +84,8 @@ const Register: React.FC = () => {
                 }
                 if (!values.password) {
                   errors.password = "Required";
-                } else if(values.password.length < 8) {
-                  errors.password = "Must be at least 8 characters long."
+                } else if (values.password.length < 8) {
+                  errors.password = "Must be at least 8 characters long.";
                 }
 
                 if (
@@ -203,11 +204,14 @@ const Register: React.FC = () => {
                       Register
                     </RegisterButton>
                   </StyledDiv6>
+                  <div style={{ marginBottom: "20px" }}>
+                    <StyledLink to="/verify">Verify Account</StyledLink>
+                  </div>
                   {registerError && (
                     <Alert severity="error">
                       <AlertTitle>Error</AlertTitle>
-                      You were unable to register either because this username and
-                      email were already taken, or your password is not strong enough.
+                      You were unable to register because this username and
+                      email were already taken.
                     </Alert>
                   )}
                   {isSubmitting && (
