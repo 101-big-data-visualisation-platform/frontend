@@ -43,12 +43,6 @@ const LineGraph = ({ data, options, dataSelector }: LineGraphProps) => {
     const itemsArray: [] = dataObj.items;
     type Item = {
       timeStamp: string;
-      inTemp: string;
-      absBaro: string;
-      dailyRain: string;
-      deviceID: string;
-      dewPoint: string;
-      inHumi: string;
     };
     interface IItem {
       [key: string]: string;
@@ -140,6 +134,7 @@ const LineGraph = ({ data, options, dataSelector }: LineGraphProps) => {
           },
           drag: {
             enabled: true,
+            backgroundColor: theme.colors.primary2,
           },
           mode: "x",
         },

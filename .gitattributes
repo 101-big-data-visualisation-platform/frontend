@@ -1,1 +1,1 @@
-*.json filter=lfs diff=lfs merge=lfs -text
+lambda-results-full-300.json filter=lfs diff=lfs merge=lfs -text
