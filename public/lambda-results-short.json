@@ -1,0 +1,634 @@
+{
+    "items": [
+        {
+            "timeStamp": "1587034571000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.2",
+            "dailyRain": "02.4",
+            "dewPoint": "016.4",
+            "inHumi": "075",
+            "inTemp": "019.9"
+        },
+        {
+            "timeStamp": "1587034587000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.2",
+            "dailyRain": "02.4",
+            "dewPoint": "016.2",
+            "inHumi": "075",
+            "inTemp": "019.9"
+        },
+        {
+            "timeStamp": "1587034603000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.3",
+            "dailyRain": "02.4",
+            "dewPoint": "016.4",
+            "inHumi": "075",
+            "inTemp": "019.9"
+        },
+        {
+            "timeStamp": "1587034620000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.3",
+            "dailyRain": "02.4",
+            "dewPoint": "016.4",
+            "inHumi": "075",
+            "inTemp": "019.9"
+        },
+        {
+            "timeStamp": "1587034636000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.3",
+            "dailyRain": "02.4",
+            "dewPoint": "016.4",
+            "inHumi": "075",
+            "inTemp": "019.9"
+        },
+        {
+            "timeStamp": "1587034652000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.3",
+            "dailyRain": "02.4",
+            "dewPoint": "016.4",
+            "inHumi": "075",
+            "inTemp": "019.9"
+        },
+        {
+            "timeStamp": "1587034663000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.0",
+            "dailyRain": "02.4",
+            "dewPoint": "016.4",
+            "inHumi": "075",
+            "inTemp": "020.0"
+        },
+        {
+            "timeStamp": "1587034668000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.0",
+            "dailyRain": "02.4",
+            "dewPoint": "016.4",
+            "inHumi": "075",
+            "inTemp": "020.0"
+        },
+        {
+            "timeStamp": "1587034684000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.0",
+            "dailyRain": "02.4",
+            "dewPoint": "016.4",
+            "inHumi": "075",
+            "inTemp": "020.0"
+        },
+        {
+            "timeStamp": "1587034699000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.0",
+            "dailyRain": "02.4",
+            "dewPoint": "016.4",
+            "inHumi": "075",
+            "inTemp": "020.0"
+        },
+        {
+            "timeStamp": "1587034716000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.0",
+            "dailyRain": "02.4",
+            "dewPoint": "016.6",
+            "inHumi": "075",
+            "inTemp": "020.0"
+        },
+        {
+            "timeStamp": "1587034724000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.0",
+            "dailyRain": "02.4",
+            "dewPoint": "016.6",
+            "inHumi": "075",
+            "inTemp": "020.0"
+        },
+        {
+            "timeStamp": "1587034732000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.0",
+            "dailyRain": "02.4",
+            "dewPoint": "016.5",
+            "inHumi": "075",
+            "inTemp": "020.0"
+        },
+        {
+            "timeStamp": "1587034748000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.0",
+            "dailyRain": "02.4",
+            "dewPoint": "016.7",
+            "inHumi": "075",
+            "inTemp": "020.0"
+        },
+        {
+            "timeStamp": "1587034764000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.0",
+            "dailyRain": "02.4",
+            "dewPoint": "016.7",
+            "inHumi": "075",
+            "inTemp": "020.0"
+        },
+        {
+            "timeStamp": "1587034780000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.0",
+            "dailyRain": "02.4",
+            "dewPoint": "016.5",
+            "inHumi": "075",
+            "inTemp": "020.0"
+        },
+        {
+            "timeStamp": "1587034783000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.2",
+            "dailyRain": "02.4",
+            "dewPoint": "016.5",
+            "inHumi": "075",
+            "inTemp": "020.0"
+        },
+        {
+            "timeStamp": "1587034811000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.2",
+            "dailyRain": "00.0",
+            "dewPoint": "016.7",
+            "inHumi": "075",
+            "inTemp": "020.0"
+        },
+        {
+            "timeStamp": "1587034828000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.2",
+            "dailyRain": "00.0",
+            "dewPoint": "016.5",
+            "inHumi": "075",
+            "inTemp": "020.0"
+        },
+        {
+            "timeStamp": "1587034843000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.2",
+            "dailyRain": "00.0",
+            "dewPoint": "016.5",
+            "inHumi": "075",
+            "inTemp": "020.0"
+        },
+        {
+            "timeStamp": "1587034860000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.1",
+            "dailyRain": "00.0",
+            "dewPoint": "016.5",
+            "inHumi": "075",
+            "inTemp": "020.0"
+        },
+        {
+            "timeStamp": "1587034875000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.1",
+            "dailyRain": "00.0",
+            "dewPoint": "016.5",
+            "inHumi": "075",
+            "inTemp": "020.0"
+        },
+        {
+            "timeStamp": "1587034891000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.1",
+            "dailyRain": "00.0",
+            "dewPoint": "016.7",
+            "inHumi": "075",
+            "inTemp": "020.0"
+        },
+        {
+            "timeStamp": "1587034904000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.2",
+            "dailyRain": "00.0",
+            "dewPoint": "016.7",
+            "inHumi": "075",
+            "inTemp": "020.0"
+        },
+        {
+            "timeStamp": "1587034907000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.2",
+            "dailyRain": "00.0",
+            "dewPoint": "016.7",
+            "inHumi": "075",
+            "inTemp": "020.0"
+        },
+        {
+            "timeStamp": "1587034923000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.2",
+            "dailyRain": "00.0",
+            "dewPoint": "016.7",
+            "inHumi": "075",
+            "inTemp": "020.0"
+        },
+        {
+            "timeStamp": "1587034940000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.2",
+            "dailyRain": "00.0",
+            "dewPoint": "016.5",
+            "inHumi": "075",
+            "inTemp": "020.0"
+        },
+        {
+            "timeStamp": "1587034955000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.2",
+            "dailyRain": "00.0",
+            "dewPoint": "016.7",
+            "inHumi": "075",
+            "inTemp": "020.0"
+        },
+        {
+            "timeStamp": "1587034964000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.6",
+            "dailyRain": "00.0",
+            "dewPoint": "016.7",
+            "inHumi": "075",
+            "inTemp": "020.0"
+        },
+        {
+            "timeStamp": "1587034971000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.6",
+            "dailyRain": "00.0",
+            "dewPoint": "016.8",
+            "inHumi": "075",
+            "inTemp": "020.0"
+        },
+        {
+            "timeStamp": "1587034987000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.6",
+            "dailyRain": "00.0",
+            "dewPoint": "016.6",
+            "inHumi": "075",
+            "inTemp": "020.0"
+        },
+        {
+            "timeStamp": "1587035003000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.6",
+            "dailyRain": "00.0",
+            "dewPoint": "016.6",
+            "inHumi": "075",
+            "inTemp": "020.0"
+        },
+        {
+            "timeStamp": "1587035020000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.6",
+            "dailyRain": "00.0",
+            "dewPoint": "016.6",
+            "inHumi": "075",
+            "inTemp": "020.0"
+        },
+        {
+            "timeStamp": "1587035024000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.4",
+            "dailyRain": "00.0",
+            "dewPoint": "016.6",
+            "inHumi": "075",
+            "inTemp": "020.0"
+        },
+        {
+            "timeStamp": "1587035035000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.4",
+            "dailyRain": "00.0",
+            "dewPoint": "016.6",
+            "inHumi": "075",
+            "inTemp": "020.0"
+        },
+        {
+            "timeStamp": "1587035051000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.4",
+            "dailyRain": "00.0",
+            "dewPoint": "016.6",
+            "inHumi": "075",
+            "inTemp": "020.0"
+        },
+        {
+            "timeStamp": "1587035067000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.4",
+            "dailyRain": "00.0",
+            "dewPoint": "016.6",
+            "inHumi": "075",
+            "inTemp": "020.0"
+        },
+        {
+            "timeStamp": "1587035083000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.4",
+            "dailyRain": "00.0",
+            "dewPoint": "016.8",
+            "inHumi": "075",
+            "inTemp": "020.0"
+        },
+        {
+            "timeStamp": "1587035099000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.2",
+            "dailyRain": "00.0",
+            "dewPoint": "016.6",
+            "inHumi": "075",
+            "inTemp": "020.1"
+        },
+        {
+            "timeStamp": "1587035116000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.2",
+            "dailyRain": "00.0",
+            "dewPoint": "016.8",
+            "inHumi": "075",
+            "inTemp": "020.1"
+        },
+        {
+            "timeStamp": "1587035131000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.2",
+            "dailyRain": "00.0",
+            "dewPoint": "016.6",
+            "inHumi": "075",
+            "inTemp": "020.1"
+        },
+        {
+            "timeStamp": "1587035143000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.2",
+            "dailyRain": "00.0",
+            "dewPoint": "016.6",
+            "inHumi": "075",
+            "inTemp": "020.1"
+        },
+        {
+            "timeStamp": "1587035147000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.2",
+            "dailyRain": "00.0",
+            "dewPoint": "016.8",
+            "inHumi": "075",
+            "inTemp": "020.1"
+        },
+        {
+            "timeStamp": "1587035164000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.2",
+            "dailyRain": "00.0",
+            "dewPoint": "016.8",
+            "inHumi": "075",
+            "inTemp": "020.1"
+        },
+        {
+            "timeStamp": "1587035179000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.2",
+            "dailyRain": "00.0",
+            "dewPoint": "016.8",
+            "inHumi": "075",
+            "inTemp": "020.1"
+        },
+        {
+            "timeStamp": "1587035196000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.2",
+            "dailyRain": "00.0",
+            "dewPoint": "016.8",
+            "inHumi": "075",
+            "inTemp": "020.1"
+        },
+        {
+            "timeStamp": "1587035204000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.3",
+            "dailyRain": "00.0",
+            "dewPoint": "016.8",
+            "inHumi": "075",
+            "inTemp": "020.1"
+        },
+        {
+            "timeStamp": "1587035211000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.3",
+            "dailyRain": "00.0",
+            "dewPoint": "016.8",
+            "inHumi": "075",
+            "inTemp": "020.1"
+        },
+        {
+            "timeStamp": "1587035228000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.3",
+            "dailyRain": "00.0",
+            "dewPoint": "017.0",
+            "inHumi": "075",
+            "inTemp": "020.1"
+        },
+        {
+            "timeStamp": "1587035243000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.3",
+            "dailyRain": "00.0",
+            "dewPoint": "017.0",
+            "inHumi": "075",
+            "inTemp": "020.1"
+        },
+        {
+            "timeStamp": "1587035259000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.3",
+            "dailyRain": "00.0",
+            "dewPoint": "017.0",
+            "inHumi": "075",
+            "inTemp": "020.1"
+        },
+        {
+            "timeStamp": "1587035263000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.3",
+            "dailyRain": "00.0",
+            "dewPoint": "017.0",
+            "inHumi": "075",
+            "inTemp": "020.1"
+        },
+        {
+            "timeStamp": "1587035275000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.3",
+            "dailyRain": "00.0",
+            "dewPoint": "017.0",
+            "inHumi": "075",
+            "inTemp": "020.1"
+        },
+        {
+            "timeStamp": "1587035291000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.3",
+            "dailyRain": "00.0",
+            "dewPoint": "017.0",
+            "inHumi": "075",
+            "inTemp": "020.1"
+        },
+        {
+            "timeStamp": "1587035307000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.3",
+            "dailyRain": "00.0",
+            "dewPoint": "017.0",
+            "inHumi": "075",
+            "inTemp": "020.1"
+        },
+        {
+            "timeStamp": "1587035323000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.3",
+            "dailyRain": "00.0",
+            "dewPoint": "017.0",
+            "inHumi": "075",
+            "inTemp": "020.1"
+        },
+        {
+            "timeStamp": "1587035339000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.3",
+            "dailyRain": "00.0",
+            "dewPoint": "017.0",
+            "inHumi": "075",
+            "inTemp": "020.1"
+        },
+        {
+            "timeStamp": "1587035356000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.3",
+            "dailyRain": "00.0",
+            "dewPoint": "017.0",
+            "inHumi": "075",
+            "inTemp": "020.1"
+        },
+        {
+            "timeStamp": "1587035372000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.3",
+            "dailyRain": "00.0",
+            "dewPoint": "017.0",
+            "inHumi": "075",
+            "inTemp": "020.1"
+        },
+        {
+            "timeStamp": "1587035384000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.5",
+            "dailyRain": "00.0",
+            "dewPoint": "017.0",
+            "inHumi": "075",
+            "inTemp": "020.1"
+        },
+        {
+            "timeStamp": "1587035387000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.5",
+            "dailyRain": "00.0",
+            "dewPoint": "017.0",
+            "inHumi": "075",
+            "inTemp": "020.1"
+        },
+        {
+            "timeStamp": "1587035403000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.5",
+            "dailyRain": "00.0",
+            "dewPoint": "017.0",
+            "inHumi": "075",
+            "inTemp": "020.1"
+        },
+        {
+            "timeStamp": "1587035419000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.5",
+            "dailyRain": "00.0",
+            "dewPoint": "017.0",
+            "inHumi": "075",
+            "inTemp": "020.1"
+        },
+        {
+            "timeStamp": "1587035435000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.5",
+            "dailyRain": "00.0",
+            "dewPoint": "017.0",
+            "inHumi": "075",
+            "inTemp": "020.1"
+        },
+        {
+            "timeStamp": "1587035443000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.2",
+            "dailyRain": "00.0",
+            "dewPoint": "017.0",
+            "inHumi": "075",
+            "inTemp": "020.1"
+        },
+        {
+            "timeStamp": "1587035452000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.2",
+            "dailyRain": "00.0",
+            "dewPoint": "017.0",
+            "inHumi": "075",
+            "inTemp": "020.1"
+        },
+        {
+            "timeStamp": "1587035468000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.2",
+            "dailyRain": "00.0",
+            "dewPoint": "017.0",
+            "inHumi": "075",
+            "inTemp": "020.1"
+        },
+        {
+            "timeStamp": "1587035484000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.2",
+            "dailyRain": "00.0",
+            "dewPoint": "017.0",
+            "inHumi": "075",
+            "inTemp": "020.1"
+        },
+        {
+            "timeStamp": "1587035499000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.2",
+            "dailyRain": "00.0",
+            "dewPoint": "017.0",
+            "inHumi": "075",
+            "inTemp": "020.1"
+        },
+        {
+            "timeStamp": "1587035504000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0997.0",
+            "dailyRain": "00.0",
+            "dewPoint": "017.0",
+            "inHumi": "075",
+            "inTemp": "020.2"
+        }
+    ]
+}

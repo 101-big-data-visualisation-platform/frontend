@@ -22,6 +22,7 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     getData1();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -34,7 +35,7 @@ const Dashboard: React.FC = () => {
             graphTitleText: "Temperature Data",
             datasetBackgroundColor: "red",
             datasetBorderColor: "red",
-            decimationSamples: 50,
+            decimationSamples: 5000,
           }}
           dataSelector="inTemp"
         />
@@ -44,7 +45,7 @@ const Dashboard: React.FC = () => {
             graphTitleText: "Daily Rain Data",
             datasetBackgroundColor: "red",
             datasetBorderColor: "red",
-            decimationSamples: 50,
+            decimationSamples: 5000,
           }}
           dataSelector="dailyRain"
         />
@@ -54,7 +55,7 @@ const Dashboard: React.FC = () => {
             graphTitleText: "Absolute Barometer Data",
             datasetBackgroundColor: "red",
             datasetBorderColor: "red",
-            decimationSamples: 50,
+            decimationSamples: 5000,
           }}
           dataSelector="absBaro"
         />
@@ -64,7 +65,7 @@ const Dashboard: React.FC = () => {
             graphTitleText: "Dew Point Data",
             datasetBackgroundColor: "red",
             datasetBorderColor: "red",
-            decimationSamples: 50,
+            decimationSamples: 5000,
           }}
           dataSelector="dewPoint"
         />
@@ -74,7 +75,7 @@ const Dashboard: React.FC = () => {
             graphTitleText: "Humidity Data",
             datasetBackgroundColor: "red",
             datasetBorderColor: "red",
-            decimationSamples: 50,
+            decimationSamples: 5000,
           }}
           dataSelector="inHumi"
         />

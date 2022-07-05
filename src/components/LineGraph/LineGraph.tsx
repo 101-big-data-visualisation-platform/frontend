@@ -61,6 +61,8 @@ const LineGraph = ({ data, options, dataSelector }: LineGraphProps) => {
           backgroundColor: options.datasetBackgroundColor,
           borderColor: options.datasetBorderColor,
           yAxisID: "y",
+          pointRadius: 0,
+          borderWidth: 1,
         },
       ],
     });
@@ -68,6 +70,7 @@ const LineGraph = ({ data, options, dataSelector }: LineGraphProps) => {
 
   useEffect(() => {
     getData1();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
   const optionsFinal: ChartOptions<"line"> = {
     elements: {
@@ -152,13 +155,14 @@ const LineGraph = ({ data, options, dataSelector }: LineGraphProps) => {
       },
     },
   };
-
+  if (!data.items || finalData.datasets.length === 0) {
+    return <div>Loading data...</div>;
+  }
   return (
     <StyledDiv1>
       <button
         style={{ position: "absolute" }}
         onClick={() => {
-          console.log("Clicking button");
           chartRef?.current?.resetZoom();
         }}
       >
