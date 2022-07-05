@@ -1,3 +1,10 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:8062f193f694d5840f15b1e5821656ed7cc96d6bab2104e0de15bf529bcdc3cc
-size 144
+[
+  {
+    "Key": "user:Stack",
+    "Value": "{project-env}"
+  },
+  {
+    "Key": "user:Application",
+    "Value": "{project-name}"
+  }
+]

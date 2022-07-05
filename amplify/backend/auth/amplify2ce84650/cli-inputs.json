@@ -1,3 +1,46 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:961a1b90c52044731c132366a6d93380fb4b146ca6e0fdc55afa0701d580e868
-size 1497
+{
+  "version": "1",
+  "cognitoConfig": {
+    "identityPoolName": "amplify2ce84650_identitypool_2ce84650",
+    "allowUnauthenticatedIdentities": false,
+    "resourceNameTruncated": "amplif2ce84650",
+    "userPoolName": "amplify2ce84650_userpool_2ce84650",
+    "autoVerifiedAttributes": [
+      "email"
+    ],
+    "mfaConfiguration": "OFF",
+    "mfaTypes": [
+      "SMS Text Message"
+    ],
+    "smsAuthenticationMessage": "Your authentication code is {####}",
+    "smsVerificationMessage": "Your verification code is {####}",
+    "emailVerificationSubject": "Your verification code",
+    "emailVerificationMessage": "Your verification code is {####}",
+    "defaultPasswordPolicy": false,
+    "passwordPolicyMinLength": 8,
+    "passwordPolicyCharacters": [],
+    "requiredAttributes": [
+      "email"
+    ],
+    "aliasAttributes": [],
+    "userpoolClientGenerateSecret": false,
+    "userpoolClientRefreshTokenValidity": 30,
+    "userpoolClientWriteAttributes": [
+      "email"
+    ],
+    "userpoolClientReadAttributes": [
+      "email"
+    ],
+    "userpoolClientLambdaRole": "amplif2ce84650_userpoolclient_lambda_role",
+    "userpoolClientSetAttributes": false,
+    "sharedId": "2ce84650",
+    "resourceName": "amplify2ce84650",
+    "authSelections": "identityPoolAndUserPool",
+    "useDefault": "default",
+    "triggers": {},
+    "userPoolGroupList": [],
+    "serviceName": "Cognito",
+    "usernameCaseSensitive": false,
+    "useEnabledMfas": true
+  }
+}

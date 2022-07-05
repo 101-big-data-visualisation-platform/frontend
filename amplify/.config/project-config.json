@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:091aae709d26d3a34228180a90fcb38967c824fbf23f502105399b95b0534787
-size 362
+{
+  "projectName": "amplify",
+  "version": "3.1",
+  "frontend": "typescript",
+  "javascript": {
+    "framework": "react",
+    "config": {
+      "SourceDir": "src",
+      "DistributionDir": "build",
+      "BuildCommand": "npm.cmd run-script build",
+      "StartCommand": "npm.cmd run-script start"
+    }
+  },
+  "providers": ["awscloudformation"]
+}
