@@ -6,18 +6,16 @@ import {
   ChartOptions,
   ChartData,
 } from "chart.js";
-import { getWeatherData } from "../../api/dashboard";
 import zoomPlugin from "chartjs-plugin-zoom";
 import "chartjs-adapter-moment";
 import { Container } from "../../components/Container";
 import { ThemeContext } from "styled-components";
-import Switch from "@mui/material/Switch";
 import { StyledDiv1 } from "./styled";
 Chartjs.register(...registerables);
 Chartjs.register(zoomPlugin);
 
 let arrayOfGraphs: number[] = [];
-for (let i = 0; i < 9; i++) {
+for (let i = 0; i < 1; i++) {
   arrayOfGraphs.push(i);
 }
 
@@ -28,9 +26,19 @@ const Dashboard: React.FC = () => {
     datasets: [],
   });
   const getData1 = async () => {
-    const dataObj = await getWeatherData("IALBAN25", 15000000000000);
-    console.log(dataObj);
-    const itemsArray: [] = dataObj.Items;
+    // const dataObj = await getWeatherData("IALBAN25", 15000000000000);
+    type Data = {
+      items: [];
+    };
+    // const dataObj: Data = JSON.parse(JSON.stringify(dataMain));
+    const dataObj: Data = await fetch("./lambda-results-full-300.json", {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    }).then((response) => response.json());
+
+    const itemsArray: [] = dataObj.items;
     type Item = {
       timeStamp: string;
       inTemp: string;
@@ -42,7 +50,6 @@ const Dashboard: React.FC = () => {
         y: parseFloat(item.inTemp),
       };
     });
-    console.log(dataObj);
     setData({
       datasets: [
         {
@@ -112,7 +119,7 @@ const Dashboard: React.FC = () => {
       decimation: {
         enabled: true,
         algorithm: "lttb",
-        samples: 300,
+        samples: 200,
       },
       zoom: {
         zoom: {
@@ -145,33 +152,6 @@ const Dashboard: React.FC = () => {
   return (
     <Container>
       <h1>Dashboard</h1>
-      {data.datasets.map((dataset) => {
-        console.log(dataset);
-        return (
-          <>
-            <p>{dataset.label}</p>
-            <Switch
-              defaultChecked={true}
-              onChange={(evt) => {
-                setData({
-                  datasets: data.datasets.map((datasetObj) => {
-                    if (datasetObj.label === dataset.label) {
-                      return {
-                        ...datasetObj,
-                        hidden: !evt.target.checked,
-                      };
-                    } else {
-                      return {
-                        ...datasetObj,
-                      };
-                    }
-                  }),
-                });
-              }}
-            />
-          </>
-        );
-      })}
       <div style={{ display: "flex", flexWrap: "wrap" }}>
         {arrayOfGraphs.map(() => (
           <StyledDiv1>
