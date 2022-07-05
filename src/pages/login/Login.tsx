@@ -26,6 +26,7 @@ import { Alert, AlertTitle, LinearProgress } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { Auth } from "aws-amplify";
 
 const Login: React.FC = () => {
   const theme = useContext(ThemeContext);
@@ -81,14 +82,23 @@ const Login: React.FC = () => {
                   return {};
                 }
               }}
-              onSubmit={(values, { setSubmitting }): void => {
+              onSubmit={async (values, { setSubmitting }): Promise<void> => {
                 setLoggedIn(false);
-                setTimeout(() => {
-                  alert(JSON.stringify(values, null, 2));
-                  setLoginError(false);
+                setLoginError(false);
+                let user;
+                try {
+                  user = await Auth.signIn(values.username, values.password);
+                } catch (error) {
+                  setLoginError(true);
                   setSubmitting(false);
-                  setLoggedIn(true);
-                }, 400);
+                } finally {
+                  if (user) {
+                    alert(JSON.stringify(user, null, 2));
+                    setLoginError(false);
+                    setSubmitting(false);
+                    setLoggedIn(true);
+                  }
+                }
               }}
             >
               {({

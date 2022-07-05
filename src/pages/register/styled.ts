@@ -181,3 +181,7 @@ export const RegisterButton = styled("button")`
 export const StyledIconButton = styled(IconButton)`
   color: ${({ theme }) => theme.colors.secondary} !important;
 `;
+
+export const StyledLink = styled(Link)`
+  color: ${({ theme }) => theme.colors.secondary};
+`;
