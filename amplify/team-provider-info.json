@@ -1,3 +1,20 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:a16ab1004df0e7e85ea5da6e3260bd579706c3d89b6da69ea4e6a9af91cde25a
-size 786
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-amplify-dev-130600-authRole",
+      "UnauthRoleArn": "arn:aws:iam::714736663480:role/amplify-amplify-dev-130600-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::714736663480:role/amplify-amplify-dev-130600-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-amplify-dev-130600-deployment",
+      "UnauthRoleName": "amplify-amplify-dev-130600-unauthRole",
+      "StackName": "amplify-amplify-dev-130600",
+      "StackId": "arn:aws:cloudformation:us-east-2:714736663480:stack/amplify-amplify-dev-130600/7b900130-f67e-11ec-a9b3-029e1d15a40a",
+      "AmplifyAppId": "d4ekpfupq05ec"
+    },
+    "categories": {
+      "auth": {
+        "amplify2ce84650": {}
+      }
+    }
+  }
+}
