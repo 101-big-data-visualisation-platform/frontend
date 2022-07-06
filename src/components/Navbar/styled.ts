@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Container } from "../Container";
 import { Link } from "react-router-dom";
+import { Button as MUIButton } from "@mui/material";
 
 export const MainDiv = styled("div")`
   @media (max-width: 800px) {
@@ -39,6 +40,24 @@ export const Button = styled("button")`
   &:focus,
   &:hover {
     background: ${({ theme }) => theme.colors.secondaryHover};
+  }
+`;
+
+export const AuthButton = styled(MUIButton)`
+  margin-left: 20px !important;
+  text-align: center !important;
+  font-size: 1rem !important;
+  background: transparent !important;
+  cursor: pointer;
+  color: ${({ theme }) => theme.colors.secondary} !important;
+  border: 2px solid ${({ theme }) => theme.colors.secondary} !important;
+  min-width: 100px !important;
+  border-radius: 5px !important;
+  transition: 300ms !important;
+  &:focus,
+  &:hover {
+    color: ${({ theme }) => theme.colors.primary} !important;
+    background: ${({ theme }) => theme.colors.secondary} !important;
   }
 `;
 

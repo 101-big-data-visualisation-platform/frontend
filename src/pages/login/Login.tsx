@@ -27,9 +27,13 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { Auth } from "aws-amplify";
+import AuthContext from "../../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Login: React.FC = () => {
+  const navigate = useNavigate();
   const theme = useContext(ThemeContext);
+  const { setUser } = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
@@ -93,10 +97,15 @@ const Login: React.FC = () => {
                   setSubmitting(false);
                 } finally {
                   if (user) {
-                    alert(JSON.stringify(user, null, 2));
+                    const idToken = (await Auth.currentSession())
+                      .getIdToken()
+                      .getJwtToken();
+                    setUser(user);
+                    localStorage.setItem("authorization", idToken);
                     setLoginError(false);
                     setSubmitting(false);
                     setLoggedIn(true);
+                    navigate("/dashboard");
                   }
                 }
               }}

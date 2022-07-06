@@ -1,11 +1,4 @@
-import { apiHeroku, apiAWS } from ".";
-
-export const getBatteryData = async () => {
-  return await apiHeroku.get("/data/battery").then((response) => response.data);
-};
-export const getTankData = async () => {
-  return await apiHeroku.get("/data/tank").then((response) => response.data);
-};
+import { apiAWS } from ".";
 
 export const getWeatherData = async (
   deviceID: string,
@@ -13,5 +6,19 @@ export const getWeatherData = async (
 ) => {
   return await apiAWS
     .get(`/data/weather?deviceID=${deviceID}&min=${minTimeStamp}`)
+    .then((response) => response.data);
+};
+
+export const getTankData = async (
+  deviceID: string,
+  minTimeStamp: number,
+  jwt: string
+) => {
+  return await apiAWS
+    .get(`/data/tank?deviceID=${deviceID}&min=${minTimeStamp}`, {
+      headers: {
+        authorization: jwt,
+      },
+    })
     .then((response) => response.data);
 };

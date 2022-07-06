@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import LineGraph from "../../components/LineGraph";
 import { Container } from "../../components/Container";
+import { getTankData } from "../../api/dashboard";
 
 const Dashboard: React.FC = () => {
   type Data = {
@@ -20,8 +21,17 @@ const Dashboard: React.FC = () => {
     setData(dataObj);
   };
 
+  const getData2 = async () => {
+    const dataObj: Data = await getTankData(
+      "4317031",
+      0,
+      localStorage.getItem("authorization") || ""
+    );
+    console.log(dataObj);
+  };
   useEffect(() => {
     getData1();
+    getData2();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
