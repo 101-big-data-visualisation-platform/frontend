@@ -10,6 +10,8 @@ import {
   LinkButton,
   MainDiv,
   MenuButton,
+  MenuStyled,
+  MenuStyledMobile,
   MobileMainDiv,
   PageLink,
   PagesDiv,
@@ -17,8 +19,8 @@ import {
 import themes from "../../themes/schema.json";
 import { Container } from "../Container";
 import { Auth } from "aws-amplify";
-import { Menu, MenuItem } from "@mui/material";
-import { ArrowDownward } from "@mui/icons-material";
+import { CircularProgress, MenuItem } from "@mui/material";
+import { ArrowDownward, Logout } from "@mui/icons-material";
 import AuthContext from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 
@@ -47,6 +49,7 @@ const Navbar: React.FC<Props> = ({ setSelectedTheme, selectedTheme }) => {
   const { user, setUser } = useContext(AuthContext);
   const navigate = useNavigate();
   const [displayMenu, setDisplayMenu] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
   const [anchorEl, setAnchorEl] = useState<
     (EventTarget & HTMLButtonElement) | null
   >(null);
@@ -67,8 +70,10 @@ const Navbar: React.FC<Props> = ({ setSelectedTheme, selectedTheme }) => {
   };
 
   const logout: voidFunc = async () => {
+    setLoggingOut(true);
     await Auth.signOut();
     setUser(null);
+    setLoggingOut(false);
     navigate("/");
   };
   const handleAuthButtonClick = (
@@ -99,14 +104,14 @@ const Navbar: React.FC<Props> = ({ setSelectedTheme, selectedTheme }) => {
                 <LinkButton to="/register">Register</LinkButton>
               </>
             ) : (
-              <>
+              <div>
                 <AuthButton
                   endIcon={<ArrowDownward />}
                   onClick={handleAuthButtonClick}
                 >
                   {user.username} Logged In
                 </AuthButton>
-                <Menu
+                <MenuStyled
                   style={{ zIndex: 100000 }}
                   id="basic-menu"
                   anchorEl={anchorEl}
@@ -116,11 +121,17 @@ const Navbar: React.FC<Props> = ({ setSelectedTheme, selectedTheme }) => {
                     "aria-labelledby": "basic-button",
                   }}
                 >
-                  <MenuItem onClick={handleClose}>Profile</MenuItem>
-                  <MenuItem onClick={handleClose}>My account</MenuItem>
-                  <MenuItem onClick={logout}>Logout</MenuItem>
-                </Menu>
-              </>
+                  <MenuItem disabled={loggingOut} onClick={logout}>
+                    <Logout /> Logout
+                    {loggingOut && (
+                      <CircularProgress
+                        style={{ marginLeft: "auto" }}
+                        size={20}
+                      />
+                    )}
+                  </MenuItem>
+                </MenuStyled>
+              </div>
             )}
           </ButtonsDiv>
         </Container>
@@ -145,8 +156,41 @@ const Navbar: React.FC<Props> = ({ setSelectedTheme, selectedTheme }) => {
             <Button onClick={handleClick}>
               {selectedTheme.name === "light" ? "Dark" : "Light"}
             </Button>
-            <LinkButton to="/login">Login</LinkButton>
-            <LinkButton to="/register">Register</LinkButton>
+            {!user?.username ? (
+              <>
+                <LinkButton to="/login">Login</LinkButton>
+                <LinkButton to="/register">Register</LinkButton>
+              </>
+            ) : (
+              <div>
+                <AuthButton
+                  endIcon={<ArrowDownward />}
+                  onClick={handleAuthButtonClick}
+                >
+                  {user.username} Logged In
+                </AuthButton>
+                <MenuStyledMobile
+                  style={{ zIndex: 100000 }}
+                  id="basic-menu"
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleClose}
+                  MenuListProps={{
+                    "aria-labelledby": "basic-button",
+                  }}
+                >
+                  <MenuItem disabled={loggingOut} onClick={logout}>
+                    <Logout /> Logout
+                    {loggingOut && (
+                      <CircularProgress
+                        style={{ marginLeft: "auto" }}
+                        size={20}
+                      />
+                    )}
+                  </MenuItem>
+                </MenuStyledMobile>
+              </div>
+            )}
           </ContainerStyled>
         )}
       </MobileMainDiv>

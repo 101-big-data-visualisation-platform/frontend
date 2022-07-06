@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Container } from "../Container";
 import { Link } from "react-router-dom";
-import { Button as MUIButton } from "@mui/material";
+import { Button as MUIButton, Menu } from "@mui/material";
 
 export const MainDiv = styled("div")`
   @media (max-width: 800px) {
@@ -45,6 +45,7 @@ export const Button = styled("button")`
 
 export const AuthButton = styled(MUIButton)`
   margin-left: 20px !important;
+  width: 100%;
   text-align: center !important;
   font-size: 1rem !important;
   background: transparent !important;
@@ -58,6 +59,9 @@ export const AuthButton = styled(MUIButton)`
   &:hover {
     color: ${({ theme }) => theme.colors.primary} !important;
     background: ${({ theme }) => theme.colors.secondary} !important;
+  }
+  @media (max-width: 800px) {
+    margin-left: 0 !important;
   }
 `;
 
@@ -131,5 +135,40 @@ export const PagesDiv = styled("div")`
   }
   ${PageLink} {
     margin-right: 20px;
+  }
+`;
+
+export const MenuStyled = styled(Menu)`
+  & .MuiPaper-root {
+    background: ${({ theme }) => theme.colors.primary2} !important;
+    color: ${({ theme }) => theme.colors.secondary2} !important;
+    box-shadow: none !important;
+    margin-top: 10px;
+    width: 300px;
+  }
+  & .MuiSvgIcon-root {
+    margin-right: 20px;
+  }
+  ,
+  @media(max-width: 800px) {
+    display: none !important;
+  }
+`;
+
+export const MenuStyledMobile = styled(Menu)`
+  display: none;
+  & .MuiPaper-root {
+    background: ${({ theme }) => theme.colors.primary2} !important;
+    color: ${({ theme }) => theme.colors.secondary2} !important;
+    box-shadow: none !important;
+    margin-top: 10px;
+    width: 300px;
+  }
+  & .MuiSvgIcon-root {
+    margin-right: 20px;
+  }
+  ,
+  @media(max-width: 800px) {
+    display: block !important;
   }
 `;
