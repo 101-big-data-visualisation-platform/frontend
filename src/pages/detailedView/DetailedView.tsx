@@ -11,11 +11,15 @@ import {
 import zoomPlugin from "chartjs-plugin-zoom";
 import "chartjs-adapter-moment";
 import { ThemeContext } from "styled-components";
+import GraphsContext from "../../contexts/GraphsContext";
+import { Container } from "../../components/Container";
 Chartjs.register(...registerables);
 Chartjs.register(zoomPlugin);
+
 const DetailedView: FC = () => {
   const [searchParams] = useSearchParams();
   const { allData } = useContext(DataContext);
+  const { allGraphs } = useContext(GraphsContext);
   const dataName = searchParams.get("dataName") || "";
   const dataSelector = searchParams.get("dataSelector") || "";
   const theme = useContext(ThemeContext);
@@ -23,7 +27,16 @@ const DetailedView: FC = () => {
   const [finalData, setFinalData] = useState<ChartData<"line">>({
     datasets: [],
   });
-  const getData1 = async () => {
+  type Graph = {
+    dataName: string;
+    dataSelector: string;
+    graphTitleText: string;
+    datasetBackgroundColor: string;
+    datasetBorderColor: string;
+    decimationSamples: number;
+  };
+  const [graphSettings, setGraphSettings] = useState<Graph>();
+  const getData1 = () => {
     // const dataObj = await getWeatherData("IALBAN25", 15000000000000);
     // const dataObj: Data = JSON.parse(JSON.stringify(dataMain));
     const itemsArray: [] =
@@ -46,20 +59,36 @@ const DetailedView: FC = () => {
         {
           data: processedItems,
           label: dataSelector,
-          backgroundColor: "blue",
-          borderColor: "blue",
+          backgroundColor: graphSettings?.datasetBackgroundColor,
+          borderColor: graphSettings?.datasetBorderColor,
           yAxisID: "y",
-          pointRadius: 0,
+          pointRadius: 1,
           borderWidth: 1,
         },
       ],
     });
   };
+  const getGraphs = () => {
+    const relatedGraph = allGraphs?.find((graph) => {
+      if (graph.dataName === dataName && graph.dataSelector === dataSelector) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+    console.log(relatedGraph?.datasetBackgroundColor);
+    setGraphSettings(relatedGraph);
+  };
 
   useEffect(() => {
     getData1();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allData]);
+  }, [allData, graphSettings]);
+  useEffect(() => {
+    getGraphs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allGraphs]);
+
   const optionsFinal: ChartOptions<"line"> = {
     elements: {
       line: {
@@ -104,7 +133,7 @@ const DetailedView: FC = () => {
     plugins: {
       title: {
         display: true,
-        text: `${dataSelector} data over time`,
+        text: graphSettings?.graphTitleText,
         color: theme.colors.secondary,
         font: {
           size: 20,
@@ -113,7 +142,7 @@ const DetailedView: FC = () => {
       decimation: {
         enabled: true,
         algorithm: "lttb",
-        samples: 5000,
+        samples: graphSettings?.decimationSamples,
       },
       zoom: {
         zoom: {
@@ -143,7 +172,18 @@ const DetailedView: FC = () => {
       },
     },
   };
-  return <Line data={finalData} options={optionsFinal} ref={chartRef} />;
+  return (
+    <Container>
+      <button
+        onClick={() => {
+          chartRef?.current?.resetZoom();
+        }}
+      >
+        Reset Zoom
+      </button>
+      <Line data={finalData} options={optionsFinal} ref={chartRef} />
+    </Container>
+  );
 };
 
 export default DetailedView;
