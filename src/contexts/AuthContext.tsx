@@ -11,11 +11,13 @@ type UserInfo = {
 type AuthContextType = {
   user: UserInfo | null;
   setUser: Dispatch<SetStateAction<null>>;
+  fetchingUser: boolean;
 };
 
 const AuthContext = React.createContext<AuthContextType>({
   user: null,
   setUser: () => {},
+  fetchingUser: false,
 });
 
 export default AuthContext;

@@ -1,94 +1,138 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import LineGraph from "../../components/LineGraph";
 import { Container } from "../../components/Container";
-import { getTankData } from "../../api/dashboard";
+import { getAWSData } from "../../api/dashboard";
+import DataContext from "../../contexts/DataContext";
 
 const Dashboard: React.FC = () => {
-  type Data = {
+  const { allData, setData, updatingData } = useContext(DataContext);
+  type ReturnedDataObj = {
     items: [];
   };
-  const [data, setData] = useState<Data>({
-    items: [],
-  });
-  const getData1 = async () => {
+  type ReturnedDataObjAWS = {
+    Items: [];
+  };
+  type Data = {
+    items: [];
+    name: string;
+  };
+  const [graphsDisplayed, setGraphsDisplayed] = useState([
+    {
+      dataName: "weatherData",
+      dataSelector: "inTemp",
+      graphTitleText: "Temperature Data",
+      datasetBackgroundColor: "red",
+      datasetBorderColor: "red",
+      decimationSamples: 5000,
+    },
+    {
+      dataName: "weatherData",
+      dataSelector: "dailyRain",
+      graphTitleText: "Daily Rain Data",
+      datasetBackgroundColor: "red",
+      datasetBorderColor: "red",
+      decimationSamples: 5000,
+    },
+    {
+      dataName: "weatherData",
+      dataSelector: "absBaro",
+      graphTitleText: "Absolute Barometer Data",
+      datasetBackgroundColor: "red",
+      datasetBorderColor: "red",
+      decimationSamples: 5000,
+    },
+    {
+      dataName: "weatherData",
+      dataSelector: "dewPoint",
+      graphTitleText: "Dew Point Data",
+      datasetBackgroundColor: "red",
+      datasetBorderColor: "red",
+      decimationSamples: 5000,
+    },
+    {
+      dataName: "weatherData",
+      dataSelector: "inHumi",
+      graphTitleText: "Humidity Data",
+      datasetBackgroundColor: "red",
+      datasetBorderColor: "red",
+      decimationSamples: 5000,
+    },
+    {
+      dataName: "tankData",
+      dataSelector: "battery",
+      graphTitleText: "Tank Battery Data",
+      datasetBackgroundColor: "red",
+      datasetBorderColor: "red",
+      decimationSamples: 5000,
+    },
+  ]);
+
+  const getDataFromJson = async (link: string, name: string) => {
     // const dataObj = await getWeatherData("IALBAN25", 15000000000000);
-    const dataObj: Data = await fetch("./lambda-results-full-300.json", {
+    const dataObj: ReturnedDataObj = await fetch(link, {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
     }).then((response) => response.json());
-    setData(dataObj);
+
+    // check if arg name does not match any of the allData names before appending new data to to allData
+    if (!allData?.find((data) => data.name === name)) {
+      setData((prevState: Data[]) => [
+        ...prevState,
+        { items: dataObj.items, name: name },
+      ]);
+    }
   };
 
-  const getData2 = async () => {
-    const dataObj: Data = await getTankData(
+  const getDataFromAWS = async (link: string, name: string) => {
+    const dataObj: ReturnedDataObjAWS = await getAWSData(
       "4317031",
       0,
-      localStorage.getItem("authorization") || ""
+      localStorage.getItem("authorization") || "",
+      link
     );
     console.log(dataObj);
+
+    // check if arg name does not match any of the allData names before appending new data to to allData
+    if (!allData?.find((data) => data.name === name)) {
+      setData((prevState: Data[]) => [
+        ...prevState,
+        { items: dataObj.Items, name: name },
+      ]);
+    }
   };
   useEffect(() => {
-    getData1();
-    getData2();
+    getDataFromJson("./lambda-results-full-300.json", "weatherData");
+    getDataFromAWS("/data/tank", "tankData");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+  useEffect(() => {
+    console.log(allData);
+  }, [allData]);
   return (
     <Container>
       <h1>Dashboard</h1>
       <div style={{ display: "flex", flexWrap: "wrap" }}>
-        <LineGraph
-          data={data}
-          options={{
-            graphTitleText: "Temperature Data",
-            datasetBackgroundColor: "red",
-            datasetBorderColor: "red",
-            decimationSamples: 5000,
-          }}
-          dataSelector="inTemp"
-        />
-        <LineGraph
-          data={data}
-          options={{
-            graphTitleText: "Daily Rain Data",
-            datasetBackgroundColor: "red",
-            datasetBorderColor: "red",
-            decimationSamples: 5000,
-          }}
-          dataSelector="dailyRain"
-        />
-        <LineGraph
-          data={data}
-          options={{
-            graphTitleText: "Absolute Barometer Data",
-            datasetBackgroundColor: "red",
-            datasetBorderColor: "red",
-            decimationSamples: 5000,
-          }}
-          dataSelector="absBaro"
-        />
-        <LineGraph
-          data={data}
-          options={{
-            graphTitleText: "Dew Point Data",
-            datasetBackgroundColor: "red",
-            datasetBorderColor: "red",
-            decimationSamples: 5000,
-          }}
-          dataSelector="dewPoint"
-        />
-        <LineGraph
-          data={data}
-          options={{
-            graphTitleText: "Humidity Data",
-            datasetBackgroundColor: "red",
-            datasetBorderColor: "red",
-            decimationSamples: 5000,
-          }}
-          dataSelector="inHumi"
-        />
+        {graphsDisplayed.map((graphData) => (
+          <LineGraph
+            data={{
+              items:
+                allData?.find(
+                  (dataObj: { name: string }) =>
+                    dataObj.name === graphData.dataName
+                )?.items || [],
+            }}
+            options={{
+              graphTitleText: graphData.graphTitleText,
+              datasetBackgroundColor: graphData.datasetBackgroundColor,
+              datasetBorderColor: graphData.datasetBorderColor,
+              decimationSamples: graphData.decimationSamples,
+            }}
+            dataSelector={graphData.dataSelector}
+            dataName={graphData.dataName}
+          />
+        ))}
       </div>
     </Container>
   );

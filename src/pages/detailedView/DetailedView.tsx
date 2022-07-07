@@ -1,5 +1,7 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { FC, useContext, useEffect, useRef, useState } from "react";
 import { Line } from "react-chartjs-2";
+import { useSearchParams } from "react-router-dom";
+import DataContext from "../../contexts/DataContext";
 import {
   Chart as Chartjs,
   registerables,
@@ -9,31 +11,13 @@ import {
 import zoomPlugin from "chartjs-plugin-zoom";
 import "chartjs-adapter-moment";
 import { ThemeContext } from "styled-components";
-import { StyledDiv1 } from "./styled";
-import { Link } from "react-router-dom";
 Chartjs.register(...registerables);
 Chartjs.register(zoomPlugin);
-
-type LineGraphProps = {
-  data: {
-    items: [];
-  };
-  options: {
-    graphTitleText: string;
-    datasetBackgroundColor: string;
-    datasetBorderColor: string;
-    decimationSamples: number;
-  };
-  dataSelector: string;
-  dataName: string;
-};
-
-const LineGraph = ({
-  data,
-  options,
-  dataSelector,
-  dataName,
-}: LineGraphProps) => {
+const DetailedView: FC = () => {
+  const [searchParams] = useSearchParams();
+  const { allData } = useContext(DataContext);
+  const dataName = searchParams.get("dataName") || "";
+  const dataSelector = searchParams.get("dataSelector") || "";
   const theme = useContext(ThemeContext);
   const chartRef = useRef<Chartjs<"line">>();
   const [finalData, setFinalData] = useState<ChartData<"line">>({
@@ -41,13 +25,10 @@ const LineGraph = ({
   });
   const getData1 = async () => {
     // const dataObj = await getWeatherData("IALBAN25", 15000000000000);
-    type Data = {
-      items: [];
-    };
     // const dataObj: Data = JSON.parse(JSON.stringify(dataMain));
-    const dataObj: Data = data;
+    const itemsArray: [] =
+      allData?.find((data) => data.name === dataName)?.items || [];
 
-    const itemsArray: [] = dataObj.items;
     type Item = {
       timeStamp: string;
     };
@@ -65,8 +46,8 @@ const LineGraph = ({
         {
           data: processedItems,
           label: dataSelector,
-          backgroundColor: options.datasetBackgroundColor,
-          borderColor: options.datasetBorderColor,
+          backgroundColor: "blue",
+          borderColor: "blue",
           yAxisID: "y",
           pointRadius: 0,
           borderWidth: 1,
@@ -78,7 +59,7 @@ const LineGraph = ({
   useEffect(() => {
     getData1();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  }, [allData]);
   const optionsFinal: ChartOptions<"line"> = {
     elements: {
       line: {
@@ -123,7 +104,7 @@ const LineGraph = ({
     plugins: {
       title: {
         display: true,
-        text: options.graphTitleText,
+        text: `${dataSelector} data over time`,
         color: theme.colors.secondary,
         font: {
           size: 20,
@@ -132,7 +113,7 @@ const LineGraph = ({
       decimation: {
         enabled: true,
         algorithm: "lttb",
-        samples: options.decimationSamples,
+        samples: 5000,
       },
       zoom: {
         zoom: {
@@ -162,24 +143,7 @@ const LineGraph = ({
       },
     },
   };
-  if (!data.items || finalData.datasets.length === 0) {
-    return <div>Loading data...</div>;
-  }
-  return (
-    <StyledDiv1>
-      <button
-        onClick={() => {
-          chartRef?.current?.resetZoom();
-        }}
-      >
-        Reset Zoom
-      </button>
-      <Link to={`/detailed?dataName=${dataName}&dataSelector=${dataSelector}`}>
-        Detailed View
-      </Link>
-      <Line data={finalData} options={optionsFinal} ref={chartRef} />
-    </StyledDiv1>
-  );
+  return <Line data={finalData} options={optionsFinal} ref={chartRef} />;
 };
 
-export default LineGraph;
+export default DetailedView;

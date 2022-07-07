@@ -22,3 +22,18 @@ export const getTankData = async (
     })
     .then((response) => response.data);
 };
+
+export const getAWSData = async (
+  deviceID: string,
+  minTimeStamp: number,
+  jwt: string,
+  endpointURL: string
+) => {
+  return await apiAWS
+    .get(`${endpointURL}?deviceID=${deviceID}&min=${minTimeStamp}`, {
+      headers: {
+        authorization: jwt,
+      },
+    })
+    .then((response) => response.data);
+};

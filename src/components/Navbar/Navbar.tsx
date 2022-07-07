@@ -46,7 +46,7 @@ interface Props {
 }
 
 const Navbar: React.FC<Props> = ({ setSelectedTheme, selectedTheme }) => {
-  const { user, setUser } = useContext(AuthContext);
+  const { user, setUser, fetchingUser } = useContext(AuthContext);
   const navigate = useNavigate();
   const [displayMenu, setDisplayMenu] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
@@ -100,8 +100,14 @@ const Navbar: React.FC<Props> = ({ setSelectedTheme, selectedTheme }) => {
             </Button>
             {!user?.username ? (
               <>
-                <LinkButton to="/login">Login</LinkButton>
-                <LinkButton to="/register">Register</LinkButton>
+                {fetchingUser ? (
+                  <h1>Checking for user</h1>
+                ) : (
+                  <>
+                    <LinkButton to="/login">Login</LinkButton>
+                    <LinkButton to="/register">Register</LinkButton>
+                  </>
+                )}
               </>
             ) : (
               <div>
