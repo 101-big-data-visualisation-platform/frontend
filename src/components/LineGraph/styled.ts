@@ -21,6 +21,7 @@ export const StyledButton = styled("button")`
     background: ${({ theme }) => theme.colors.secondary};
     color: ${({ theme }) => theme.colors.primary};
   }
+  font-size: 0.8rem;
 `;
 
 export const StyledLink = styled(Link)`
@@ -34,4 +35,5 @@ export const StyledLink = styled(Link)`
     background: ${({ theme }) => theme.colors.secondary};
     color: ${({ theme }) => theme.colors.primary};
   }
+  font-size: 0.8rem;
 `;
