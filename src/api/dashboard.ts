@@ -29,11 +29,17 @@ export const getAWSData = async (
   jwt: string,
   endpointURL: string
 ) => {
-  return await apiAWS
-    .get(`${endpointURL}?deviceID=${deviceID}&min=${minTimeStamp}`, {
-      headers: {
-        authorization: jwt,
-      },
-    })
-    .then((response) => response.data);
+  try {
+    return await apiAWS
+      .get(`${endpointURL}?deviceID=${deviceID}&min=${minTimeStamp}`, {
+        headers: {
+          authorization: jwt,
+        },
+      })
+      .then((response) => response.data);
+  } catch (err) {
+    alert(
+      "You need to log in again to be able to access AWS services. Sorry for the inconvenience"
+    );
+  }
 };

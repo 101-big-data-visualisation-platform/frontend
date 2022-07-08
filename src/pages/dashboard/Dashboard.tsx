@@ -30,24 +30,40 @@ const Dashboard: React.FC = () => {
     }).then((response) => response.json());
 
     // check if arg name does not match any of the allData names before appending new data to to allData
-    if (!allData?.find((data) => data.name === name)) {
+    if (
+      !allData?.find((data) => {
+        console.log(data.name);
+        console.log(name);
+        return data.name === name;
+      })
+    ) {
       setData((prevState: Data[]) => [
         ...prevState,
         { items: dataObj.items, name: name },
       ]);
+    } else {
+      console.log("Object Found");
     }
   };
 
-  const getDataFromAWS = async (link: string, name: string) => {
+  const getDataFromAWS = async (
+    link: string,
+    name: string,
+    deviceID: string,
+    minTimestamp: number
+  ) => {
     const dataObj: ReturnedDataObjAWS = await getAWSData(
-      "4317031",
-      0,
+      deviceID,
+      minTimestamp,
       localStorage.getItem("authorization") || "",
       link
     );
-
     // check if arg name does not match any of the allData names before appending new data to to allData
-    if (!allData?.find((data) => data.name === name)) {
+    if (
+      !allData?.find((data) => {
+        return data.name === name;
+      })
+    ) {
       setData((prevState: Data[]) => [
         ...prevState,
         { items: dataObj.Items, name: name },
@@ -56,7 +72,25 @@ const Dashboard: React.FC = () => {
   };
   useEffect(() => {
     getDataFromJson("./lambda-results-full-300.json", "weatherData");
-    getDataFromAWS("/data/tank", "tankData");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(() => {
+    allGraphs?.forEach((graph) => {
+      // Remove this if statement once backend is completed
+      if (graph.dataName === "tankData") {
+        const finalDataName: string =
+          graph.dataName + graph.deviceID + graph.minTimestamp;
+        getDataFromAWS(
+          graph.dataURL || "",
+          finalDataName,
+          graph.deviceID || "",
+          graph.minTimestamp || 0
+        );
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allGraphs]);
+  useEffect(() => {
     setGraphs([
       {
         dataName: "weatherData",
@@ -105,35 +139,71 @@ const Dashboard: React.FC = () => {
         datasetBackgroundColor: "red",
         datasetBorderColor: "red",
         decimationSamples: 5000,
+        dataURL: "/data/tank",
+        deviceID: "4317031",
+        minTimestamp: 0,
+      },
+      {
+        dataName: "tankData",
+        dataSelector: "tankState",
+        graphTitleText: "Tank State Data",
+        datasetBackgroundColor: "red",
+        datasetBorderColor: "red",
+        decimationSamples: 5000,
+        dataURL: "/data/tank",
+        deviceID: "4317031",
+        minTimestamp: 1594246178000,
       },
     ]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   return (
     <Container>
       <h1>Dashboard</h1>
-      <div style={{ display: "flex", flexWrap: "wrap" }}>
-        {allGraphs?.map((graphData) => (
-          <LineGraph
-            data={{
-              items:
-                allData?.find(
-                  (dataObj: { name: string }) =>
-                    dataObj.name === graphData.dataName
-                )?.items || [],
-            }}
-            options={{
-              graphTitleText: graphData.graphTitleText,
-              datasetBackgroundColor: graphData.datasetBackgroundColor,
-              datasetBorderColor: graphData.datasetBorderColor,
-              decimationSamples: graphData.decimationSamples,
-            }}
-            dataSelector={graphData.dataSelector}
-            dataName={graphData.dataName}
-          />
-        ))}
-      </div>
+      {allData && !updatingData ? (
+        <div style={{ display: "flex", flexWrap: "wrap" }}>
+          {allGraphs?.map((graphData) => (
+            <LineGraph
+              data={{
+                items:
+                  allData?.find((dataObj: { name: string }) => {
+                    const deviceID = graphData.deviceID
+                      ? graphData.deviceID
+                      : "";
+                    const minTimestamp =
+                      graphData.minTimestamp !== undefined
+                        ? graphData.minTimestamp
+                        : "";
+                    return (
+                      dataObj.name ===
+                      graphData.dataName + deviceID + minTimestamp
+                    );
+                  })?.items || [],
+              }}
+              options={{
+                graphTitleText: `${graphData.graphTitleText} device:${
+                  graphData.deviceID
+                } since:${
+                  (graphData?.minTimestamp || 0) > 0
+                    ? new Date(
+                        graphData?.minTimestamp || "invalid date"
+                      ).toLocaleDateString()
+                    : "all time"
+                }`,
+                datasetBackgroundColor: graphData.datasetBackgroundColor,
+                datasetBorderColor: graphData.datasetBorderColor,
+                decimationSamples: graphData.decimationSamples,
+              }}
+              dataSelector={graphData.dataSelector}
+              dataName={
+                graphData.dataName + graphData.deviceID + graphData.minTimestamp
+              }
+            />
+          ))}
+        </div>
+      ) : (
+        "Loading Data"
+      )}
     </Container>
   );
 };

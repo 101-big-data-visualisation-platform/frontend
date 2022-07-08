@@ -162,9 +162,6 @@ const LineGraph = ({
       },
     },
   };
-  if (!data.items || finalData.datasets.length === 0) {
-    return <div>Loading data...</div>;
-  }
   return (
     <StyledDiv1>
       <button

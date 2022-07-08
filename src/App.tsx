@@ -31,12 +31,15 @@ const App = () => {
   const fetchCurrentUser = async () => {
     setFetchingUser(true);
     const userInfo = await Auth.currentUserInfo();
-    setFetchingUser(false);
     setUser(userInfo);
+    setFetchingUser(false);
   };
   useEffect(() => {
     fetchCurrentUser();
   }, []);
+  useEffect(() => {
+    console.log(allData);
+  }, [allData]);
   return (
     <ThemeProvider theme={selectedTheme}>
       <AuthContext.Provider value={{ user, setUser, fetchingUser }}>

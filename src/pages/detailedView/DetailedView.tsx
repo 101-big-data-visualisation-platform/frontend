@@ -70,7 +70,10 @@ const DetailedView: FC = () => {
   };
   const getGraphs = () => {
     const relatedGraph = allGraphs?.find((graph) => {
-      if (graph.dataName === dataName && graph.dataSelector === dataSelector) {
+      if (
+        graph.dataName + graph.deviceID + graph.minTimestamp === dataName &&
+        graph.dataSelector === dataSelector
+      ) {
         return true;
       } else {
         return false;
@@ -87,7 +90,7 @@ const DetailedView: FC = () => {
   useEffect(() => {
     getGraphs();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allGraphs]);
+  }, [allGraphs, allData]);
 
   const optionsFinal: ChartOptions<"line"> = {
     elements: {

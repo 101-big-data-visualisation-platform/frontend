@@ -7,6 +7,10 @@ type Graph = {
   datasetBackgroundColor: string;
   datasetBorderColor: string;
   decimationSamples: number;
+  // Make these properties required once backend is finalized
+  dataURL?: string;
+  deviceID?: string;
+  minTimestamp?: number;
 };
 
 type GraphsContextType = {

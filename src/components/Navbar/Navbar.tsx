@@ -101,7 +101,7 @@ const Navbar: React.FC<Props> = ({ setSelectedTheme, selectedTheme }) => {
             {!user?.username ? (
               <>
                 {fetchingUser ? (
-                  <h1>Checking for user</h1>
+                  "Fetching User"
                 ) : (
                   <>
                     <LinkButton to="/login">Login</LinkButton>
@@ -164,8 +164,14 @@ const Navbar: React.FC<Props> = ({ setSelectedTheme, selectedTheme }) => {
             </Button>
             {!user?.username ? (
               <>
-                <LinkButton to="/login">Login</LinkButton>
-                <LinkButton to="/register">Register</LinkButton>
+                {fetchingUser ? (
+                  "Fetching User"
+                ) : (
+                  <>
+                    <LinkButton to="/login">Login</LinkButton>
+                    <LinkButton to="/register">Register</LinkButton>
+                  </>
+                )}
               </>
             ) : (
               <div>
