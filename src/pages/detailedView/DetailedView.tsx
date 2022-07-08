@@ -71,7 +71,12 @@ const DetailedView: FC = () => {
   const getGraphs = () => {
     const relatedGraph = allGraphs?.find((graph) => {
       if (
-        graph.dataName + graph.deviceID + graph.minTimestamp === dataName &&
+        graph.dataName +
+          (graph.deviceID !== undefined ? graph.deviceID : "") +
+          (graph.minTimestamp !== undefined
+            ? graph.minTimestamp?.toString()
+            : "") ===
+          dataName &&
         graph.dataSelector === dataSelector
       ) {
         return true;

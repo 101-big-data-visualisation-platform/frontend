@@ -196,7 +196,11 @@ const Dashboard: React.FC = () => {
               }}
               dataSelector={graphData.dataSelector}
               dataName={
-                graphData.dataName + graphData.deviceID + graphData.minTimestamp
+                graphData.dataName +
+                (graphData.deviceID !== undefined ? graphData.deviceID : "") +
+                (graphData.minTimestamp !== undefined
+                  ? graphData.minTimestamp?.toString()
+                  : "")
               }
             />
           ))}

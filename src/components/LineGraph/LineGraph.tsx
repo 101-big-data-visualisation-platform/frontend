@@ -9,8 +9,7 @@ import {
 import zoomPlugin from "chartjs-plugin-zoom";
 import "chartjs-adapter-moment";
 import { ThemeContext } from "styled-components";
-import { StyledDiv1 } from "./styled";
-import { Link } from "react-router-dom";
+import { StyledButton, StyledDiv1, StyledLink } from "./styled";
 Chartjs.register(...registerables);
 Chartjs.register(zoomPlugin);
 
@@ -164,16 +163,18 @@ const LineGraph = ({
   };
   return (
     <StyledDiv1>
-      <button
+      <StyledButton
         onClick={() => {
           chartRef?.current?.resetZoom();
         }}
       >
         Reset Zoom
-      </button>
-      <Link to={`/detailed?dataName=${dataName}&dataSelector=${dataSelector}`}>
+      </StyledButton>
+      <StyledLink
+        to={`/detailed?dataName=${dataName}&dataSelector=${dataSelector}`}
+      >
         Detailed View
-      </Link>
+      </StyledLink>
       <Line data={finalData} options={optionsFinal} ref={chartRef} />
     </StyledDiv1>
   );
