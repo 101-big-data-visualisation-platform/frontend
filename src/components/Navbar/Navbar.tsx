@@ -23,6 +23,8 @@ import { CircularProgress, MenuItem } from "@mui/material";
 import { ArrowDownward, Logout } from "@mui/icons-material";
 import AuthContext from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import GraphsContext from "../../contexts/GraphsContext";
+import DataContext from "../../contexts/DataContext";
 
 type Theme = {
   name: string;
@@ -47,6 +49,8 @@ interface Props {
 
 const Navbar: React.FC<Props> = ({ setSelectedTheme, selectedTheme }) => {
   const { user, setUser, fetchingUser } = useContext(AuthContext);
+  const { setGraphs } = useContext(GraphsContext);
+  const { setData } = useContext(DataContext);
   const navigate = useNavigate();
   const [displayMenu, setDisplayMenu] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
@@ -73,6 +77,8 @@ const Navbar: React.FC<Props> = ({ setSelectedTheme, selectedTheme }) => {
     setLoggingOut(true);
     await Auth.signOut();
     setUser(null);
+    setGraphs([]);
+    setData([]);
     setLoggingOut(false);
     navigate("/");
   };
