@@ -59,15 +59,17 @@ const Dashboard: React.FC = () => {
       link
     );
     // check if arg name does not match any of the allData names before appending new data to to allData
-    if (
-      !allData?.find((data) => {
-        return data.name === name;
-      })
-    ) {
-      setData((prevState: Data[]) => [
-        ...prevState,
-        { items: dataObj.Items, name: name },
-      ]);
+    if (dataObj) {
+      if (
+        !allData?.find((data) => {
+          return data.name === name;
+        })
+      ) {
+        setData((prevState: Data[]) => [
+          ...prevState,
+          { items: dataObj.Items, name: name },
+        ]);
+      }
     }
   };
   useEffect(() => {
