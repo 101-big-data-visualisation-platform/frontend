@@ -10,7 +10,10 @@ const Dashboard: React.FC = () => {
   const { allGraphs, setGraphs } = useContext(GraphsContext);
 
   type ReturnedDataObj = {
-    items: [];
+    items: {
+      timestamp: number;
+      inTemp: number;
+    }[];
   };
   type ReturnedDataObjAWS = {
     Items: [];
@@ -19,30 +22,85 @@ const Dashboard: React.FC = () => {
     items: [];
     name: string;
   };
-  const getArrayFromJson = async (link: string, name: string) => {
+  // const getArrayFromJson = async (link: string, name: string) => {
+  //   // const dataObj = await getWeatherData("IALBAN25", 15000000000000);
+  //   const dataArray: [] = await fetch(link, {
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Accept: "application/json",
+  //     },
+  //   }).then((response) => response.json());
+  //   console.log(dataArray);
+
+  //   // check if arg name does not match any of the allData names before appending new data to to allData
+  //   if (
+  //     !allData?.find((data) => {
+  //       return data.name === name;
+  //     })
+  //   ) {
+  //     setData((prevState: Data[]) => [
+  //       ...prevState,
+  //       { items: dataArray, name: name },
+  //     ]);
+  //   } else {
+  //     console.log("Object Found");
+  //   }
+  // };
+
+  const getDataFromJsonAndCompress = async (link: string, name: string) => {
     // const dataObj = await getWeatherData("IALBAN25", 15000000000000);
-    const dataArray: [] = await fetch(link, {
+    let dataObj: ReturnedDataObj = await fetch(link, {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
     }).then((response) => response.json());
-    console.log(dataArray);
+    console.log(dataObj);
+
+    // COMPRESSION START
+
+    let dataCompressed: any = [];
+    let lastIngestedPoint: { timestamp: number; inTemp: number } = {
+      timestamp: 0,
+      inTemp: 0,
+    };
+
+    for (let i = 0; i < dataObj.items.length; i++) {
+      if (i === 0) {
+        dataCompressed.push(dataObj.items[i]);
+        lastIngestedPoint = dataObj.items[i];
+        continue;
+      }
+      if (lastIngestedPoint?.inTemp !== dataObj.items[i]?.inTemp) {
+        dataCompressed.push(dataObj.items[i]);
+        lastIngestedPoint = dataObj.items[i];
+        continue;
+      }
+      if (lastIngestedPoint?.inTemp !== dataObj.items[i + 1]?.inTemp) {
+        dataCompressed.push(dataObj.items[i]);
+        lastIngestedPoint = dataObj.items[i];
+      }
+    }
+    console.log("CompressedArray:", dataCompressed);
+    // COMPRESSION END
 
     // check if arg name does not match any of the allData names before appending new data to to allData
     if (
       !allData?.find((data) => {
+        console.log(data.name);
+        console.log(name);
         return data.name === name;
       })
     ) {
       setData((prevState: Data[]) => [
         ...prevState,
-        { items: dataArray, name: name },
+        { items: dataCompressed, name: name },
       ]);
     } else {
       console.log("Object Found");
     }
   };
+
   const getDataFromJson = async (link: string, name: string) => {
     // const dataObj = await getWeatherData("IALBAN25", 15000000000000);
     const dataObj: ReturnedDataObj = await fetch(link, {
@@ -97,8 +155,8 @@ const Dashboard: React.FC = () => {
   };
   useEffect(() => {
     getDataFromJson("./lambda-results-full-300.json", "weatherData");
-    getArrayFromJson(
-      "./lambda-results-compressed.json",
+    getDataFromJsonAndCompress(
+      "./lambda-results-full-300.json",
       "weatherDataCompressed"
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
