@@ -13,6 +13,18 @@ import "chartjs-adapter-moment";
 import { ThemeContext } from "styled-components";
 import GraphsContext from "../../contexts/GraphsContext";
 import { Container } from "../../components/Container";
+import {
+  MinorSeparator,
+  StyledButton,
+  StyledButton2,
+  StyledDiv1,
+  StyledDiv2,
+  StyledDiv3,
+  StyledDiv4,
+  StyledDiv5,
+} from "./styled";
+import { Close, Menu } from "@mui/icons-material";
+import ContentToggler from "../../components/ContentToggler";
 Chartjs.register(...registerables);
 Chartjs.register(zoomPlugin);
 
@@ -27,6 +39,7 @@ const DetailedView: FC = () => {
   const [finalData, setFinalData] = useState<ChartData<"line">>({
     datasets: [],
   });
+  const [menuDisplayed, setMenuDisplayed] = useState(false);
   type Graph = {
     dataName: string;
     dataSelector: string;
@@ -180,17 +193,76 @@ const DetailedView: FC = () => {
       },
     },
   };
+
+  const toggleMenu = () => {
+    setMenuDisplayed(!menuDisplayed);
+  };
+
   return (
-    <Container>
-      <button
-        onClick={() => {
-          chartRef?.current?.resetZoom();
-        }}
-      >
-        Reset Zoom
-      </button>
-      <Line data={finalData} options={optionsFinal} ref={chartRef} />
-    </Container>
+    <StyledDiv2>
+      <Container>
+        <StyledDiv1>
+          <button
+            onClick={() => {
+              chartRef?.current?.resetZoom();
+            }}
+          >
+            Reset Zoom
+          </button>
+          <Line data={finalData} options={optionsFinal} ref={chartRef} />
+        </StyledDiv1>
+      </Container>
+      <StyledDiv4>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <StyledButton onClick={toggleMenu}>
+            {menuDisplayed ? <Close /> : <Menu />}
+          </StyledButton>
+          {menuDisplayed && (
+            <span style={{ marginLeft: "10px" }}>Graph Settings</span>
+          )}
+        </div>
+        {menuDisplayed && (
+          <StyledDiv3>
+            <ContentToggler title="Selected Timespan">
+              <>
+                <StyledDiv5>
+                  <StyledButton>1 day</StyledButton>
+                  <StyledButton>1 week</StyledButton>
+                  <StyledButton>1 month</StyledButton>
+                  <StyledButton>1 year</StyledButton>
+                  <StyledButton>All Time</StyledButton>
+                </StyledDiv5>
+                <MinorSeparator>
+                  <span style={{ marginRight: "10px" }}>OR</span>
+                  <input type={"date"} />
+                  <StyledButton2 style={{ marginLeft: "10px" }}>
+                    Update
+                  </StyledButton2>
+                </MinorSeparator>
+              </>
+            </ContentToggler>
+            <ContentToggler title="Data Displayed">
+              <p>Content</p>
+            </ContentToggler>
+            <ContentToggler title="Granularity">
+              <p>Content</p>
+            </ContentToggler>
+            <ContentToggler title="Style Settings">
+              <p>Content</p>
+            </ContentToggler>
+            <ContentToggler title="Graph Selection">
+              <p>Content</p>
+            </ContentToggler>
+            <ContentToggler title="Graph Exporting">
+              <p>Content</p>
+            </ContentToggler>
+            <ContentToggler title="Forcasting">
+              <p>Content</p>
+            </ContentToggler>
+          </StyledDiv3>
+        )}
+      </StyledDiv4>
+    </StyledDiv2>
   );
 };
 
