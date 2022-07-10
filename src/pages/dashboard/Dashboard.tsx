@@ -19,7 +19,30 @@ const Dashboard: React.FC = () => {
     items: [];
     name: string;
   };
+  const getArrayFromJson = async (link: string, name: string) => {
+    // const dataObj = await getWeatherData("IALBAN25", 15000000000000);
+    const dataArray: [] = await fetch(link, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    }).then((response) => response.json());
+    console.log(dataArray);
 
+    // check if arg name does not match any of the allData names before appending new data to to allData
+    if (
+      !allData?.find((data) => {
+        return data.name === name;
+      })
+    ) {
+      setData((prevState: Data[]) => [
+        ...prevState,
+        { items: dataArray, name: name },
+      ]);
+    } else {
+      console.log("Object Found");
+    }
+  };
   const getDataFromJson = async (link: string, name: string) => {
     // const dataObj = await getWeatherData("IALBAN25", 15000000000000);
     const dataObj: ReturnedDataObj = await fetch(link, {
@@ -28,7 +51,7 @@ const Dashboard: React.FC = () => {
         Accept: "application/json",
       },
     }).then((response) => response.json());
-
+    console.log(dataObj);
     // check if arg name does not match any of the allData names before appending new data to to allData
     if (
       !allData?.find((data) => {
@@ -74,6 +97,10 @@ const Dashboard: React.FC = () => {
   };
   useEffect(() => {
     getDataFromJson("./lambda-results-full-300.json", "weatherData");
+    getArrayFromJson(
+      "./lambda-results-compressed.json",
+      "weatherDataCompressed"
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
@@ -100,6 +127,14 @@ const Dashboard: React.FC = () => {
         graphTitleText: "Temperature Data",
         datasetBackgroundColor: "red",
         datasetBorderColor: "red",
+        decimationSamples: 5000,
+      },
+      {
+        dataName: "weatherDataCompressed",
+        dataSelector: "inTemp",
+        graphTitleText: "Temperature Data Compressed",
+        datasetBackgroundColor: "green",
+        datasetBorderColor: "green",
         decimationSamples: 5000,
       },
       {
