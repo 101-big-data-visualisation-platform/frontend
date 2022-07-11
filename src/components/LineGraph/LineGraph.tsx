@@ -130,7 +130,6 @@ const LineGraph = ({
       },
       decimation: {
         enabled: true,
-        algorithm: "lttb",
         samples: options.decimationSamples,
       },
       zoom: {
