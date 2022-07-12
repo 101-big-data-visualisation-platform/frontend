@@ -162,7 +162,6 @@ const DetailedView: FC = () => {
       },
       decimation: {
         enabled: true,
-        algorithm: "lttb",
         samples: graphSettings?.decimationSamples,
       },
       zoom: {
