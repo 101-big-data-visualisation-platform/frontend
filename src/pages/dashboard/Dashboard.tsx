@@ -1,13 +1,212 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import LineGraph from "../../components/LineGraph";
 import { Container } from "../../components/Container";
 import { getAWSData } from "../../api/dashboard";
 import DataContext from "../../contexts/DataContext";
 import GraphsContext from "../../contexts/GraphsContext";
+// REMOVE THESE IMPORTS IN FINAL PRODUCT
+import { Line } from "react-chartjs-2";
+import {
+  Chart as Chartjs,
+  registerables,
+  ChartOptions,
+  ChartData,
+} from "chart.js";
+import zoomPlugin from "chartjs-plugin-zoom";
+import "chartjs-adapter-moment";
+import { ThemeContext } from "styled-components";
+Chartjs.register(...registerables);
+Chartjs.register(zoomPlugin);
 
 const Dashboard: React.FC = () => {
   const { allData, setData, updatingData } = useContext(DataContext);
   const { allGraphs, setGraphs } = useContext(GraphsContext);
+
+  // TEMPORARY GRAPH START
+  const theme = useContext(ThemeContext);
+  const chartRef = useRef<Chartjs<"line">>();
+  const [finalData, setFinalData] = useState<ChartData<"line">>({
+    datasets: [],
+  });
+
+  const getData1 = async () => {
+    // const dataObj = await getWeatherData("IALBAN25", 15000000000000);
+    type Data = {
+      items: [];
+    };
+    // const dataObj: Data = JSON.parse(JSON.stringify(dataMain));
+    const itemsArray1: [] = await fetch(
+      "lambda-results-inTemp-moving-average.json",
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      }
+    ).then((response) => response.json());
+    const itemsArray2: [] = await fetch(
+      "lambda-results-inTemp-11point-moving-average.json",
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      }
+    ).then((response) => response.json());
+
+    let dataObj: Data = await fetch("lambda-results-full-300.json", {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    }).then((response) => response.json());
+
+    const itemsArray: [] = dataObj.items;
+    type Item = {
+      timeStamp: string;
+    };
+    interface IItem {
+      [key: string]: string;
+    }
+
+    const processedItems1 = itemsArray.map((item: Item) => {
+      return {
+        x: parseInt(item.timeStamp),
+        y: parseFloat((item as IItem)["inTemp"]),
+      };
+    });
+
+    const processedItems2 = itemsArray1.map((item: Item) => {
+      return {
+        x: parseInt(item.timeStamp),
+        y: parseFloat((item as IItem)["inTemp"]),
+      };
+    });
+
+    const processedItems3 = itemsArray2.map((item: Item) => {
+      return {
+        x: parseInt(item.timeStamp),
+        y: parseFloat((item as IItem)["inTemp"]),
+      };
+    });
+
+    setFinalData({
+      datasets: [
+        {
+          data: processedItems1,
+          label: "inTemp",
+          backgroundColor: "red",
+          borderColor: "red",
+          yAxisID: "y",
+          pointRadius: 0,
+          borderWidth: 1,
+        },
+        {
+          data: processedItems2,
+          label: "inTemp moving average",
+          backgroundColor: "green",
+          borderColor: "green",
+          yAxisID: "y",
+          pointRadius: 0,
+          borderWidth: 1,
+        },
+        {
+          data: processedItems3,
+          label: "inTemp 11 point moving average",
+          backgroundColor: "blue",
+          borderColor: "blue",
+          yAxisID: "y",
+          pointRadius: 0,
+          borderWidth: 1,
+        },
+      ],
+    });
+  };
+
+  const optionsFinal: ChartOptions<"line"> = {
+    elements: {
+      line: {
+        tension: 0,
+      },
+    },
+    responsive: true,
+    animation: false,
+    parsing: false,
+    scales: {
+      x: {
+        type: "time",
+        title: {
+          text: "time",
+          display: true,
+          color: theme.colors.secondary,
+        },
+        grid: {
+          color: theme.colors.primary3,
+        },
+        ticks: {
+          color: theme.colors.secondary,
+        },
+      },
+      y: {
+        type: "linear",
+        display: true,
+        position: "left",
+        title: {
+          text: "inTemp",
+          display: true,
+          color: theme.colors.secondary,
+        },
+        grid: {
+          color: theme.colors.primary3,
+        },
+        ticks: {
+          color: theme.colors.secondary,
+        },
+      },
+    },
+    plugins: {
+      title: {
+        display: true,
+        text: "inTemp weather data with moving averages",
+        color: theme.colors.secondary,
+        font: {
+          size: 20,
+        },
+      },
+      decimation: {
+        enabled: true,
+        samples: 5000,
+      },
+      zoom: {
+        zoom: {
+          wheel: {
+            enabled: true,
+          },
+          pinch: {
+            enabled: true,
+          },
+          drag: {
+            enabled: true,
+            backgroundColor: theme.colors.primary2,
+          },
+          mode: "x",
+        },
+        pan: {
+          mode: "x",
+          enabled: true,
+          modifierKey: "ctrl",
+        },
+        limits: {
+          x: {
+            min: "original",
+            max: "original",
+          },
+        },
+      },
+    },
+  };
+
+  // TEMPORARY GRAPH END
 
   type ReturnedDataObj = {
     items: {
@@ -252,6 +451,7 @@ const Dashboard: React.FC = () => {
     ]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   return (
     <Container>
       <h1>Dashboard</h1>
@@ -299,6 +499,7 @@ const Dashboard: React.FC = () => {
               }
             />
           ))}
+          <Line options={optionsFinal} data={finalData} />
         </div>
       ) : (
         "Loading Data"
