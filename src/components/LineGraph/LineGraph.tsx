@@ -15,62 +15,81 @@ Chartjs.register(zoomPlugin);
 
 type LineGraphProps = {
   data: {
-    items: [];
+    datasets: {
+      items: [];
+      name: string;
+    }[];
   };
   options: {
     graphTitleText: string;
-    datasetBackgroundColor: string;
-    datasetBorderColor: string;
+    datasetOptions: {
+      datasetBackgroundColor: string;
+      datasetBorderColor: string;
+      label: string;
+      dataSelector: string;
+      dataName: string;
+    }[];
     decimationSamples: number;
   };
-  dataSelector: string;
-  dataName: string;
 };
 
-const LineGraph = ({
-  data,
-  options,
-  dataSelector,
-  dataName,
-}: LineGraphProps) => {
+const LineGraph = ({ data, options }: LineGraphProps) => {
   const theme = useContext(ThemeContext);
   const chartRef = useRef<Chartjs<"line">>();
   const [finalData, setFinalData] = useState<ChartData<"line">>({
     datasets: [],
   });
   const getData1 = async () => {
-    // const dataObj = await getWeatherData("IALBAN25", 15000000000000);
     type Data = {
       items: [];
+      name: string;
     };
-    // const dataObj: Data = JSON.parse(JSON.stringify(dataMain));
-    const dataObj: Data = data;
-
-    const itemsArray: [] = dataObj.items;
-    type Item = {
-      timeStamp: string;
+    type DataObj = {
+      datasets: Data[];
     };
-    interface IItem {
-      [key: string]: string;
-    }
-    const processedItems = itemsArray.map((item: Item) => {
-      return {
-        x: parseInt(item.timeStamp),
-        y: parseFloat((item as IItem)[dataSelector]),
+    const dataObj: DataObj = data;
+    dataObj.datasets.forEach((dataset) => {
+      const itemsArray: [] = dataset.items;
+      type Item = {
+        timeStamp: string;
       };
-    });
-    setFinalData({
-      datasets: [
-        {
-          data: processedItems,
-          label: dataSelector,
-          backgroundColor: options.datasetBackgroundColor,
-          borderColor: options.datasetBorderColor,
-          yAxisID: "y",
-          pointRadius: 0,
-          borderWidth: 1,
-        },
-      ],
+      interface IItem {
+        [key: string]: string;
+      }
+      const processedItems = itemsArray.map((item: Item) => {
+        return {
+          x: parseInt(item.timeStamp),
+          y: parseFloat(
+            (item as IItem)[
+              options.datasetOptions.find(
+                (option) => option.dataName === dataset.name
+              )?.dataSelector || "invalid selector"
+            ]
+          ),
+        };
+      });
+      setFinalData({
+        datasets: [
+          {
+            data: processedItems,
+            label:
+              options.datasetOptions.find(
+                (option) => option.dataName === dataset.name
+              )?.dataSelector || "invalid selector",
+            backgroundColor:
+              options.datasetOptions.find(
+                (option) => option.dataName === dataset.name
+              )?.datasetBackgroundColor || "invalid selector",
+            borderColor:
+              options.datasetOptions.find(
+                (option) => option.dataName === dataset.name
+              )?.datasetBorderColor || "invalid selector",
+            yAxisID: "y",
+            pointRadius: 0,
+            borderWidth: 1,
+          },
+        ],
+      });
     });
   };
 

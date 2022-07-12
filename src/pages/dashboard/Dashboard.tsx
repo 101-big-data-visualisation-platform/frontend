@@ -165,90 +165,124 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     allGraphs?.forEach((graph) => {
       // Remove this if statement once backend is completed
-      if (graph.dataName === "tankData") {
-        const finalDataName: string =
-          graph.dataName + graph.deviceID + graph.minTimestamp;
-        getDataFromAWS(
-          graph.dataURL || "",
-          finalDataName,
-          graph.deviceID || "",
-          graph.minTimestamp || 0
-        );
-      }
+      graph.datasets.forEach((dataset) => {
+        if (dataset.dataName === "tankData") {
+          const finalDataName: string =
+            dataset.dataName + dataset.deviceID + graph.minTimestamp;
+          getDataFromAWS(
+            dataset.dataURL || "",
+            finalDataName,
+            dataset.deviceID || "",
+            graph.minTimestamp || 0
+          );
+        }
+      });
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allGraphs]);
   useEffect(() => {
     setGraphs([
       {
-        dataName: "weatherData",
-        dataSelector: "inTemp",
+        datasets: [
+          {
+            dataName: "weatherData",
+            datasetBackgroundColor: "red",
+            datasetBorderColor: "red",
+          },
+        ],
         graphTitleText: "Temperature Data",
-        datasetBackgroundColor: "red",
-        datasetBorderColor: "red",
         decimationSamples: 5000,
-      },
-      {
-        dataName: "weatherDataCompressed",
         dataSelector: "inTemp",
+      },
+      {
+        datasets: [
+          {
+            dataName: "weatherDataCompressed",
+            datasetBackgroundColor: "green",
+            datasetBorderColor: "green",
+          },
+        ],
         graphTitleText: "Temperature Data Compressed",
-        datasetBackgroundColor: "green",
-        datasetBorderColor: "green",
         decimationSamples: 5000,
+        dataSelector: "inTemp",
       },
       {
-        dataName: "weatherData",
-        dataSelector: "dailyRain",
+        datasets: [
+          {
+            dataName: "weatherData",
+            datasetBackgroundColor: "red",
+            datasetBorderColor: "red",
+          },
+        ],
         graphTitleText: "Daily Rain Data",
-        datasetBackgroundColor: "red",
-        datasetBorderColor: "red",
         decimationSamples: 5000,
+        dataSelector: "dailyRain",
       },
       {
-        dataName: "weatherData",
-        dataSelector: "absBaro",
+        datasets: [
+          {
+            dataName: "weatherData",
+            datasetBackgroundColor: "red",
+            datasetBorderColor: "red",
+          },
+        ],
         graphTitleText: "Absolute Barometer Data",
-        datasetBackgroundColor: "red",
-        datasetBorderColor: "red",
         decimationSamples: 5000,
+        dataSelector: "absBaro",
       },
       {
-        dataName: "weatherData",
-        dataSelector: "dewPoint",
+        datasets: [
+          {
+            dataName: "weatherData",
+            datasetBackgroundColor: "red",
+            datasetBorderColor: "red",
+          },
+        ],
         graphTitleText: "Dew Point Data",
-        datasetBackgroundColor: "red",
-        datasetBorderColor: "red",
         decimationSamples: 5000,
+        dataSelector: "dewPoint",
       },
       {
-        dataName: "weatherData",
-        dataSelector: "inHumi",
+        datasets: [
+          {
+            dataName: "weatherData",
+            datasetBackgroundColor: "red",
+            datasetBorderColor: "red",
+          },
+        ],
         graphTitleText: "Humidity Data",
-        datasetBackgroundColor: "red",
-        datasetBorderColor: "red",
         decimationSamples: 5000,
+        dataSelector: "inHumi",
       },
       {
-        dataName: "tankData",
-        dataSelector: "battery",
+        datasets: [
+          {
+            dataName: "tankData",
+            datasetBackgroundColor: "red",
+            datasetBorderColor: "red",
+            dataURL: "/data/tank",
+            deviceID: "4317031",
+            minTimestamp: 0,
+          },
+        ],
         graphTitleText: "Tank Battery Data",
-        datasetBackgroundColor: "red",
-        datasetBorderColor: "red",
         decimationSamples: 5000,
-        dataURL: "/data/tank",
-        deviceID: "4317031",
-        minTimestamp: 0,
+        dataSelector: "battery",
       },
       {
-        dataName: "tankData",
-        dataSelector: "tankState",
+        datasets: [
+          {
+            dataName: "tankData",
+            datasetBackgroundColor: "red",
+            datasetBorderColor: "red",
+            dataURL: "/data/tank",
+            deviceID: "4317031",
+            minTimestamp: 1594246178000,
+          },
+        ],
         graphTitleText: "Tank State Data",
-        datasetBackgroundColor: "red",
-        datasetBorderColor: "red",
         decimationSamples: 5000,
-        dataURL: "/data/tank",
-        deviceID: "4317031",
-        minTimestamp: 1594246178000,
+        dataSelector: "tankState",
       },
     ]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -263,43 +297,42 @@ const Dashboard: React.FC = () => {
             {allGraphs?.map((graphData) => (
               <LineGraph
                 data={{
-                  items:
-                    allData?.find((dataObj: { name: string }) => {
-                      const deviceID = graphData.deviceID
-                        ? graphData.deviceID
-                        : "";
-                      const minTimestamp =
-                        graphData.minTimestamp !== undefined
-                          ? graphData.minTimestamp
-                          : "";
-                      return (
-                        dataObj.name ===
-                        graphData.dataName + deviceID + minTimestamp
-                      );
-                    })?.items || [],
+                  datasets: graphData.datasets.map((dataset) => {
+                    return {
+                      items:
+                        allData.find((data) => {
+                          return data.name === dataset.dataName;
+                        })?.items || [],
+                      name:
+                        dataset.dataName +
+                        (dataset.deviceID !== undefined
+                          ? dataset.deviceID
+                          : "") +
+                        (graphData.minTimestamp !== undefined
+                          ? graphData.minTimestamp?.toString()
+                          : ""),
+                    };
+                  }),
                 }}
                 options={{
-                  graphTitleText: `${graphData.graphTitleText} device:${
-                    graphData.deviceID
-                  } since:${
+                  graphTitleText: `${graphData.graphTitleText}  since:${
                     (graphData?.minTimestamp || 0) > 0
                       ? new Date(
                           graphData?.minTimestamp || "invalid date"
                         ).toLocaleDateString()
                       : "all time"
                   }`,
-                  datasetBackgroundColor: graphData.datasetBackgroundColor,
-                  datasetBorderColor: graphData.datasetBorderColor,
+                  datasetOptions: graphData.datasets.map((dataset) => {
+                    return {
+                      datasetBackgroundColor: dataset.datasetBackgroundColor,
+                      datasetBorderColor: dataset.datasetBorderColor,
+                      label: dataset.dataSelector,
+                      dataName: dataset.dataName,
+                      dataSelector: dataset.dataSelector,
+                    };
+                  }),
                   decimationSamples: graphData.decimationSamples,
                 }}
-                dataSelector={graphData.dataSelector}
-                dataName={
-                  graphData.dataName +
-                  (graphData.deviceID !== undefined ? graphData.deviceID : "") +
-                  (graphData.minTimestamp !== undefined
-                    ? graphData.minTimestamp?.toString()
-                    : "")
-                }
               />
             ))}
           </div>
