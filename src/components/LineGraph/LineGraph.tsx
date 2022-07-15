@@ -26,10 +26,10 @@ type LineGraphProps = {
       datasetBackgroundColor: string;
       datasetBorderColor: string;
       label: string;
-      dataSelector: string;
       dataName: string;
     }[];
     decimationSamples: number;
+    dataSelector: string;
   };
 };
 
@@ -48,48 +48,42 @@ const LineGraph = ({ data, options }: LineGraphProps) => {
       datasets: Data[];
     };
     const dataObj: DataObj = data;
-    dataObj.datasets.forEach((dataset) => {
-      const itemsArray: [] = dataset.items;
-      type Item = {
-        timeStamp: string;
-      };
-      interface IItem {
-        [key: string]: string;
-      }
-      const processedItems = itemsArray.map((item: Item) => {
+
+    type Item = {
+      timeStamp: string;
+    };
+    interface IItem {
+      [key: string]: string;
+    }
+
+    const processedItems = dataObj.datasets.map(
+      (arrayOfItems: { items: []; name: string }) => {
         return {
-          x: parseInt(item.timeStamp),
-          y: parseFloat(
-            (item as IItem)[
-              options.datasetOptions.find(
-                (option) => option.dataName === dataset.name
-              )?.dataSelector || "invalid selector"
-            ]
-          ),
+          items: arrayOfItems.items.map((item: Item) => {
+            return {
+              x: parseInt(item.timeStamp),
+              y: parseFloat((item as IItem)[options.dataSelector]),
+            };
+          }),
+          name: arrayOfItems.name,
         };
-      });
-      setFinalData({
-        datasets: [
-          {
-            data: processedItems,
-            label:
-              options.datasetOptions.find(
-                (option) => option.dataName === dataset.name
-              )?.dataSelector || "invalid selector",
-            backgroundColor:
-              options.datasetOptions.find(
-                (option) => option.dataName === dataset.name
-              )?.datasetBackgroundColor || "invalid selector",
-            borderColor:
-              options.datasetOptions.find(
-                (option) => option.dataName === dataset.name
-              )?.datasetBorderColor || "invalid selector",
-            yAxisID: "y",
-            pointRadius: 0,
-            borderWidth: 1,
-          },
-        ],
-      });
+      }
+    );
+    setFinalData({
+      datasets: processedItems.map((processedItem) => {
+        const relatedGraph = options.datasetOptions.find((dataset) => {
+          return dataset.dataName === processedItem.name;
+        });
+        return {
+          data: processedItem.items,
+          label: relatedGraph?.label,
+          backgroundColor: relatedGraph?.datasetBackgroundColor,
+          borderColor: relatedGraph?.datasetBorderColor,
+          yAxisID: "y",
+          pointRadius: 0,
+          borderWidth: 1,
+        };
+      }),
     });
   };
 
@@ -126,7 +120,7 @@ const LineGraph = ({ data, options }: LineGraphProps) => {
         display: true,
         position: "left",
         title: {
-          text: dataSelector,
+          text: options.dataSelector,
           display: true,
           color: theme.colors.secondary,
         },
@@ -189,7 +183,9 @@ const LineGraph = ({ data, options }: LineGraphProps) => {
         Reset Zoom
       </StyledButton>
       <StyledLink
-        to={`/detailed?dataName=${dataName}&dataSelector=${dataSelector}`}
+        to={`/detailed?dataName=${JSON.stringify(
+          options.datasetOptions.map((option) => option.dataName)
+        )}&dataSelector=${options.dataSelector}`}
       >
         Detailed View
       </StyledLink>

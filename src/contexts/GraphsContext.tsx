@@ -4,7 +4,6 @@ export type Graph = {
   graphTitleText: any;
   datasets: {
     dataName: string;
-    dataSelector: string;
     datasetBackgroundColor: string;
     datasetBorderColor: string;
     dataURL?: string;
@@ -12,6 +11,7 @@ export type Graph = {
   }[];
   minTimestamp?: number;
   decimationSamples: number;
+  dataSelector: string;
   // Make these properties required once backend is finalized
 };
 

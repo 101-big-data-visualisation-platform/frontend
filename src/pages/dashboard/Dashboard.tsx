@@ -56,7 +56,6 @@ const Dashboard: React.FC = () => {
         Accept: "application/json",
       },
     }).then((response) => response.json());
-    console.log(dataObj);
 
     // COMPRESSION START
 
@@ -82,14 +81,11 @@ const Dashboard: React.FC = () => {
         lastIngestedPoint = dataObj.items[i];
       }
     }
-    console.log("CompressedArray:", dataCompressed);
     // COMPRESSION END
 
     // check if arg name does not match any of the allData names before appending new data to to allData
     if (
       !allData?.find((data) => {
-        console.log(data.name);
-        console.log(name);
         return data.name === name;
       })
     ) {
@@ -110,12 +106,9 @@ const Dashboard: React.FC = () => {
         Accept: "application/json",
       },
     }).then((response) => response.json());
-    console.log(dataObj);
     // check if arg name does not match any of the allData names before appending new data to to allData
     if (
       !allData?.find((data) => {
-        console.log(data.name);
-        console.log(name);
         return data.name === name;
       })
     ) {
@@ -166,12 +159,10 @@ const Dashboard: React.FC = () => {
     allGraphs?.forEach((graph) => {
       // Remove this if statement once backend is completed
       graph.datasets.forEach((dataset) => {
-        if (dataset.dataName === "tankData") {
-          const finalDataName: string =
-            dataset.dataName + dataset.deviceID + graph.minTimestamp;
+        if (dataset.dataName.includes("tankData")) {
           getDataFromAWS(
             dataset.dataURL || "",
-            finalDataName,
+            dataset.dataName,
             dataset.deviceID || "",
             graph.minTimestamp || 0
           );
@@ -257,32 +248,69 @@ const Dashboard: React.FC = () => {
       {
         datasets: [
           {
-            dataName: "tankData",
+            dataName: "tankData43170311594246178000",
             datasetBackgroundColor: "red",
             datasetBorderColor: "red",
             dataURL: "/data/tank",
             deviceID: "4317031",
-            minTimestamp: 0,
           },
-        ],
-        graphTitleText: "Tank Battery Data",
-        decimationSamples: 5000,
-        dataSelector: "battery",
-      },
-      {
-        datasets: [
           {
-            dataName: "tankData",
-            datasetBackgroundColor: "red",
-            datasetBorderColor: "red",
+            dataName: "tankData41139991594246178000",
+            datasetBackgroundColor: "blue",
+            datasetBorderColor: "blue",
             dataURL: "/data/tank",
-            deviceID: "4317031",
-            minTimestamp: 1594246178000,
+            deviceID: "4113999",
           },
         ],
         graphTitleText: "Tank State Data",
         decimationSamples: 5000,
         dataSelector: "tankState",
+        minTimestamp: 1594246178000,
+      },
+      {
+        datasets: [
+          {
+            dataName: "tankData41139991594246178000",
+            datasetBackgroundColor: "blue",
+            datasetBorderColor: "blue",
+            dataURL: "/data/tank",
+            deviceID: "4113999",
+          },
+        ],
+        graphTitleText: "Tank State Data",
+        decimationSamples: 5000,
+        dataSelector: "tankState",
+        minTimestamp: 1594246178000,
+      },
+      {
+        datasets: [
+          {
+            dataName: "tankData43170311594246178000",
+            datasetBackgroundColor: "red",
+            datasetBorderColor: "red",
+            dataURL: "/data/tank",
+            deviceID: "4317031",
+          },
+        ],
+        graphTitleText: "Tank State Data",
+        decimationSamples: 5000,
+        dataSelector: "tankState",
+        minTimestamp: 1594246178000,
+      },
+      {
+        datasets: [
+          {
+            dataName: "tankData43170310",
+            datasetBackgroundColor: "red",
+            datasetBorderColor: "red",
+            dataURL: "/data/tank",
+            deviceID: "4317031",
+          },
+        ],
+        graphTitleText: "Tank Battery Data",
+        decimationSamples: 5000,
+        dataSelector: "battery",
+        minTimestamp: 0,
       },
     ]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -303,14 +331,7 @@ const Dashboard: React.FC = () => {
                         allData.find((data) => {
                           return data.name === dataset.dataName;
                         })?.items || [],
-                      name:
-                        dataset.dataName +
-                        (dataset.deviceID !== undefined
-                          ? dataset.deviceID
-                          : "") +
-                        (graphData.minTimestamp !== undefined
-                          ? graphData.minTimestamp?.toString()
-                          : ""),
+                      name: dataset.dataName,
                     };
                   }),
                 }}
@@ -326,12 +347,12 @@ const Dashboard: React.FC = () => {
                     return {
                       datasetBackgroundColor: dataset.datasetBackgroundColor,
                       datasetBorderColor: dataset.datasetBorderColor,
-                      label: dataset.dataSelector,
+                      label: `Device: ${dataset.deviceID}`,
                       dataName: dataset.dataName,
-                      dataSelector: dataset.dataSelector,
                     };
                   }),
                   decimationSamples: graphData.decimationSamples,
+                  dataSelector: graphData.dataSelector,
                 }}
               />
             ))}

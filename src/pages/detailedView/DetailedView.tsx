@@ -32,7 +32,7 @@ const DetailedView: FC = () => {
   const [searchParams] = useSearchParams();
   const { allData } = useContext(DataContext);
   const { allGraphs } = useContext(GraphsContext);
-  const dataName = searchParams.get("dataName") || "";
+  const dataNames = searchParams.get("dataName") || "";
   const dataSelector = searchParams.get("dataSelector") || "";
   const theme = useContext(ThemeContext);
   const chartRef = useRef<Chartjs<"line">>();
@@ -41,19 +41,32 @@ const DetailedView: FC = () => {
   });
   const [menuDisplayed, setMenuDisplayed] = useState(false);
   type Graph = {
-    dataName: string;
-    dataSelector: string;
     graphTitleText: string;
-    datasetBackgroundColor: string;
-    datasetBorderColor: string;
+    datasets: {
+      dataName: string;
+      datasetBackgroundColor: string;
+      datasetBorderColor: string;
+      dataURL?: string;
+      deviceID?: string;
+    }[];
+    minTimestamp?: number;
     decimationSamples: number;
+    dataSelector: string;
+    // Make these properties required once backend is finalized
   };
   const [graphSettings, setGraphSettings] = useState<Graph>();
   const getData1 = () => {
     // const dataObj = await getWeatherData("IALBAN25", 15000000000000);
     // const dataObj: Data = JSON.parse(JSON.stringify(dataMain));
-    const itemsArray: [] =
-      allData?.find((data) => data.name === dataName)?.items || [];
+
+    const arrayOfitemsArray = JSON.parse(dataNames).map((dataName: string) => {
+      const itemsArray: [] =
+        allData?.find((data) => data.name === dataName)?.items || [];
+      return {
+        items: itemsArray,
+        name: dataName,
+      };
+    });
 
     type Item = {
       timeStamp: string;
@@ -61,43 +74,55 @@ const DetailedView: FC = () => {
     interface IItem {
       [key: string]: string;
     }
-    const processedItems = itemsArray.map((item: Item) => {
-      return {
-        x: parseInt(item.timeStamp),
-        y: parseFloat((item as IItem)[dataSelector]),
-      };
-    });
+    const processedItems = arrayOfitemsArray.map(
+      (arrayOfItems: { items: []; name: string }) => {
+        return {
+          items: arrayOfItems.items.map((item: Item) => {
+            return {
+              x: parseInt(item.timeStamp),
+              y: parseFloat((item as IItem)[dataSelector]),
+            };
+          }),
+          name: arrayOfItems.name,
+        };
+      }
+    );
     setFinalData({
-      datasets: [
-        {
-          data: processedItems,
-          label: dataSelector,
-          backgroundColor: graphSettings?.datasetBackgroundColor,
-          borderColor: graphSettings?.datasetBorderColor,
-          yAxisID: "y",
-          pointRadius: 1,
-          borderWidth: 1,
-        },
-      ],
+      datasets: processedItems.map(
+        (processedItem: { items: []; name: string }) => {
+          const relatedGraph = graphSettings?.datasets.find((dataset) => {
+            return dataset.dataName === processedItem.name;
+          });
+          return {
+            data: processedItem.items,
+            label: `Device: ${relatedGraph?.deviceID}`,
+            backgroundColor: relatedGraph?.datasetBackgroundColor,
+            borderColor: relatedGraph?.datasetBorderColor,
+            yAxisID: "y",
+            pointRadius: 1,
+            borderWidth: 1,
+          };
+        }
+      ),
     });
   };
   const getGraphs = () => {
     const relatedGraph = allGraphs?.find((graph) => {
-      if (
-        graph.dataName +
-          (graph.deviceID !== undefined ? graph.deviceID : "") +
-          (graph.minTimestamp !== undefined
-            ? graph.minTimestamp?.toString()
-            : "") ===
-          dataName &&
-        graph.dataSelector === dataSelector
-      ) {
+      const dataNamesArray = graph.datasets.map((dataset) => dataset.dataName);
+      let counter = 0;
+      let counterGoal = dataNamesArray.length;
+      dataNamesArray.forEach((dataNameString) => {
+        if (JSON.parse(dataNames).includes(dataNameString)) {
+          counter++;
+        }
+      });
+      if (counter === counterGoal) {
         return true;
       } else {
         return false;
       }
     });
-    console.log(relatedGraph?.datasetBackgroundColor);
+
     setGraphSettings(relatedGraph);
   };
 
