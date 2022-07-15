@@ -37,7 +37,6 @@ const MovingAverageGraph: FC = () => {
       },
     }).then((response) => response.json());
 
-    const itemsArray: any[] = dataObj.items;
     type Item = {
       timeStamp: string;
     };
@@ -68,7 +67,7 @@ const MovingAverageGraph: FC = () => {
       }
     }
 
-    const processedItems1 = itemsArray.map((item: Item) => {
+    const processedItems1 = dataCompressed.map((item: Item) => {
       return {
         x: parseInt(item.timeStamp),
         y: parseFloat((item as IItem)["inTemp"]),
@@ -100,22 +99,6 @@ const MovingAverageGraph: FC = () => {
       };
     });
 
-    console.log("Moving Average:", processedItems2);
-
-    // const processedItems2 = itemsArray1.map((item: Item) => {
-    //   return {
-    //     x: parseInt(item.timeStamp),
-    //     y: parseFloat((item as IItem)["inTemp"]),
-    //   };
-    // });
-
-    // const processedItems3 = itemsArray2.map((item: Item) => {
-    //   return {
-    //     x: parseInt(item.timeStamp),
-    //     y: parseFloat((item as IItem)["inTemp"]),
-    //   };
-    // });
-
     setFinalData({
       datasets: [
         {
@@ -136,15 +119,6 @@ const MovingAverageGraph: FC = () => {
           pointRadius: 0,
           borderWidth: 1,
         },
-        // {
-        //   data: processedItems3,
-        //   label: "inTemp 11 point moving average",
-        //   backgroundColor: "blue",
-        //   borderColor: "blue",
-        //   yAxisID: "y",
-        //   pointRadius: 0,
-        //   borderWidth: 1,
-        // },
       ],
     });
   };

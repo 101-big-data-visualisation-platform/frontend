@@ -1,16 +1,18 @@
 import React, { Dispatch, SetStateAction } from "react";
 
-type Graph = {
-  dataName: string;
-  dataSelector: string;
-  graphTitleText: string;
-  datasetBackgroundColor: string;
-  datasetBorderColor: string;
-  decimationSamples: number;
-  // Make these properties required once backend is finalized
-  dataURL?: string;
-  deviceID?: string;
+export type Graph = {
+  graphTitleText: any;
+  datasets: {
+    dataName: string;
+    datasetBackgroundColor: string;
+    datasetBorderColor: string;
+    dataURL?: string;
+    deviceID?: string;
+  }[];
   minTimestamp?: number;
+  decimationSamples: number;
+  dataSelector: string;
+  // Make these properties required once backend is finalized
 };
 
 type GraphsContextType = {
