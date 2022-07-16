@@ -1,13 +1,15 @@
 import React, { useContext, useEffect } from "react";
 import LineGraph from "../../components/LineGraph";
 import { Container } from "../../components/Container";
-import { getAWSData } from "../../api/dashboard";
+import { getAWSDashboard, getAWSData } from "../../api/dashboard";
 import DataContext from "../../contexts/DataContext";
 import GraphsContext from "../../contexts/GraphsContext";
 import MovingAverageGraph from "./MovingAverageGraph";
+import AuthContext from "../../contexts/AuthContext";
 
 const Dashboard: React.FC = () => {
   const { allData, setData, updatingData } = useContext(DataContext);
+  const { user } = useContext(AuthContext);
   const { allGraphs, setGraphs } = useContext(GraphsContext);
 
   type ReturnedDataObj = {
@@ -147,6 +149,15 @@ const Dashboard: React.FC = () => {
       }
     }
   };
+
+  const fetchDashboard = async () => {
+    const dashboardData = await getAWSDashboard(
+      localStorage.getItem("authorization") || "",
+      user?.username || ""
+    );
+    setGraphs(dashboardData.items);
+  };
+
   useEffect(() => {
     getDataFromJson("./lambda-results-full-300.json", "weatherData");
     getDataFromJsonAndCompress(
@@ -172,147 +183,7 @@ const Dashboard: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allGraphs]);
   useEffect(() => {
-    setGraphs([
-      {
-        datasets: [
-          {
-            dataName: "weatherData",
-            datasetBackgroundColor: "red",
-            datasetBorderColor: "red",
-          },
-        ],
-        graphTitleText: "Temperature Data",
-        decimationSamples: 5000,
-        dataSelector: "inTemp",
-      },
-      {
-        datasets: [
-          {
-            dataName: "weatherDataCompressed",
-            datasetBackgroundColor: "green",
-            datasetBorderColor: "green",
-          },
-        ],
-        graphTitleText: "Temperature Data Compressed",
-        decimationSamples: 5000,
-        dataSelector: "inTemp",
-      },
-      {
-        datasets: [
-          {
-            dataName: "weatherData",
-            datasetBackgroundColor: "red",
-            datasetBorderColor: "red",
-          },
-        ],
-        graphTitleText: "Daily Rain Data",
-        decimationSamples: 5000,
-        dataSelector: "dailyRain",
-      },
-      {
-        datasets: [
-          {
-            dataName: "weatherData",
-            datasetBackgroundColor: "red",
-            datasetBorderColor: "red",
-          },
-        ],
-        graphTitleText: "Absolute Barometer Data",
-        decimationSamples: 5000,
-        dataSelector: "absBaro",
-      },
-      {
-        datasets: [
-          {
-            dataName: "weatherData",
-            datasetBackgroundColor: "red",
-            datasetBorderColor: "red",
-          },
-        ],
-        graphTitleText: "Dew Point Data",
-        decimationSamples: 5000,
-        dataSelector: "dewPoint",
-      },
-      {
-        datasets: [
-          {
-            dataName: "weatherData",
-            datasetBackgroundColor: "red",
-            datasetBorderColor: "red",
-          },
-        ],
-        graphTitleText: "Humidity Data",
-        decimationSamples: 5000,
-        dataSelector: "inHumi",
-      },
-      {
-        datasets: [
-          {
-            dataName: "tankData43170311594246178000",
-            datasetBackgroundColor: "red",
-            datasetBorderColor: "red",
-            dataURL: "/data/tank",
-            deviceID: "4317031",
-          },
-          {
-            dataName: "tankData41139991594246178000",
-            datasetBackgroundColor: "blue",
-            datasetBorderColor: "blue",
-            dataURL: "/data/tank",
-            deviceID: "4113999",
-          },
-        ],
-        graphTitleText: "Tank State Data",
-        decimationSamples: 5000,
-        dataSelector: "tankState",
-        minTimestamp: 1594246178000,
-      },
-      {
-        datasets: [
-          {
-            dataName: "tankData41139991594246178000",
-            datasetBackgroundColor: "blue",
-            datasetBorderColor: "blue",
-            dataURL: "/data/tank",
-            deviceID: "4113999",
-          },
-        ],
-        graphTitleText: "Tank State Data",
-        decimationSamples: 5000,
-        dataSelector: "tankState",
-        minTimestamp: 1594246178000,
-      },
-      {
-        datasets: [
-          {
-            dataName: "tankData43170311594246178000",
-            datasetBackgroundColor: "red",
-            datasetBorderColor: "red",
-            dataURL: "/data/tank",
-            deviceID: "4317031",
-          },
-        ],
-        graphTitleText: "Tank State Data",
-        decimationSamples: 5000,
-        dataSelector: "tankState",
-        minTimestamp: 1594246178000,
-      },
-      {
-        datasets: [
-          {
-            dataName: "tankData43170310",
-            datasetBackgroundColor: "red",
-            datasetBorderColor: "red",
-            dataURL: "/data/tank",
-            deviceID: "4317031",
-          },
-        ],
-        graphTitleText: "Tank Battery Data",
-        decimationSamples: 5000,
-        dataSelector: "battery",
-        minTimestamp: 0,
-      },
-    ]);
+    fetchDashboard();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

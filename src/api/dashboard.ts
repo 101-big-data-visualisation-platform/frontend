@@ -43,3 +43,13 @@ export const getAWSData = async (
     );
   }
 };
+
+export const getAWSDashboard = async (jwt: string, username: string) => {
+  return await apiAWS
+    .get(`/data/dashboard?username=${username}`, {
+      headers: {
+        authorization: jwt,
+      },
+    })
+    .then((response) => response.data);
+};
