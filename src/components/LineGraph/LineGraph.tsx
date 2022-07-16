@@ -10,6 +10,10 @@ import zoomPlugin from "chartjs-plugin-zoom";
 import "chartjs-adapter-moment";
 import { ThemeContext } from "styled-components";
 import { StyledButton, StyledDiv1, StyledLink } from "./styled";
+import { updateUserSettingsAWS } from "../../api/dashboard";
+import AuthContext from "../../contexts/AuthContext";
+import GraphsContext from "../../contexts/GraphsContext";
+import { LinearProgress } from "@mui/material";
 Chartjs.register(...registerables);
 Chartjs.register(zoomPlugin);
 
@@ -27,18 +31,24 @@ type LineGraphProps = {
       datasetBorderColor: string;
       label: string;
       dataName: string;
+      deviceID: string;
     }[];
     decimationSamples: number;
     dataSelector: string;
+    minTimestamp: number;
   };
+  graphID: string;
 };
 
-const LineGraph = ({ data, options }: LineGraphProps) => {
+const LineGraph = ({ data, options, graphID }: LineGraphProps) => {
   const theme = useContext(ThemeContext);
+  const { user } = useContext(AuthContext);
+  const { allGraphs, setGraphs } = useContext(GraphsContext);
   const chartRef = useRef<Chartjs<"line">>();
   const [finalData, setFinalData] = useState<ChartData<"line">>({
     datasets: [],
   });
+  const [deleting, setDeleting] = useState(false);
   const getData1 = async () => {
     type Data = {
       items: [];
@@ -55,6 +65,8 @@ const LineGraph = ({ data, options }: LineGraphProps) => {
     interface IItem {
       [key: string]: string;
     }
+
+    console.log(data);
 
     const processedItems = dataObj.datasets.map(
       (arrayOfItems: { items: []; name: string }) => {
@@ -183,12 +195,41 @@ const LineGraph = ({ data, options }: LineGraphProps) => {
         Reset Zoom
       </StyledButton>
       <StyledLink
-        to={`/detailed?dataName=${JSON.stringify(
-          options.datasetOptions.map((option) => option.dataName)
-        )}&dataSelector=${options.dataSelector}`}
+        style={deleting ? { pointerEvents: "none" } : {}}
+        to={`/detailed?dataName=${encodeURIComponent(
+          JSON.stringify(options.datasetOptions)
+        )}&dataSelector=${options.dataSelector}&graphID=${graphID}`}
       >
         Detailed View
       </StyledLink>
+      <StyledButton
+        onClick={async () => {
+          setDeleting(true);
+          const updatedGraphs =
+            allGraphs?.filter((graph) => {
+              if (graph.graphID === graphID) {
+                return false;
+              } else {
+                return true;
+              }
+            }) || [];
+          await updateUserSettingsAWS(
+            localStorage.getItem("authorization") || "",
+            user?.username || "",
+            updatedGraphs
+          );
+
+          setDeleting(false);
+          setGraphs(updatedGraphs);
+        }}
+        disabled={deleting}
+      >
+        Delete
+      </StyledButton>
+      {deleting && (
+        <LinearProgress style={{ marginTop: "10px" }} color="inherit" />
+      )}
+
       <Line data={finalData} options={optionsFinal} ref={chartRef} />
     </StyledDiv1>
   );

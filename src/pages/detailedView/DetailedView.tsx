@@ -11,7 +11,7 @@ import {
 import zoomPlugin from "chartjs-plugin-zoom";
 import "chartjs-adapter-moment";
 import { ThemeContext } from "styled-components";
-import GraphsContext from "../../contexts/GraphsContext";
+import GraphsContext, { Dataset, Graph } from "../../contexts/GraphsContext";
 import { Container } from "../../components/Container";
 import {
   MinorSeparator,
@@ -34,37 +34,25 @@ const DetailedView: FC = () => {
   const { allGraphs } = useContext(GraphsContext);
   const dataNames = searchParams.get("dataName") || "";
   const dataSelector = searchParams.get("dataSelector") || "";
+  const graphID = searchParams.get("graphID") || "";
   const theme = useContext(ThemeContext);
   const chartRef = useRef<Chartjs<"line">>();
   const [finalData, setFinalData] = useState<ChartData<"line">>({
     datasets: [],
   });
   const [menuDisplayed, setMenuDisplayed] = useState(false);
-  type Graph = {
-    graphTitleText: string;
-    datasets: {
-      dataName: string;
-      datasetBackgroundColor: string;
-      datasetBorderColor: string;
-      dataURL?: string;
-      deviceID?: string;
-    }[];
-    minTimestamp?: number;
-    decimationSamples: number;
-    dataSelector: string;
-    // Make these properties required once backend is finalized
-  };
+
   const [graphSettings, setGraphSettings] = useState<Graph>();
   const getData1 = () => {
     // const dataObj = await getWeatherData("IALBAN25", 15000000000000);
     // const dataObj: Data = JSON.parse(JSON.stringify(dataMain));
-
-    const arrayOfitemsArray = JSON.parse(dataNames).map((dataName: string) => {
+    console.log(JSON.parse(dataNames));
+    const arrayOfitemsArray = JSON.parse(dataNames).map((dataObj: Dataset) => {
       const itemsArray: [] =
-        allData?.find((data) => data.name === dataName)?.items || [];
+        allData?.find((data) => data.name === dataObj.dataName)?.items || [];
       return {
         items: itemsArray,
-        name: dataName,
+        name: dataObj.dataName,
       };
     });
 
@@ -108,21 +96,12 @@ const DetailedView: FC = () => {
   };
   const getGraphs = () => {
     const relatedGraph = allGraphs?.find((graph) => {
-      const dataNamesArray = graph.datasets.map((dataset) => dataset.dataName);
-      let counter = 0;
-      let counterGoal = dataNamesArray.length;
-      dataNamesArray.forEach((dataNameString) => {
-        if (JSON.parse(dataNames).includes(dataNameString)) {
-          counter++;
-        }
-      });
-      if (counter === counterGoal) {
+      if (graph.graphID === graphID) {
         return true;
       } else {
         return false;
       }
     });
-
     setGraphSettings(relatedGraph);
   };
 

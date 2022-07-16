@@ -1,14 +1,17 @@
 import React, { Dispatch, SetStateAction } from "react";
 
+export type Dataset = {
+  dataName: string;
+  datasetBackgroundColor: string;
+  datasetBorderColor: string;
+  dataURL?: string;
+  deviceID?: string;
+};
+
 export type Graph = {
+  graphID: string;
   graphTitleText: any;
-  datasets: {
-    dataName: string;
-    datasetBackgroundColor: string;
-    datasetBorderColor: string;
-    dataURL?: string;
-    deviceID?: string;
-  }[];
+  datasets: Dataset[];
   minTimestamp?: number;
   decimationSamples: number;
   dataSelector: string;

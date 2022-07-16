@@ -29,6 +29,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { Auth } from "aws-amplify";
 import AuthContext from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { addUserSettingsAWS } from "../../api/dashboard";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -102,6 +103,11 @@ const Login: React.FC = () => {
                       .getJwtToken();
                     setUser(user);
                     localStorage.setItem("authorization", idToken);
+                    const response = await addUserSettingsAWS(
+                      idToken,
+                      user.username
+                    );
+                    alert(JSON.stringify(response));
                     setLoginError(false);
                     setSubmitting(false);
                     setLoggedIn(true);

@@ -36,4 +36,5 @@ export const StyledLink = styled(Link)`
     color: ${({ theme }) => theme.colors.primary};
   }
   font-size: 0.8rem;
+  margin-right: 10px;
 `;

@@ -1,4 +1,5 @@
 import { apiAWS } from ".";
+import { Graph } from "../contexts/GraphsContext";
 
 export const getWeatherData = async (
   deviceID: string,
@@ -42,4 +43,47 @@ export const getAWSData = async (
       "You need to log in again to be able to access AWS services. Sorry for the inconvenience"
     );
   }
+};
+
+export const getAWSDashboard = async (jwt: string, username: string) => {
+  return await apiAWS
+    .get(`/data/dashboard?username=${username}`, {
+      headers: {
+        authorization: jwt,
+      },
+    })
+    .then((response) => response.data);
+};
+
+export const addUserSettingsAWS = async (jwt: string, username: string) => {
+  return await apiAWS.post(
+    "/data/dashboard",
+    {
+      username,
+    },
+    {
+      headers: {
+        authorization: jwt,
+      },
+    }
+  );
+};
+
+export const updateUserSettingsAWS = async (
+  jwt: string,
+  username: string,
+  dashboard: Graph[]
+) => {
+  return await apiAWS.patch(
+    "/data/dashboard",
+    {
+      username,
+      dashboard,
+    },
+    {
+      headers: {
+        authorization: jwt,
+      },
+    }
+  );
 };

@@ -11,8 +11,8 @@
         "secondary2": "black",
         "secondaryHover": "#575757",
         "tertiary": "#0036F6",
-        "tertiary2": "#0036F6",
-        "tertiary3": "#0036F6"
+        "tertiary2": "#0c36cc",
+        "tertiary3": "#0c2991"
       }
     },
     "dark": {
@@ -26,8 +26,8 @@
         "secondary2": "white",
         "secondaryHover": "#cfcfcf",
         "tertiary": "#0036F6",
-        "tertiary2": "#0036F6",
-        "tertiary3": "#0036F6"
+        "tertiary2": "#0c36cc",
+        "tertiary3": "#0c2991"
       }
     }
   }
