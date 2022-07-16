@@ -102,14 +102,14 @@ const Register: React.FC = () => {
                 setLoggedIn(false);
                 setRegisterError(false);
                 try {
-                  const { user } = await Auth.signUp({
+                  await Auth.signUp({
                     username: values.username,
                     password: values.password,
                     attributes: {
                       email: values.email, // optional
                     },
                   });
-                  alert(JSON.stringify(user, null, 2));
+
                   setRegisterError(false);
                   setSubmitting(false);
                   setLoggedIn(true);

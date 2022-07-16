@@ -53,3 +53,17 @@ export const getAWSDashboard = async (jwt: string, username: string) => {
     })
     .then((response) => response.data);
 };
+
+export const addUserSettingsAWS = async (jwt: string, username: string) => {
+  return await apiAWS.post(
+    "/data/dashboard",
+    {
+      username,
+    },
+    {
+      headers: {
+        authorization: jwt,
+      },
+    }
+  );
+};
