@@ -67,3 +67,22 @@ export const addUserSettingsAWS = async (jwt: string, username: string) => {
     }
   );
 };
+
+export const updateUserSettingsAWS = async (
+  jwt: string,
+  username: string,
+  dashboard: {}
+) => {
+  return await apiAWS.patch(
+    "/data/dashboard",
+    {
+      username,
+      dashboard,
+    },
+    {
+      headers: {
+        authorization: jwt,
+      },
+    }
+  );
+};

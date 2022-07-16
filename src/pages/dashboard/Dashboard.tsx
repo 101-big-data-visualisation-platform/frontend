@@ -1,7 +1,10 @@
 import React, { useContext, useEffect } from "react";
 import LineGraph from "../../components/LineGraph";
 import { Container } from "../../components/Container";
-import { getAWSDashboard, getAWSData } from "../../api/dashboard";
+import {
+  getAWSDashboard,
+  getAWSData,
+} from "../../api/dashboard";
 import DataContext from "../../contexts/DataContext";
 import GraphsContext from "../../contexts/GraphsContext";
 import MovingAverageGraph from "./MovingAverageGraph";
@@ -155,7 +158,12 @@ const Dashboard: React.FC = () => {
       localStorage.getItem("authorization") || "",
       user?.username || ""
     );
-    setGraphs(dashboardData.items);
+
+    if (typeof dashboardData.items === "string") {
+      setGraphs(JSON.parse(dashboardData.items));
+    } else {
+      setGraphs(dashboardData.items);
+    }
   };
 
   useEffect(() => {
