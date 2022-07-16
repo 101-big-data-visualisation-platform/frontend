@@ -9,7 +9,7 @@ export const MainDiv = styled("div")`
   }
   background: ${({ theme }) => theme.colors.primary};
   position: relative;
-  z-index: 10000;
+  z-index: 1000;
 `;
 
 export const MobileMainDiv = styled("div")`

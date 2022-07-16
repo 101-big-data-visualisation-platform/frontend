@@ -56,6 +56,8 @@ const LineGraph = ({ data, options }: LineGraphProps) => {
       [key: string]: string;
     }
 
+    console.log(data);
+
     const processedItems = dataObj.datasets.map(
       (arrayOfItems: { items: []; name: string }) => {
         return {
@@ -183,8 +185,8 @@ const LineGraph = ({ data, options }: LineGraphProps) => {
         Reset Zoom
       </StyledButton>
       <StyledLink
-        to={`/detailed?dataName=${JSON.stringify(
-          options.datasetOptions.map((option) => option.dataName)
+        to={`/detailed?dataName=${encodeURIComponent(
+          JSON.stringify(options.datasetOptions)
         )}&dataSelector=${options.dataSelector}`}
       >
         Detailed View

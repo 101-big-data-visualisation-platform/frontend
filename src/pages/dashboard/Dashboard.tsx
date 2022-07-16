@@ -1,19 +1,35 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import LineGraph from "../../components/LineGraph";
 import { Container } from "../../components/Container";
 import {
   getAWSDashboard,
   getAWSData,
+  updateUserSettingsAWS,
 } from "../../api/dashboard";
 import DataContext from "../../contexts/DataContext";
-import GraphsContext from "../../contexts/GraphsContext";
+import GraphsContext, { Graph } from "../../contexts/GraphsContext";
 import MovingAverageGraph from "./MovingAverageGraph";
 import AuthContext from "../../contexts/AuthContext";
+import AddGraph from "../../components/Modals/AddGraph/AddGraph";
 
 const Dashboard: React.FC = () => {
   const { allData, setData, updatingData } = useContext(DataContext);
   const { user } = useContext(AuthContext);
   const { allGraphs, setGraphs } = useContext(GraphsContext);
+
+  // MODAL START
+  const [openAddGraph, setOpenAddGraph] = useState(false);
+  const [openUpdateGraph, setOpenUpdateGraph] = useState(false);
+  const [openDeleteGraph, setOpenDeleteGraph] = useState(false);
+
+  const handleOpenAdd = () => setOpenAddGraph(true);
+  const handleCloseAdd = () => setOpenAddGraph(false);
+  const handleOpenUpdate = () => setOpenUpdateGraph(true);
+  const handleCloseUpdate = () => setOpenUpdateGraph(false);
+  const handleOpenDelete = () => setOpenDeleteGraph(true);
+  const handleCloseDelete = () => setOpenDeleteGraph(false);
+
+  // MODAL END
 
   type ReturnedDataObj = {
     items: {
@@ -158,7 +174,7 @@ const Dashboard: React.FC = () => {
       localStorage.getItem("authorization") || "",
       user?.username || ""
     );
-
+    console.log(dashboardData);
     if (typeof dashboardData.items === "string") {
       setGraphs(JSON.parse(dashboardData.items));
     } else {
@@ -167,10 +183,10 @@ const Dashboard: React.FC = () => {
   };
 
   useEffect(() => {
-    getDataFromJson("./lambda-results-full-300.json", "weatherData");
+    getDataFromJson("./lambda-results-full-300.json", "weatherDataIALBAN250");
     getDataFromJsonAndCompress(
       "./lambda-results-full-300.json",
-      "weatherDataCompressed"
+      "weatherDataCompressedIALBAN250"
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -198,6 +214,10 @@ const Dashboard: React.FC = () => {
   return (
     <Container>
       <h1>Dashboard</h1>
+      <button onClick={handleOpenAdd}>Add Graph</button>
+      <button>Update Graph</button>
+      <button>Delete Graph</button>
+      <AddGraph open={openAddGraph} handleClose={handleCloseAdd} />
       {allData && !updatingData ? (
         <>
           <div style={{ display: "flex", flexWrap: "wrap" }}>
@@ -228,6 +248,7 @@ const Dashboard: React.FC = () => {
                       datasetBorderColor: dataset.datasetBorderColor,
                       label: `Device: ${dataset.deviceID}`,
                       dataName: dataset.dataName,
+                      minTimestamp: graphData.minTimestamp,
                     };
                   }),
                   decimationSamples: graphData.decimationSamples,

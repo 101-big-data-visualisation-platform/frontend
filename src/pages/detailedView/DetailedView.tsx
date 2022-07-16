@@ -11,7 +11,7 @@ import {
 import zoomPlugin from "chartjs-plugin-zoom";
 import "chartjs-adapter-moment";
 import { ThemeContext } from "styled-components";
-import GraphsContext from "../../contexts/GraphsContext";
+import GraphsContext, { Dataset, Graph } from "../../contexts/GraphsContext";
 import { Container } from "../../components/Container";
 import {
   MinorSeparator,
@@ -40,31 +40,18 @@ const DetailedView: FC = () => {
     datasets: [],
   });
   const [menuDisplayed, setMenuDisplayed] = useState(false);
-  type Graph = {
-    graphTitleText: string;
-    datasets: {
-      dataName: string;
-      datasetBackgroundColor: string;
-      datasetBorderColor: string;
-      dataURL?: string;
-      deviceID?: string;
-    }[];
-    minTimestamp?: number;
-    decimationSamples: number;
-    dataSelector: string;
-    // Make these properties required once backend is finalized
-  };
+
   const [graphSettings, setGraphSettings] = useState<Graph>();
   const getData1 = () => {
     // const dataObj = await getWeatherData("IALBAN25", 15000000000000);
     // const dataObj: Data = JSON.parse(JSON.stringify(dataMain));
-
-    const arrayOfitemsArray = JSON.parse(dataNames).map((dataName: string) => {
+    console.log(JSON.parse(dataNames));
+    const arrayOfitemsArray = JSON.parse(dataNames).map((dataObj: Dataset) => {
       const itemsArray: [] =
-        allData?.find((data) => data.name === dataName)?.items || [];
+        allData?.find((data) => data.name === dataObj.dataName)?.items || [];
       return {
         items: itemsArray,
-        name: dataName,
+        name: dataObj.dataName,
       };
     });
 
@@ -108,13 +95,22 @@ const DetailedView: FC = () => {
   };
   const getGraphs = () => {
     const relatedGraph = allGraphs?.find((graph) => {
-      const dataNamesArray = graph.datasets.map((dataset) => dataset.dataName);
+      const dataArray = graph.datasets;
       let counter = 0;
-      let counterGoal = dataNamesArray.length;
-      dataNamesArray.forEach((dataNameString) => {
-        if (JSON.parse(dataNames).includes(dataNameString)) {
-          counter++;
-        }
+      let counterGoal = JSON.parse(dataNames).length;
+      dataArray.forEach((data) => {
+        const urlDataArray = JSON.parse(dataNames);
+
+        urlDataArray.forEach((urlData: any) => {
+          if (
+            urlData.dataName === data.dataName &&
+            urlData.datasetBackgroundColor === data.datasetBackgroundColor &&
+            urlData.datasetBorderColor === data.datasetBorderColor &&
+            urlData.minTimestamp === graph.minTimestamp
+          ) {
+            counter++;
+          }
+        });
       });
       if (counter === counterGoal) {
         return true;
@@ -122,7 +118,6 @@ const DetailedView: FC = () => {
         return false;
       }
     });
-
     setGraphSettings(relatedGraph);
   };
 
