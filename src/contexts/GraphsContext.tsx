@@ -9,6 +9,7 @@ export type Dataset = {
 };
 
 export type Graph = {
+  graphID: string;
   graphTitleText: any;
   datasets: Dataset[];
   minTimestamp?: number;

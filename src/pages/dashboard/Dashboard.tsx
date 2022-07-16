@@ -223,6 +223,7 @@ const Dashboard: React.FC = () => {
           <div style={{ display: "flex", flexWrap: "wrap" }}>
             {allGraphs?.map((graphData) => (
               <LineGraph
+                graphID={graphData.graphID}
                 data={{
                   datasets: graphData.datasets.map((dataset) => {
                     return {

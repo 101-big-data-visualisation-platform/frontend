@@ -13,6 +13,7 @@ import { StyledButton, StyledDiv1, StyledLink } from "./styled";
 import { updateUserSettingsAWS } from "../../api/dashboard";
 import AuthContext from "../../contexts/AuthContext";
 import GraphsContext from "../../contexts/GraphsContext";
+import { LinearProgress } from "@mui/material";
 Chartjs.register(...registerables);
 Chartjs.register(zoomPlugin);
 
@@ -36,9 +37,10 @@ type LineGraphProps = {
     dataSelector: string;
     minTimestamp: number;
   };
+  graphID: string;
 };
 
-const LineGraph = ({ data, options }: LineGraphProps) => {
+const LineGraph = ({ data, options, graphID }: LineGraphProps) => {
   const theme = useContext(ThemeContext);
   const { user } = useContext(AuthContext);
   const { allGraphs, setGraphs } = useContext(GraphsContext);
@@ -46,6 +48,7 @@ const LineGraph = ({ data, options }: LineGraphProps) => {
   const [finalData, setFinalData] = useState<ChartData<"line">>({
     datasets: [],
   });
+  const [deleting, setDeleting] = useState(false);
   const getData1 = async () => {
     type Data = {
       items: [];
@@ -192,6 +195,7 @@ const LineGraph = ({ data, options }: LineGraphProps) => {
         Reset Zoom
       </StyledButton>
       <StyledLink
+        style={deleting ? { pointerEvents: "none" } : {}}
         to={`/detailed?dataName=${encodeURIComponent(
           JSON.stringify(options.datasetOptions)
         )}&dataSelector=${options.dataSelector}`}
@@ -199,30 +203,33 @@ const LineGraph = ({ data, options }: LineGraphProps) => {
         Detailed View
       </StyledLink>
       <StyledButton
-        onClick={() => {
+        onClick={async () => {
+          setDeleting(true);
           const updatedGraphs =
             allGraphs?.filter((graph) => {
-              if (
-                graph.graphTitleText ===
-                  options.graphTitleText.split("  since")[0] &&
-                graph.dataSelector === options.dataSelector &&
-                graph.minTimestamp === options.minTimestamp
-              ) {
+              if (graph.graphID === graphID) {
                 return false;
               } else {
                 return true;
               }
             }) || [];
-          updateUserSettingsAWS(
+          await updateUserSettingsAWS(
             localStorage.getItem("authorization") || "",
             user?.username || "",
             updatedGraphs
           );
+
+          setDeleting(false);
           setGraphs(updatedGraphs);
         }}
+        disabled={deleting}
       >
         Delete
       </StyledButton>
+      {deleting && (
+        <LinearProgress style={{ marginTop: "10px" }} color="inherit" />
+      )}
+
       <Line data={finalData} options={optionsFinal} ref={chartRef} />
     </StyledDiv1>
   );

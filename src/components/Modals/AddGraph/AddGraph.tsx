@@ -1,4 +1,4 @@
-import { Modal } from "@mui/material";
+import { LinearProgress, Modal } from "@mui/material";
 import React, { useContext, useState } from "react";
 import {
   ButtonsDiv,
@@ -13,6 +13,7 @@ import { Formik } from "formik";
 import GraphsContext, { Dataset } from "../../../contexts/GraphsContext";
 import { updateUserSettingsAWS } from "../../../api/dashboard";
 import AuthContext from "../../../contexts/AuthContext";
+import { v4 as uuidv4 } from "uuid";
 
 const AddGraph = ({
   open,
@@ -22,6 +23,7 @@ const AddGraph = ({
   handleClose: () => void;
 }) => {
   const [datasets, setDatasets] = useState<Dataset[]>([]);
+  const [submitting, setSubmitting] = useState(false);
   const { user } = useContext(AuthContext);
   const { allGraphs, setGraphs } = useContext(GraphsContext);
   return (
@@ -45,8 +47,8 @@ const AddGraph = ({
               validateOnBlur={false}
               initialValues={{
                 dataName: "",
-                datasetBackgroundColor: "#000000",
-                datasetBorderColor: "#000000",
+                datasetBackgroundColor: "#ff0000",
+                datasetBorderColor: "#ff0000",
                 dataURL: "",
                 deviceID: "",
               }}
@@ -94,7 +96,7 @@ const AddGraph = ({
                   return {};
                 }
               }}
-              onSubmit={async (values, { setSubmitting }): Promise<void> => {
+              onSubmit={async (values): Promise<void> => {
                 setDatasets((prevState) => [
                   ...prevState,
                   {
@@ -246,7 +248,8 @@ const AddGraph = ({
                 return {};
               }
             }}
-            onSubmit={async (values, { setSubmitting }): Promise<void> => {
+            onSubmit={async (values): Promise<void> => {
+              setSubmitting(true);
               const finalDatasets = datasets.map((dataset) => {
                 return {
                   ...dataset,
@@ -258,14 +261,24 @@ const AddGraph = ({
                 values.minTimestamp !== 0
                   ? new Date(values.minTimestamp).valueOf()
                   : 0;
-
+              let uuidString: string = uuidv4();
               try {
+                while (
+                  (allGraphs || []).filter(
+                    (graph) => graph.graphID === uuidString
+                  ).length > 0
+                ) {
+                  console.log(allGraphs);
+                  uuidString = uuidv4();
+                }
+
                 await updateUserSettingsAWS(
                   localStorage.getItem("authorization") || "",
                   user?.username || "",
                   [
                     ...(allGraphs as any),
                     {
+                      graphID: uuidString,
                       datasets: finalDatasets,
                       graphTitleText: values.graphTitleText,
                       minTimestamp: finalMinTimestamp,
@@ -277,10 +290,12 @@ const AddGraph = ({
               } catch (err) {
                 console.log(err);
               } finally {
+                setSubmitting(false);
                 setGraphs((prevState: any) => {
                   return [
                     ...prevState,
                     {
+                      graphID: uuidString,
                       datasets: finalDatasets,
                       graphTitleText: values.graphTitleText,
                       minTimestamp: finalMinTimestamp,
@@ -289,7 +304,7 @@ const AddGraph = ({
                     },
                   ];
                 });
-                setSubmitting(false);
+                handleClose();
               }
             }}
           >
@@ -357,7 +372,7 @@ const AddGraph = ({
                       {errors.datasets?.toString()}
                     </span>
                   </h3>
-                  <div style={{ height: "200px", overflowY: "scroll" }}>
+                  <div style={{ height: "200px", overflowY: "auto" }}>
                     {datasets.length > 0
                       ? datasets?.map((dataset) => {
                           return (
@@ -404,11 +419,16 @@ const AddGraph = ({
             )}
           </Formik>
         </ModalDivInner>
+        {submitting && (
+          <LinearProgress color="inherit" style={{ marginBottom: "10px" }} />
+        )}
         <ButtonsDiv>
-          <AddButton type="submit" form="mainForm">
+          <AddButton disabled={submitting} type="submit" form="mainForm">
             Add
           </AddButton>
-          <CancelButton onClick={handleClose}>Cancel</CancelButton>
+          <CancelButton disabled={submitting} onClick={handleClose}>
+            Cancel
+          </CancelButton>
         </ButtonsDiv>
       </ModalDiv>
     </Modal>
