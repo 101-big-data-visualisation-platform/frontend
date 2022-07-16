@@ -10,6 +10,9 @@ import zoomPlugin from "chartjs-plugin-zoom";
 import "chartjs-adapter-moment";
 import { ThemeContext } from "styled-components";
 import { StyledButton, StyledDiv1, StyledLink } from "./styled";
+import { updateUserSettingsAWS } from "../../api/dashboard";
+import AuthContext from "../../contexts/AuthContext";
+import GraphsContext from "../../contexts/GraphsContext";
 Chartjs.register(...registerables);
 Chartjs.register(zoomPlugin);
 
@@ -27,14 +30,18 @@ type LineGraphProps = {
       datasetBorderColor: string;
       label: string;
       dataName: string;
+      deviceID: string;
     }[];
     decimationSamples: number;
     dataSelector: string;
+    minTimestamp: number;
   };
 };
 
 const LineGraph = ({ data, options }: LineGraphProps) => {
   const theme = useContext(ThemeContext);
+  const { user } = useContext(AuthContext);
+  const { allGraphs, setGraphs } = useContext(GraphsContext);
   const chartRef = useRef<Chartjs<"line">>();
   const [finalData, setFinalData] = useState<ChartData<"line">>({
     datasets: [],
@@ -191,6 +198,31 @@ const LineGraph = ({ data, options }: LineGraphProps) => {
       >
         Detailed View
       </StyledLink>
+      <StyledButton
+        onClick={() => {
+          const updatedGraphs =
+            allGraphs?.filter((graph) => {
+              if (
+                graph.graphTitleText ===
+                  options.graphTitleText.split("  since")[0] &&
+                graph.dataSelector === options.dataSelector &&
+                graph.minTimestamp === options.minTimestamp
+              ) {
+                return false;
+              } else {
+                return true;
+              }
+            }) || [];
+          updateUserSettingsAWS(
+            localStorage.getItem("authorization") || "",
+            user?.username || "",
+            updatedGraphs
+          );
+          setGraphs(updatedGraphs);
+        }}
+      >
+        Delete
+      </StyledButton>
       <Line data={finalData} options={optionsFinal} ref={chartRef} />
     </StyledDiv1>
   );

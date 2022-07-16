@@ -248,11 +248,12 @@ const Dashboard: React.FC = () => {
                       datasetBorderColor: dataset.datasetBorderColor,
                       label: `Device: ${dataset.deviceID}`,
                       dataName: dataset.dataName,
-                      minTimestamp: graphData.minTimestamp,
+                      deviceID: dataset.deviceID || "",
                     };
                   }),
                   decimationSamples: graphData.decimationSamples,
                   dataSelector: graphData.dataSelector,
+                  minTimestamp: graphData.minTimestamp || 0,
                 }}
               />
             ))}
