@@ -265,6 +265,7 @@ const AddGraph = ({
               try {
                 while (
                   (allGraphs || []).filter(
+                    // eslint-disable-next-line no-loop-func
                     (graph) => graph.graphID === uuidString
                   ).length > 0
                 ) {

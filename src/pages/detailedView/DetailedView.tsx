@@ -34,6 +34,7 @@ const DetailedView: FC = () => {
   const { allGraphs } = useContext(GraphsContext);
   const dataNames = searchParams.get("dataName") || "";
   const dataSelector = searchParams.get("dataSelector") || "";
+  const graphID = searchParams.get("graphID") || "";
   const theme = useContext(ThemeContext);
   const chartRef = useRef<Chartjs<"line">>();
   const [finalData, setFinalData] = useState<ChartData<"line">>({
@@ -95,24 +96,7 @@ const DetailedView: FC = () => {
   };
   const getGraphs = () => {
     const relatedGraph = allGraphs?.find((graph) => {
-      const dataArray = graph.datasets;
-      let counter = 0;
-      let counterGoal = JSON.parse(dataNames).length;
-      dataArray.forEach((data) => {
-        const urlDataArray = JSON.parse(dataNames);
-
-        urlDataArray.forEach((urlData: any) => {
-          if (
-            urlData.dataName === data.dataName &&
-            urlData.datasetBackgroundColor === data.datasetBackgroundColor &&
-            urlData.datasetBorderColor === data.datasetBorderColor &&
-            urlData.minTimestamp === graph.minTimestamp
-          ) {
-            counter++;
-          }
-        });
-      });
-      if (counter === counterGoal) {
+      if (graph.graphID === graphID) {
         return true;
       } else {
         return false;

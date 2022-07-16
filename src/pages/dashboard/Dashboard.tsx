@@ -1,13 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import LineGraph from "../../components/LineGraph";
 import { Container } from "../../components/Container";
-import {
-  getAWSDashboard,
-  getAWSData,
-  updateUserSettingsAWS,
-} from "../../api/dashboard";
+import { getAWSDashboard, getAWSData } from "../../api/dashboard";
 import DataContext from "../../contexts/DataContext";
-import GraphsContext, { Graph } from "../../contexts/GraphsContext";
+import GraphsContext from "../../contexts/GraphsContext";
 import MovingAverageGraph from "./MovingAverageGraph";
 import AuthContext from "../../contexts/AuthContext";
 import AddGraph from "../../components/Modals/AddGraph/AddGraph";
@@ -19,15 +15,9 @@ const Dashboard: React.FC = () => {
 
   // MODAL START
   const [openAddGraph, setOpenAddGraph] = useState(false);
-  const [openUpdateGraph, setOpenUpdateGraph] = useState(false);
-  const [openDeleteGraph, setOpenDeleteGraph] = useState(false);
 
   const handleOpenAdd = () => setOpenAddGraph(true);
   const handleCloseAdd = () => setOpenAddGraph(false);
-  const handleOpenUpdate = () => setOpenUpdateGraph(true);
-  const handleCloseUpdate = () => setOpenUpdateGraph(false);
-  const handleOpenDelete = () => setOpenDeleteGraph(true);
-  const handleCloseDelete = () => setOpenDeleteGraph(false);
 
   // MODAL END
 

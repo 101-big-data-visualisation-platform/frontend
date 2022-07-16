@@ -198,7 +198,7 @@ const LineGraph = ({ data, options, graphID }: LineGraphProps) => {
         style={deleting ? { pointerEvents: "none" } : {}}
         to={`/detailed?dataName=${encodeURIComponent(
           JSON.stringify(options.datasetOptions)
-        )}&dataSelector=${options.dataSelector}`}
+        )}&dataSelector=${options.dataSelector}&graphID=${graphID}`}
       >
         Detailed View
       </StyledLink>
