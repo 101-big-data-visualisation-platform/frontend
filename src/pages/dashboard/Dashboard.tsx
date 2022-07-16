@@ -205,8 +205,6 @@ const Dashboard: React.FC = () => {
     <Container>
       <h1>Dashboard</h1>
       <button onClick={handleOpenAdd}>Add Graph</button>
-      <button>Update Graph</button>
-      <button>Delete Graph</button>
       <AddGraph open={openAddGraph} handleClose={handleCloseAdd} />
       {allData && !updatingData ? (
         <>
