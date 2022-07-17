@@ -80,6 +80,7 @@ const Navbar: React.FC<Props> = ({ setSelectedTheme, selectedTheme }) => {
     setGraphs([]);
     setData([]);
     setLoggingOut(false);
+    handleClose();
     navigate("/");
   };
   const handleAuthButtonClick = (
