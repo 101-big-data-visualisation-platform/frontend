@@ -72,6 +72,10 @@ const LineGraph = ({ data, options, graphID }: LineGraphProps) => {
       (arrayOfItems: { items: []; name: string }) => {
         return {
           items: arrayOfItems.items.map((item: Item) => {
+            if (options.graphTitleText === "Tiny Data  since:all time") {
+              console.log(parseInt(item.timeStamp));
+              console.log(typeof item.timeStamp);
+            }
             return {
               x: parseInt(item.timeStamp),
               y: parseFloat((item as IItem)[options.dataSelector]),
@@ -103,6 +107,12 @@ const LineGraph = ({ data, options, graphID }: LineGraphProps) => {
     getData1();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
+
+  useEffect(() => {
+    if (options.graphTitleText === "Tiny Data  since:all time") {
+      console.log(finalData);
+    }
+  }, [finalData, options]);
   const optionsFinal: ChartOptions<"line"> = {
     elements: {
       line: {

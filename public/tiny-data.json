@@ -1,35 +1,35 @@
 {
     "items": [
         {
-            "timestamp": 0,
+            "timeStamp": 0,
             "inTemp": 1
         },
         {
-            "timestamp": 1,
+            "timeStamp": 1,
             "inTemp": 1
         },
         {
-            "timestamp": 2,
+            "timeStamp": 2,
             "inTemp": 1
         },
         {
-            "timestamp": 3,
+            "timeStamp": 3,
+            "inTemp": null
+        },
+        {
+            "timeStamp": 4,
             "inTemp": 2
         },
         {
-            "timestamp": 4,
+            "timeStamp": 5,
             "inTemp": 2
         },
         {
-            "timestamp": 5,
-            "inTemp": 2
-        },
-        {
-            "timestamp": 6,
+            "timeStamp": 6,
             "inTemp": 3
         },
         {
-            "timestamp": 7,
+            "timeStamp": 7,
             "inTemp": 1
         }
     ]

@@ -61,7 +61,7 @@ const Dashboard: React.FC = () => {
 
   const getDataFromJsonAndCompress = async (link: string, name: string) => {
     // const dataObj = await getWeatherData("IALBAN25", 15000000000000);
-    let dataObj: ReturnedDataObj = await fetch(link, {
+    let dataObj: any = await fetch(link, {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -69,11 +69,15 @@ const Dashboard: React.FC = () => {
     }).then((response) => response.json());
 
     // COMPRESSION START
-
+    const selectorString = name.split(":")[0];
     let dataCompressed: any = [];
-    let lastIngestedPoint: { timestamp: number; inTemp: number } = {
+
+    let lastIngestedPoint: {
+      timestamp: number;
+      [selectorString: string]: number;
+    } = {
       timestamp: 0,
-      inTemp: 0,
+      [selectorString]: 0,
     };
 
     for (let i = 0; i < dataObj.items.length; i++) {
@@ -82,16 +86,23 @@ const Dashboard: React.FC = () => {
         lastIngestedPoint = dataObj.items[i];
         continue;
       }
-      if (lastIngestedPoint?.inTemp !== dataObj.items[i]?.inTemp) {
+      if (
+        lastIngestedPoint?.[selectorString] !==
+        dataObj.items[i]?.[selectorString]
+      ) {
         dataCompressed.push(dataObj.items[i]);
         lastIngestedPoint = dataObj.items[i];
         continue;
       }
-      if (lastIngestedPoint?.inTemp !== dataObj.items[i + 1]?.inTemp) {
+      if (
+        lastIngestedPoint?.[selectorString] !==
+        dataObj.items[i + 1]?.[selectorString]
+      ) {
         dataCompressed.push(dataObj.items[i]);
         lastIngestedPoint = dataObj.items[i];
       }
     }
+
     // COMPRESSION END
 
     // check if arg name does not match any of the allData names before appending new data to to allData
@@ -174,9 +185,26 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     getDataFromJson("./lambda-results-full-300.json", "weatherDataIALBAN250");
+    getDataFromJson("./tiny-data.json", "tiny-dataIALBAN250");
     getDataFromJsonAndCompress(
       "./lambda-results-full-300.json",
-      "weatherDataCompressedIALBAN250"
+      "inTemp:weatherDataCompressedIALBAN250"
+    );
+    getDataFromJsonAndCompress(
+      "./lambda-results-full-300.json",
+      "absBaro:weatherDataCompressedIALBAN250"
+    );
+    getDataFromJsonAndCompress(
+      "./lambda-results-full-300.json",
+      "dailyRain:weatherDataCompressedIALBAN250"
+    );
+    getDataFromJsonAndCompress(
+      "./lambda-results-full-300.json",
+      "dewPoint:weatherDataCompressedIALBAN250"
+    );
+    getDataFromJsonAndCompress(
+      "./lambda-results-full-300.json",
+      "inHumi:weatherDataCompressedIALBAN250"
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
