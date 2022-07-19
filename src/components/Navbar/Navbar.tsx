@@ -49,7 +49,7 @@ interface Props {
 
 const Navbar: React.FC<Props> = ({ setSelectedTheme, selectedTheme }) => {
   const { user, setUser, fetchingUser } = useContext(AuthContext);
-  const { setGraphs } = useContext(GraphsContext);
+  const { setDashboards } = useContext(GraphsContext);
   const { setData } = useContext(DataContext);
   const navigate = useNavigate();
   const [displayMenu, setDisplayMenu] = useState(false);
@@ -77,7 +77,7 @@ const Navbar: React.FC<Props> = ({ setSelectedTheme, selectedTheme }) => {
     setLoggingOut(true);
     await Auth.signOut();
     setUser(null);
-    setGraphs([]);
+    setDashboards([]);
     setData([]);
     setLoggingOut(false);
     handleClose();

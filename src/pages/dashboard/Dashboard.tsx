@@ -1,7 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import LineGraph from "../../components/LineGraph";
 import { Container } from "../../components/Container";
-import { getAWSDashboard, getAWSData } from "../../api/dashboard";
+import {
+  getAWSDashboard,
+  getAWSData,
+  updateUserSettingsAWS,
+} from "../../api/dashboard";
 import DataContext from "../../contexts/DataContext";
 import GraphsContext from "../../contexts/GraphsContext";
 import MovingAverageGraph from "./MovingAverageGraph";
@@ -11,10 +15,12 @@ import AddGraph from "../../components/Modals/AddGraph/AddGraph";
 const Dashboard: React.FC = () => {
   const { allData, setData, updatingData } = useContext(DataContext);
   const { user } = useContext(AuthContext);
-  const { allGraphs, setGraphs } = useContext(GraphsContext);
+  const { allDashboards, setDashboards } = useContext(GraphsContext);
 
   // MODAL START
   const [openAddGraph, setOpenAddGraph] = useState(false);
+  const [dashboardName, setDashboardName] = useState("default");
+  const [dashboardNameInput, setDashboardNameInput] = useState("");
 
   const handleOpenAdd = () => setOpenAddGraph(true);
   const handleCloseAdd = () => setOpenAddGraph(false);
@@ -177,9 +183,9 @@ const Dashboard: React.FC = () => {
     );
     console.log(dashboardData);
     if (typeof dashboardData.items === "string") {
-      setGraphs(JSON.parse(dashboardData.items));
+      setDashboards(JSON.parse(dashboardData.items));
     } else {
-      setGraphs(dashboardData.items);
+      setDashboards(dashboardData.items);
     }
   };
 
@@ -209,21 +215,23 @@ const Dashboard: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
-    allGraphs?.forEach((graph) => {
-      // Remove this if statement once backend is completed
-      graph.datasets.forEach((dataset) => {
-        if (dataset.dataName.includes("tankData")) {
-          getDataFromAWS(
-            dataset.dataURL || "",
-            dataset.dataName,
-            dataset.deviceID || "",
-            graph.minTimestamp || 0
-          );
-        }
+    allDashboards
+      ?.find((dashboard) => dashboard.name === dashboardName)
+      ?.allGraphs?.forEach((graph) => {
+        // Remove this if statement once backend is completed
+        graph.datasets.forEach((dataset) => {
+          if (dataset.dataName.includes("tankData")) {
+            getDataFromAWS(
+              dataset.dataURL || "",
+              dataset.dataName,
+              dataset.deviceID || "",
+              graph.minTimestamp || 0
+            );
+          }
+        });
       });
-    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allGraphs]);
+  }, [allDashboards]);
   useEffect(() => {
     fetchDashboard();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -231,49 +239,115 @@ const Dashboard: React.FC = () => {
 
   return (
     <Container>
-      <h1>Dashboard</h1>
+      <select
+        onChange={(evt) => {
+          setDashboardName(evt.target.value);
+        }}
+      >
+        {allDashboards?.map((dashboard) => {
+          return <option value={dashboard.name}>{dashboard.name}</option>;
+        })}
+      </select>
+      <input
+        type="text"
+        placeholder="dashboard name"
+        onChange={(evt) => {
+          setDashboardNameInput(evt.target.value);
+        }}
+      />
+      <button
+        onClick={async () => {
+          const updatedDashboards = [
+            ...(allDashboards as any),
+            {
+              name: dashboardNameInput,
+              allGraphs: [],
+            },
+          ];
+          try {
+            await updateUserSettingsAWS(
+              localStorage.getItem("authorization") || "",
+              user?.username || "",
+              updatedDashboards
+            );
+            setDashboards(updatedDashboards);
+          } catch (err) {
+            console.log(err);
+          }
+        }}
+      >
+        Add Dashboard
+      </button>
+      <h1>Dashboard: {dashboardName}</h1>
+      <button
+        onClick={async () => {
+          const updatedDashboards = allDashboards?.filter(
+            (dashboard) => dashboard.name !== dashboardName
+          );
+          try {
+            await updateUserSettingsAWS(
+              localStorage.getItem("authorization") || "",
+              user?.username || "",
+              updatedDashboards
+            );
+            setDashboards(updatedDashboards);
+          } catch (err) {
+            console.log(err);
+          }
+        }}
+      >
+        Delete Dashboard
+      </button>
       <button onClick={handleOpenAdd}>Add Graph</button>
-      <AddGraph open={openAddGraph} handleClose={handleCloseAdd} />
+
+      <AddGraph
+        open={openAddGraph}
+        handleClose={handleCloseAdd}
+        dashboardName={dashboardName}
+      />
       {allData && !updatingData ? (
         <>
           <div style={{ display: "flex", flexWrap: "wrap" }}>
-            {allGraphs?.map((graphData) => (
-              <LineGraph
-                graphID={graphData.graphID}
-                data={{
-                  datasets: graphData.datasets.map((dataset) => {
-                    return {
-                      items:
-                        allData.find((data) => {
-                          return data.name === dataset.dataName;
-                        })?.items || [],
-                      name: dataset.dataName,
-                    };
-                  }),
-                }}
-                options={{
-                  graphTitleText: `${graphData.graphTitleText}  since:${
-                    (graphData?.minTimestamp || 0) > 0
-                      ? new Date(
-                          graphData?.minTimestamp || "invalid date"
-                        ).toLocaleDateString()
-                      : "all time"
-                  }`,
-                  datasetOptions: graphData.datasets.map((dataset) => {
-                    return {
-                      datasetBackgroundColor: dataset.datasetBackgroundColor,
-                      datasetBorderColor: dataset.datasetBorderColor,
-                      label: `Device: ${dataset.deviceID}`,
-                      dataName: dataset.dataName,
-                      deviceID: dataset.deviceID || "",
-                    };
-                  }),
-                  decimationSamples: graphData.decimationSamples,
-                  dataSelector: graphData.dataSelector,
-                  minTimestamp: graphData.minTimestamp || 0,
-                }}
-              />
-            ))}
+            {allDashboards
+              ?.find((dashboard) => dashboard.name === dashboardName)
+              ?.allGraphs?.map((graphData) => (
+                <LineGraph
+                  dashboardName={dashboardName}
+                  graphID={graphData.graphID}
+                  data={{
+                    datasets: graphData.datasets.map((dataset) => {
+                      return {
+                        items:
+                          allData.find((data) => {
+                            return data.name === dataset.dataName;
+                          })?.items || [],
+                        name: dataset.dataName,
+                      };
+                    }),
+                  }}
+                  options={{
+                    graphTitleText: `${graphData.graphTitleText}  since:${
+                      (graphData?.minTimestamp || 0) > 0
+                        ? new Date(
+                            graphData?.minTimestamp || "invalid date"
+                          ).toLocaleDateString()
+                        : "all time"
+                    }`,
+                    datasetOptions: graphData.datasets.map((dataset) => {
+                      return {
+                        datasetBackgroundColor: dataset.datasetBackgroundColor,
+                        datasetBorderColor: dataset.datasetBorderColor,
+                        label: `Device: ${dataset.deviceID}`,
+                        dataName: dataset.dataName,
+                        deviceID: dataset.deviceID || "",
+                      };
+                    }),
+                    decimationSamples: graphData.decimationSamples,
+                    dataSelector: graphData.dataSelector,
+                    minTimestamp: graphData.minTimestamp || 0,
+                  }}
+                />
+              ))}
           </div>
           <MovingAverageGraph />
         </>

@@ -1,5 +1,5 @@
 import { apiAWS } from ".";
-import { Graph } from "../contexts/GraphsContext";
+import { Dashboard, Graph } from "../contexts/GraphsContext";
 
 export const getWeatherData = async (
   deviceID: string,
@@ -72,7 +72,7 @@ export const addUserSettingsAWS = async (jwt: string, username: string) => {
 export const updateUserSettingsAWS = async (
   jwt: string,
   username: string,
-  dashboard: Graph[]
+  dashboard: Dashboard[] | undefined
 ) => {
   return await apiAWS.patch(
     "/data/dashboard",

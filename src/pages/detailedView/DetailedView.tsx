@@ -11,7 +11,11 @@ import {
 import zoomPlugin from "chartjs-plugin-zoom";
 import "chartjs-adapter-moment";
 import { ThemeContext } from "styled-components";
-import GraphsContext, { Dataset, Graph } from "../../contexts/GraphsContext";
+import GraphsContext, {
+  Dashboard,
+  Dataset,
+  Graph,
+} from "../../contexts/GraphsContext";
 import { Container } from "../../components/Container";
 import {
   MinorSeparator,
@@ -25,13 +29,14 @@ import {
 } from "./styled";
 import { Close, Menu } from "@mui/icons-material";
 import ContentToggler from "../../components/ContentToggler";
+
 Chartjs.register(...registerables);
 Chartjs.register(zoomPlugin);
 
 const DetailedView: FC = () => {
   const [searchParams] = useSearchParams();
   const { allData } = useContext(DataContext);
-  const { allGraphs } = useContext(GraphsContext);
+  const { allDashboards } = useContext(GraphsContext);
   const dataNames = searchParams.get("dataName") || "";
   const dataSelector = searchParams.get("dataSelector") || "";
   const graphID = searchParams.get("graphID") || "";
@@ -95,14 +100,16 @@ const DetailedView: FC = () => {
     });
   };
   const getGraphs = () => {
-    const relatedGraph = allGraphs?.find((graph) => {
-      if (graph.graphID === graphID) {
-        return true;
-      } else {
-        return false;
+    for (let i = 0; i < (allDashboards?.length || 0); i++) {
+      const dashboard = allDashboards?.[i] ?? ([] as unknown as Dashboard);
+      const relatedGraph = dashboard.allGraphs.filter(
+        (graph) => graph.graphID === graphID
+      );
+      if (relatedGraph.length === 1) {
+        setGraphSettings(relatedGraph[0]);
+        break;
       }
-    });
-    setGraphSettings(relatedGraph);
+    }
   };
 
   useEffect(() => {
@@ -112,7 +119,7 @@ const DetailedView: FC = () => {
   useEffect(() => {
     getGraphs();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allGraphs, allData]);
+  }, [allDashboards, allData]);
 
   const optionsFinal: ChartOptions<"line"> = {
     elements: {
