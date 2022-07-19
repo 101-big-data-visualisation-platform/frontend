@@ -281,18 +281,21 @@ const Dashboard: React.FC = () => {
       <h1>Dashboard: {dashboardName}</h1>
       <button
         onClick={async () => {
-          const updatedDashboards = allDashboards?.filter(
-            (dashboard) => dashboard.name !== dashboardName
-          );
-          try {
-            await updateUserSettingsAWS(
-              localStorage.getItem("authorization") || "",
-              user?.username || "",
-              updatedDashboards
+          if ((allDashboards?.length || 0) > 1) {
+            const updatedDashboards = allDashboards?.filter(
+              (dashboard) => dashboard.name !== dashboardName
             );
-            setDashboards(updatedDashboards);
-          } catch (err) {
-            console.log(err);
+            try {
+              await updateUserSettingsAWS(
+                localStorage.getItem("authorization") || "",
+                user?.username || "",
+                updatedDashboards
+              );
+              setDashboards(updatedDashboards);
+              setDashboardName(allDashboards?.[0].name || "");
+            } catch (err) {
+              console.log(err);
+            }
           }
         }}
       >

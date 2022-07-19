@@ -1,5 +1,5 @@
 import { apiAWS } from ".";
-import { Dashboard, Graph } from "../contexts/GraphsContext";
+import { Dashboard } from "../contexts/GraphsContext";
 
 export const getWeatherData = async (
   deviceID: string,
