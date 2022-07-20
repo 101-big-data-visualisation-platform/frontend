@@ -27,6 +27,7 @@ const App = () => {
   const [updatingData, setUpdatingData] = useState(false);
 
   const [allDashboards, setDashboards] = useState([]);
+  const [selectedDashboard, setSelectedDashboard] = useState("");
 
   const fetchCurrentUser = async () => {
     setFetchingUser(true);
@@ -46,7 +47,14 @@ const App = () => {
         <DataContext.Provider
           value={{ allData, setData, updatingData, setUpdatingData }}
         >
-          <GraphsContext.Provider value={{ allDashboards, setDashboards }}>
+          <GraphsContext.Provider
+            value={{
+              allDashboards,
+              setDashboards,
+              selectedDashboard,
+              setSelectedDashboard,
+            }}
+          >
             <GlobalStyles />
             <Navbar
               setSelectedTheme={setSelectedTheme}

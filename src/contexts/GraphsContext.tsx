@@ -25,11 +25,15 @@ export type Dashboard = {
 
 type GraphsContextType = {
   allDashboards: Dashboard[] | null;
+  selectedDashboard: string;
   setDashboards: Dispatch<SetStateAction<any>>;
+  setSelectedDashboard: Dispatch<SetStateAction<any>>;
 };
 const GraphsContext = React.createContext<GraphsContextType>({
   allDashboards: [],
+  selectedDashboard: "",
   setDashboards: () => {},
+  setSelectedDashboard: () => {},
 });
 
 export default GraphsContext;

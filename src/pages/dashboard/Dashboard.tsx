@@ -7,19 +7,24 @@ import {
   updateUserSettingsAWS,
 } from "../../api/dashboard";
 import DataContext from "../../contexts/DataContext";
-import GraphsContext from "../../contexts/GraphsContext";
-import MovingAverageGraph from "./MovingAverageGraph";
+import GraphsContext, {
+  Dashboard as DashboardType,
+} from "../../contexts/GraphsContext";
 import AuthContext from "../../contexts/AuthContext";
 import AddGraph from "../../components/Modals/AddGraph/AddGraph";
 
 const Dashboard: React.FC = () => {
   const { allData, setData, updatingData } = useContext(DataContext);
   const { user } = useContext(AuthContext);
-  const { allDashboards, setDashboards } = useContext(GraphsContext);
+  const {
+    allDashboards,
+    setDashboards,
+    selectedDashboard: dashboardName,
+    setSelectedDashboard: setDashboardName,
+  } = useContext(GraphsContext);
 
   // MODAL START
   const [openAddGraph, setOpenAddGraph] = useState(false);
-  const [dashboardName, setDashboardName] = useState("default");
   const [dashboardNameInput, setDashboardNameInput] = useState("");
 
   const handleOpenAdd = () => setOpenAddGraph(true);
@@ -183,8 +188,11 @@ const Dashboard: React.FC = () => {
     );
     console.log(dashboardData);
     if (typeof dashboardData.items === "string") {
-      setDashboards(JSON.parse(dashboardData.items));
+      const dashboardJSON: DashboardType[] = JSON.parse(dashboardData.items);
+      setDashboardName(dashboardJSON[0].name);
+      setDashboards(dashboardJSON);
     } else {
+      setDashboardName(dashboardData.items[0].name);
       setDashboards(dashboardData.items);
     }
   };
@@ -231,7 +239,7 @@ const Dashboard: React.FC = () => {
         });
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allDashboards]);
+  }, [allDashboards, dashboardName]);
   useEffect(() => {
     fetchDashboard();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -240,6 +248,7 @@ const Dashboard: React.FC = () => {
   return (
     <Container>
       <select
+        value={dashboardName}
         onChange={(evt) => {
           setDashboardName(evt.target.value);
         }}
@@ -271,6 +280,7 @@ const Dashboard: React.FC = () => {
               updatedDashboards
             );
             setDashboards(updatedDashboards);
+            setDashboardName(dashboardNameInput);
           } catch (err) {
             console.log(err);
           }
@@ -352,7 +362,6 @@ const Dashboard: React.FC = () => {
                 />
               ))}
           </div>
-          <MovingAverageGraph />
         </>
       ) : (
         "Loading Data"
