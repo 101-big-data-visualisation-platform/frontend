@@ -25,7 +25,11 @@ const AddGraph = ({
   const [datasets, setDatasets] = useState<Dataset[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const { user } = useContext(AuthContext);
-  const { allGraphs, setGraphs } = useContext(GraphsContext);
+  const {
+    allDashboards,
+    setDashboards,
+    selectedDashboard: dashboardName,
+  } = useContext(GraphsContext);
   return (
     <Modal
       style={{
@@ -262,49 +266,50 @@ const AddGraph = ({
                   ? new Date(values.minTimestamp).valueOf()
                   : 0;
               let uuidString: string = uuidv4();
-              try {
-                while (
-                  (allGraphs || []).filter(
+              while (
+                allDashboards
+                  ?.find((dashboard: any) => dashboard.name === dashboardName)
+                  ?.allGraphs?.filter(
                     // eslint-disable-next-line no-loop-func
                     (graph) => graph.graphID === uuidString
-                  ).length > 0
-                ) {
-                  console.log(allGraphs);
-                  uuidString = uuidv4();
-                }
+                  )?.length ??
+                -1 > 0
+              ) {
+                uuidString = uuidv4();
+              }
 
+              const dashboardsModified = allDashboards?.map((dashboard) => {
+                if (dashboardName === dashboard.name) {
+                  return {
+                    name: dashboard.name,
+                    allGraphs: [
+                      ...dashboard.allGraphs,
+                      {
+                        graphID: uuidString,
+                        datasets: finalDatasets,
+                        graphTitleText: values.graphTitleText,
+                        minTimestamp: finalMinTimestamp,
+                        dataSelector: values.dataSelector,
+                        decimationSamples: 5000,
+                      },
+                    ],
+                  };
+                } else {
+                  return dashboard;
+                }
+              });
+
+              try {
                 await updateUserSettingsAWS(
                   localStorage.getItem("authorization") || "",
                   user?.username || "",
-                  [
-                    ...(allGraphs as any),
-                    {
-                      graphID: uuidString,
-                      datasets: finalDatasets,
-                      graphTitleText: values.graphTitleText,
-                      minTimestamp: finalMinTimestamp,
-                      dataSelector: values.dataSelector,
-                      decimationSamples: 5000,
-                    },
-                  ]
+                  dashboardsModified
                 );
               } catch (err) {
                 console.log(err);
               } finally {
                 setSubmitting(false);
-                setGraphs((prevState: any) => {
-                  return [
-                    ...prevState,
-                    {
-                      graphID: uuidString,
-                      datasets: finalDatasets,
-                      graphTitleText: values.graphTitleText,
-                      minTimestamp: finalMinTimestamp,
-                      dataSelector: values.dataSelector,
-                      decimationSamples: 5000,
-                    },
-                  ];
-                });
+                setDashboards(dashboardsModified);
                 handleClose();
               }
             }}
@@ -389,6 +394,7 @@ const AddGraph = ({
                               <span>{dataset.dataURL}</span>
                               <span>{dataset.deviceID}</span>
                               <button
+                                type="button"
                                 onClick={() => {
                                   setDatasets((prevState) => {
                                     return prevState.filter(

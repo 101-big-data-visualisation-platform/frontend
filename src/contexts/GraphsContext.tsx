@@ -18,13 +18,22 @@ export type Graph = {
   // Make these properties required once backend is finalized
 };
 
+export type Dashboard = {
+  name: string;
+  allGraphs: Graph[];
+};
+
 type GraphsContextType = {
-  allGraphs: Graph[] | null;
-  setGraphs: Dispatch<SetStateAction<any>>;
+  allDashboards: Dashboard[] | null;
+  selectedDashboard: string;
+  setDashboards: Dispatch<SetStateAction<any>>;
+  setSelectedDashboard: Dispatch<SetStateAction<any>>;
 };
 const GraphsContext = React.createContext<GraphsContextType>({
-  allGraphs: [],
-  setGraphs: () => {},
+  allDashboards: [],
+  selectedDashboard: "",
+  setDashboards: () => {},
+  setSelectedDashboard: () => {},
 });
 
 export default GraphsContext;

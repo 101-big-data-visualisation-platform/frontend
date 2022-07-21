@@ -3,15 +3,31 @@ import LineGraph from "../../components/LineGraph";
 import { Container } from "../../components/Container";
 import { getAWSDashboard, getAWSData } from "../../api/dashboard";
 import DataContext from "../../contexts/DataContext";
-import GraphsContext from "../../contexts/GraphsContext";
-import MovingAverageGraph from "./MovingAverageGraph";
+import GraphsContext, {
+  Dashboard as DashboardType,
+} from "../../contexts/GraphsContext";
 import AuthContext from "../../contexts/AuthContext";
 import AddGraph from "../../components/Modals/AddGraph/AddGraph";
+import {
+  AddGraphButton,
+  DeleteButton,
+  LoadingDiv,
+  StyledButton,
+  StyledOption,
+  StyledSelect,
+} from "./styled";
+import AddDashboard from "../../components/Modals/AddDashboard";
+import DeleteDashboard from "../../components/Modals/DeleteDashboard/DeleteDashboard";
 
 const Dashboard: React.FC = () => {
   const { allData, setData, updatingData } = useContext(DataContext);
   const { user } = useContext(AuthContext);
-  const { allGraphs, setGraphs } = useContext(GraphsContext);
+  const {
+    allDashboards,
+    setDashboards,
+    selectedDashboard: dashboardName,
+    setSelectedDashboard: setDashboardName,
+  } = useContext(GraphsContext);
 
   // MODAL START
   const [openAddGraph, setOpenAddGraph] = useState(false);
@@ -19,7 +35,19 @@ const Dashboard: React.FC = () => {
   const handleOpenAdd = () => setOpenAddGraph(true);
   const handleCloseAdd = () => setOpenAddGraph(false);
 
+  const [openAddDash, setOpenAddDash] = useState(false);
+
+  const handleOpenAddDash = () => setOpenAddDash(true);
+  const handleCloseAddDash = () => setOpenAddDash(false);
+
+  const [openDeleteDash, setOpenDeleteDash] = useState(false);
+
+  const handleOpenDeleteDash = () => setOpenDeleteDash(true);
+  const handleCloseDeleteDash = () => setOpenDeleteDash(false);
+
   // MODAL END
+
+  const [loadingDashboard, setLoadingDashboard] = useState(false);
 
   type ReturnedDataObj = {
     items: {
@@ -171,15 +199,20 @@ const Dashboard: React.FC = () => {
   };
 
   const fetchDashboard = async () => {
+    setLoadingDashboard(true);
     const dashboardData = await getAWSDashboard(
       localStorage.getItem("authorization") || "",
       user?.username || ""
     );
+    setLoadingDashboard(false);
     console.log(dashboardData);
     if (typeof dashboardData.items === "string") {
-      setGraphs(JSON.parse(dashboardData.items));
+      const dashboardJSON: DashboardType[] = JSON.parse(dashboardData.items);
+      setDashboardName(dashboardJSON[0].name);
+      setDashboards(dashboardJSON);
     } else {
-      setGraphs(dashboardData.items);
+      setDashboardName(dashboardData.items[0].name);
+      setDashboards(dashboardData.items);
     }
   };
 
@@ -209,73 +242,117 @@ const Dashboard: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
-    allGraphs?.forEach((graph) => {
-      // Remove this if statement once backend is completed
-      graph.datasets.forEach((dataset) => {
-        if (dataset.dataName.includes("tankData")) {
-          getDataFromAWS(
-            dataset.dataURL || "",
-            dataset.dataName,
-            dataset.deviceID || "",
-            graph.minTimestamp || 0
-          );
-        }
+    allDashboards
+      ?.find((dashboard) => dashboard.name === dashboardName)
+      ?.allGraphs?.forEach((graph) => {
+        // Remove this if statement once backend is completed
+        graph.datasets.forEach((dataset) => {
+          if (dataset.dataName.includes("tankData")) {
+            getDataFromAWS(
+              dataset.dataURL || "",
+              dataset.dataName,
+              dataset.deviceID || "",
+              graph.minTimestamp || 0
+            );
+          }
+        });
       });
-    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allGraphs]);
+  }, [allDashboards, dashboardName]);
   useEffect(() => {
     fetchDashboard();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+  if (!dashboardName && loadingDashboard) {
+    return (
+      <LoadingDiv>
+        <h1>Loading Dashboard...</h1>
+      </LoadingDiv>
+    );
+  } else if (!dashboardName && !loadingDashboard) {
+    return (
+      <LoadingDiv>
+        <h1>Your dashboard could not be loaded. Please sign in again.</h1>
+      </LoadingDiv>
+    );
+  }
   return (
     <Container>
-      <h1>Dashboard</h1>
-      <button onClick={handleOpenAdd}>Add Graph</button>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <StyledSelect
+          value={dashboardName}
+          onChange={(evt) => {
+            setDashboardName(evt.target.value);
+          }}
+        >
+          {allDashboards?.map((dashboard) => {
+            return (
+              <StyledOption value={dashboard.name}>
+                {dashboard.name}
+              </StyledOption>
+            );
+          })}
+        </StyledSelect>
+        <StyledButton onClick={handleOpenAddDash}>New Dashboard</StyledButton>
+        <DeleteButton
+          disabled={(allDashboards?.length || 0) <= 1}
+          onClick={handleOpenDeleteDash}
+        >
+          Delete Dashboard
+        </DeleteButton>
+        <AddGraphButton onClick={handleOpenAdd}>Add Graph</AddGraphButton>
+      </div>
+      <AddDashboard open={openAddDash} handleClose={handleCloseAddDash} />
+      <DeleteDashboard
+        open={openDeleteDash}
+        handleClose={handleCloseDeleteDash}
+      />
       <AddGraph open={openAddGraph} handleClose={handleCloseAdd} />
+
       {allData && !updatingData ? (
         <>
           <div style={{ display: "flex", flexWrap: "wrap" }}>
-            {allGraphs?.map((graphData) => (
-              <LineGraph
-                graphID={graphData.graphID}
-                data={{
-                  datasets: graphData.datasets.map((dataset) => {
-                    return {
-                      items:
-                        allData.find((data) => {
-                          return data.name === dataset.dataName;
-                        })?.items || [],
-                      name: dataset.dataName,
-                    };
-                  }),
-                }}
-                options={{
-                  graphTitleText: `${graphData.graphTitleText}  since:${
-                    (graphData?.minTimestamp || 0) > 0
-                      ? new Date(
-                          graphData?.minTimestamp || "invalid date"
-                        ).toLocaleDateString()
-                      : "all time"
-                  }`,
-                  datasetOptions: graphData.datasets.map((dataset) => {
-                    return {
-                      datasetBackgroundColor: dataset.datasetBackgroundColor,
-                      datasetBorderColor: dataset.datasetBorderColor,
-                      label: `Device: ${dataset.deviceID}`,
-                      dataName: dataset.dataName,
-                      deviceID: dataset.deviceID || "",
-                    };
-                  }),
-                  decimationSamples: graphData.decimationSamples,
-                  dataSelector: graphData.dataSelector,
-                  minTimestamp: graphData.minTimestamp || 0,
-                }}
-              />
-            ))}
+            {allDashboards
+              ?.find((dashboard) => dashboard.name === dashboardName)
+              ?.allGraphs?.map((graphData) => (
+                <LineGraph
+                  dashboardName={dashboardName}
+                  graphID={graphData.graphID}
+                  data={{
+                    datasets: graphData.datasets.map((dataset) => {
+                      return {
+                        items:
+                          allData.find((data) => {
+                            return data.name === dataset.dataName;
+                          })?.items || [],
+                        name: dataset.dataName,
+                      };
+                    }),
+                  }}
+                  options={{
+                    graphTitleText: `${graphData.graphTitleText}  since:${
+                      (graphData?.minTimestamp || 0) > 0
+                        ? new Date(
+                            graphData?.minTimestamp || "invalid date"
+                          ).toLocaleDateString()
+                        : "all time"
+                    }`,
+                    datasetOptions: graphData.datasets.map((dataset) => {
+                      return {
+                        datasetBackgroundColor: dataset.datasetBackgroundColor,
+                        datasetBorderColor: dataset.datasetBorderColor,
+                        label: `Device: ${dataset.deviceID}`,
+                        dataName: dataset.dataName,
+                        deviceID: dataset.deviceID || "",
+                      };
+                    }),
+                    decimationSamples: graphData.decimationSamples,
+                    dataSelector: graphData.dataSelector,
+                    minTimestamp: graphData.minTimestamp || 0,
+                  }}
+                />
+              ))}
           </div>
-          <MovingAverageGraph />
         </>
       ) : (
         "Loading Data"

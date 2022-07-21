@@ -38,12 +38,18 @@ type LineGraphProps = {
     minTimestamp: number;
   };
   graphID: string;
+  dashboardName: string;
 };
 
-const LineGraph = ({ data, options, graphID }: LineGraphProps) => {
+const LineGraph = ({
+  data,
+  options,
+  graphID,
+  dashboardName,
+}: LineGraphProps) => {
   const theme = useContext(ThemeContext);
   const { user } = useContext(AuthContext);
-  const { allGraphs, setGraphs } = useContext(GraphsContext);
+  const { allDashboards, setDashboards } = useContext(GraphsContext);
   const chartRef = useRef<Chartjs<"line">>();
   const [finalData, setFinalData] = useState<ChartData<"line">>({
     datasets: [],
@@ -215,22 +221,28 @@ const LineGraph = ({ data, options, graphID }: LineGraphProps) => {
       <StyledButton
         onClick={async () => {
           setDeleting(true);
-          const updatedGraphs =
-            allGraphs?.filter((graph) => {
-              if (graph.graphID === graphID) {
-                return false;
-              } else {
-                return true;
-              }
-            }) || [];
+
+          const dashboardsModified = allDashboards?.map((dashboard) => {
+            if (dashboardName === dashboard.name) {
+              return {
+                name: dashboard.name,
+                allGraphs: dashboard.allGraphs.filter(
+                  (graph) => graph.graphID !== graphID
+                ),
+              };
+            } else {
+              return dashboard;
+            }
+          });
+
           await updateUserSettingsAWS(
             localStorage.getItem("authorization") || "",
             user?.username || "",
-            updatedGraphs
+            dashboardsModified
           );
 
           setDeleting(false);
-          setGraphs(updatedGraphs);
+          setDashboards(dashboardsModified);
         }}
         disabled={deleting}
       >
