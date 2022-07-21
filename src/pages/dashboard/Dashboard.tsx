@@ -12,6 +12,8 @@ import GraphsContext, {
 } from "../../contexts/GraphsContext";
 import AuthContext from "../../contexts/AuthContext";
 import AddGraph from "../../components/Modals/AddGraph/AddGraph";
+import { StyledButton, StyledOption, StyledSelect } from "./styled";
+import AddDashboard from "../../components/Modals/AddDashboard";
 
 const Dashboard: React.FC = () => {
   const { allData, setData, updatingData } = useContext(DataContext);
@@ -25,10 +27,14 @@ const Dashboard: React.FC = () => {
 
   // MODAL START
   const [openAddGraph, setOpenAddGraph] = useState(false);
-  const [dashboardNameInput, setDashboardNameInput] = useState("");
 
   const handleOpenAdd = () => setOpenAddGraph(true);
   const handleCloseAdd = () => setOpenAddGraph(false);
+
+  const [openAddDash, setOpenAddDash] = useState(false);
+
+  const handleOpenAddDash = () => setOpenAddDash(true);
+  const handleCloseAddDash = () => setOpenAddDash(false);
 
   // MODAL END
 
@@ -247,72 +253,51 @@ const Dashboard: React.FC = () => {
 
   return (
     <Container>
-      <select
-        value={dashboardName}
-        onChange={(evt) => {
-          setDashboardName(evt.target.value);
-        }}
-      >
-        {allDashboards?.map((dashboard) => {
-          return <option value={dashboard.name}>{dashboard.name}</option>;
-        })}
-      </select>
-      <input
-        type="text"
-        placeholder="dashboard name"
-        onChange={(evt) => {
-          setDashboardNameInput(evt.target.value);
-        }}
-      />
-      <button
-        onClick={async () => {
-          const updatedDashboards = [
-            ...(allDashboards as any),
-            {
-              name: dashboardNameInput,
-              allGraphs: [],
-            },
-          ];
-          try {
-            await updateUserSettingsAWS(
-              localStorage.getItem("authorization") || "",
-              user?.username || "",
-              updatedDashboards
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <StyledSelect
+          value={dashboardName}
+          onChange={(evt) => {
+            setDashboardName(evt.target.value);
+          }}
+        >
+          {allDashboards?.map((dashboard) => {
+            return (
+              <StyledOption value={dashboard.name}>
+                {dashboard.name}
+              </StyledOption>
             );
-            setDashboards(updatedDashboards);
-            setDashboardName(dashboardNameInput);
-          } catch (err) {
-            console.log(err);
-          }
-        }}
-      >
-        Add Dashboard
-      </button>
-      <h1>Dashboard: {dashboardName}</h1>
-      <button
-        onClick={async () => {
-          if ((allDashboards?.length || 0) > 1) {
-            const updatedDashboards = allDashboards?.filter(
-              (dashboard) => dashboard.name !== dashboardName
-            );
-            try {
-              await updateUserSettingsAWS(
-                localStorage.getItem("authorization") || "",
-                user?.username || "",
-                updatedDashboards
+          })}
+        </StyledSelect>
+        <StyledButton onClick={handleOpenAddDash}>New Dashboard</StyledButton>
+        <button
+          onClick={async () => {
+            if ((allDashboards?.length || 0) > 1) {
+              const updatedDashboards = allDashboards?.filter(
+                (dashboard) => dashboard.name !== dashboardName
               );
-              setDashboards(updatedDashboards);
-              setDashboardName(allDashboards?.[0].name || "");
-            } catch (err) {
-              console.log(err);
+              try {
+                await updateUserSettingsAWS(
+                  localStorage.getItem("authorization") || "",
+                  user?.username || "",
+                  updatedDashboards
+                );
+                setDashboards(updatedDashboards);
+                setDashboardName(allDashboards?.[0].name || "");
+              } catch (err) {
+                console.log(err);
+              }
             }
-          }
-        }}
-      >
-        Delete Dashboard
-      </button>
-      <button onClick={handleOpenAdd}>Add Graph</button>
-
+          }}
+        >
+          Delete Dashboard
+        </button>
+        <button onClick={handleOpenAdd}>Add Graph</button>
+      </div>
+      <AddDashboard
+        open={openAddDash}
+        handleClose={handleCloseAddDash}
+        setDashboardName={setDashboardName}
+      />
       <AddGraph
         open={openAddGraph}
         handleClose={handleCloseAdd}

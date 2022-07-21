@@ -392,6 +392,7 @@ const AddGraph = ({
                               <span>{dataset.dataURL}</span>
                               <span>{dataset.deviceID}</span>
                               <button
+                                type="button"
                                 onClick={() => {
                                   setDatasets((prevState) => {
                                     return prevState.filter(
