@@ -1,11 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import LineGraph from "../../components/LineGraph";
 import { Container } from "../../components/Container";
-import {
-  getAWSDashboard,
-  getAWSData,
-  updateUserSettingsAWS,
-} from "../../api/dashboard";
+import { getAWSDashboard, getAWSData } from "../../api/dashboard";
 import DataContext from "../../contexts/DataContext";
 import GraphsContext, {
   Dashboard as DashboardType,
