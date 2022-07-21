@@ -1,3 +1,4 @@
+import { navbarHeight } from "./../../constants";
 import styled from "styled-components";
 
 export const StyledDiv1 = styled("div")`
@@ -48,4 +49,46 @@ export const StyledInput = styled("input")`
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
   font-size: 0.8rem;
+`;
+
+export const DeleteButton = styled("button")`
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin-right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid transparent;
+  background: #ff3838;
+  color: white;
+  &:hover {
+    background: red;
+  }
+  &:disabled {
+    background: #945a5a;
+    color: lightgray;
+  }
+`;
+
+export const AddGraphButton = styled("button")`
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin-right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid transparent;
+  background: ${({ theme }) => theme.colors.tertiary2};
+  color: white;
+  &:hover {
+    background: ${({ theme }) => theme.colors.tertiary};
+  }
+`;
+
+export const LoadingDiv = styled("div")`
+  width: 100vw;
+  height: calc(100vh - ${navbarHeight});
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;

@@ -16,15 +16,14 @@ import AuthContext from "../../../contexts/AuthContext";
 const AddDashboard = ({
   open,
   handleClose,
-  setDashboardName,
 }: {
   open: boolean;
   handleClose: () => void;
-  setDashboardName: (arg: string) => void;
 }) => {
   const [submitting, setSubmitting] = useState(false);
   const { user } = useContext(AuthContext);
-  const { allDashboards, setDashboards } = useContext(GraphsContext);
+  const { allDashboards, setDashboards, setSelectedDashboard } =
+    useContext(GraphsContext);
   return (
     <Modal
       style={{
@@ -84,7 +83,7 @@ const AddDashboard = ({
               } finally {
                 setSubmitting(false);
                 setDashboards(updatedDashboards);
-                setDashboardName(values.dashboardName);
+                setSelectedDashboard(values.dashboardName);
                 handleClose();
               }
             }}

@@ -12,8 +12,16 @@ import GraphsContext, {
 } from "../../contexts/GraphsContext";
 import AuthContext from "../../contexts/AuthContext";
 import AddGraph from "../../components/Modals/AddGraph/AddGraph";
-import { StyledButton, StyledOption, StyledSelect } from "./styled";
+import {
+  AddGraphButton,
+  DeleteButton,
+  LoadingDiv,
+  StyledButton,
+  StyledOption,
+  StyledSelect,
+} from "./styled";
 import AddDashboard from "../../components/Modals/AddDashboard";
+import DeleteDashboard from "../../components/Modals/DeleteDashboard/DeleteDashboard";
 
 const Dashboard: React.FC = () => {
   const { allData, setData, updatingData } = useContext(DataContext);
@@ -36,7 +44,14 @@ const Dashboard: React.FC = () => {
   const handleOpenAddDash = () => setOpenAddDash(true);
   const handleCloseAddDash = () => setOpenAddDash(false);
 
+  const [openDeleteDash, setOpenDeleteDash] = useState(false);
+
+  const handleOpenDeleteDash = () => setOpenDeleteDash(true);
+  const handleCloseDeleteDash = () => setOpenDeleteDash(false);
+
   // MODAL END
+
+  const [loadingDashboard, setLoadingDashboard] = useState(false);
 
   type ReturnedDataObj = {
     items: {
@@ -188,10 +203,12 @@ const Dashboard: React.FC = () => {
   };
 
   const fetchDashboard = async () => {
+    setLoadingDashboard(true);
     const dashboardData = await getAWSDashboard(
       localStorage.getItem("authorization") || "",
       user?.username || ""
     );
+    setLoadingDashboard(false);
     console.log(dashboardData);
     if (typeof dashboardData.items === "string") {
       const dashboardJSON: DashboardType[] = JSON.parse(dashboardData.items);
@@ -250,7 +267,19 @@ const Dashboard: React.FC = () => {
     fetchDashboard();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+  if (!dashboardName && loadingDashboard) {
+    return (
+      <LoadingDiv>
+        <h1>Loading Dashboard...</h1>
+      </LoadingDiv>
+    );
+  } else if (!dashboardName && !loadingDashboard) {
+    return (
+      <LoadingDiv>
+        <h1>Your dashboard could not be loaded. Please sign in again.</h1>
+      </LoadingDiv>
+    );
+  }
   return (
     <Container>
       <div style={{ display: "flex", alignItems: "center" }}>
@@ -269,40 +298,21 @@ const Dashboard: React.FC = () => {
           })}
         </StyledSelect>
         <StyledButton onClick={handleOpenAddDash}>New Dashboard</StyledButton>
-        <button
-          onClick={async () => {
-            if ((allDashboards?.length || 0) > 1) {
-              const updatedDashboards = allDashboards?.filter(
-                (dashboard) => dashboard.name !== dashboardName
-              );
-              try {
-                await updateUserSettingsAWS(
-                  localStorage.getItem("authorization") || "",
-                  user?.username || "",
-                  updatedDashboards
-                );
-                setDashboards(updatedDashboards);
-                setDashboardName(allDashboards?.[0].name || "");
-              } catch (err) {
-                console.log(err);
-              }
-            }
-          }}
+        <DeleteButton
+          disabled={(allDashboards?.length || 0) <= 1}
+          onClick={handleOpenDeleteDash}
         >
           Delete Dashboard
-        </button>
-        <button onClick={handleOpenAdd}>Add Graph</button>
+        </DeleteButton>
+        <AddGraphButton onClick={handleOpenAdd}>Add Graph</AddGraphButton>
       </div>
-      <AddDashboard
-        open={openAddDash}
-        handleClose={handleCloseAddDash}
-        setDashboardName={setDashboardName}
+      <AddDashboard open={openAddDash} handleClose={handleCloseAddDash} />
+      <DeleteDashboard
+        open={openDeleteDash}
+        handleClose={handleCloseDeleteDash}
       />
-      <AddGraph
-        open={openAddGraph}
-        handleClose={handleCloseAdd}
-        dashboardName={dashboardName}
-      />
+      <AddGraph open={openAddGraph} handleClose={handleCloseAdd} />
+
       {allData && !updatingData ? (
         <>
           <div style={{ display: "flex", flexWrap: "wrap" }}>

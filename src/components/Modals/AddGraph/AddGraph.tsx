@@ -18,16 +18,18 @@ import { v4 as uuidv4 } from "uuid";
 const AddGraph = ({
   open,
   handleClose,
-  dashboardName,
 }: {
   open: boolean;
   handleClose: () => void;
-  dashboardName: string;
 }) => {
   const [datasets, setDatasets] = useState<Dataset[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const { user } = useContext(AuthContext);
-  const { allDashboards, setDashboards } = useContext(GraphsContext);
+  const {
+    allDashboards,
+    setDashboards,
+    selectedDashboard: dashboardName,
+  } = useContext(GraphsContext);
   return (
     <Modal
       style={{
