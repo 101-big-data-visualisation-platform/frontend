@@ -207,12 +207,18 @@ const Dashboard: React.FC = () => {
       );
       console.log(dashboardData);
       if (typeof dashboardData.items === "string") {
-        const dashboardJSON: DashboardType[] = JSON.parse(dashboardData.items);
-        setDashboardName(dashboardJSON[0].name);
-        setDashboards(dashboardJSON);
+        if (!dashboardName) {
+          const dashboardJSON: DashboardType[] = JSON.parse(
+            dashboardData.items
+          );
+          setDashboardName(dashboardJSON[0].name);
+          setDashboards(dashboardJSON);
+        }
       } else {
-        setDashboardName(dashboardData.items[0].name);
-        setDashboards(dashboardData.items);
+        if (!dashboardName) {
+          setDashboardName(dashboardData.items[0].name);
+          setDashboards(dashboardData.items);
+        }
       }
     } finally {
       setLoadingDashboard(false);
