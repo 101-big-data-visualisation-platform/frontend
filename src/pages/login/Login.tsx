@@ -103,11 +103,7 @@ const Login: React.FC = () => {
                       .getJwtToken();
                     setUser(user);
                     localStorage.setItem("authorization", idToken);
-                    const response = await addUserSettingsAWS(
-                      idToken,
-                      user.username
-                    );
-                    alert(JSON.stringify(response));
+                    await addUserSettingsAWS(idToken, user.username);
                     setLoginError(false);
                     setSubmitting(false);
                     setLoggedIn(true);

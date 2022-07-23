@@ -200,19 +200,22 @@ const Dashboard: React.FC = () => {
 
   const fetchDashboard = async () => {
     setLoadingDashboard(true);
-    const dashboardData = await getAWSDashboard(
-      localStorage.getItem("authorization") || "",
-      user?.username || ""
-    );
-    setLoadingDashboard(false);
-    console.log(dashboardData);
-    if (typeof dashboardData.items === "string") {
-      const dashboardJSON: DashboardType[] = JSON.parse(dashboardData.items);
-      setDashboardName(dashboardJSON[0].name);
-      setDashboards(dashboardJSON);
-    } else {
-      setDashboardName(dashboardData.items[0].name);
-      setDashboards(dashboardData.items);
+    try {
+      const dashboardData = await getAWSDashboard(
+        localStorage.getItem("authorization") || "",
+        user?.username || ""
+      );
+      console.log(dashboardData);
+      if (typeof dashboardData.items === "string") {
+        const dashboardJSON: DashboardType[] = JSON.parse(dashboardData.items);
+        setDashboardName(dashboardJSON[0].name);
+        setDashboards(dashboardJSON);
+      } else {
+        setDashboardName(dashboardData.items[0].name);
+        setDashboards(dashboardData.items);
+      }
+    } finally {
+      setLoadingDashboard(false);
     }
   };
 

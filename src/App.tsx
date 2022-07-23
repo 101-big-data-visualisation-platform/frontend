@@ -33,6 +33,10 @@ const App = () => {
     setFetchingUser(true);
     const userInfo = await Auth.currentUserInfo();
     setUser(userInfo);
+    localStorage.setItem(
+      "authorization",
+      (await Auth.currentSession()).getIdToken().getJwtToken()
+    );
     setFetchingUser(false);
   };
   useEffect(() => {
