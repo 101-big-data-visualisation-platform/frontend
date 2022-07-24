@@ -10,14 +10,14 @@ import zoomPlugin from "chartjs-plugin-zoom";
 import "chartjs-adapter-moment";
 import { ThemeContext } from "styled-components";
 import { StyledButton, StyledDiv1, StyledLink } from "./styled";
-import { updateUserSettingsAWS } from "../../api/dashboard";
-import AuthContext from "../../contexts/AuthContext";
-import GraphsContext from "../../contexts/GraphsContext";
+import { updateUserSettingsAWS } from "../../../api/dashboard";
+import AuthContext from "../../../contexts/AuthContext";
+import GraphsContext from "../../../contexts/GraphsContext";
 import { LinearProgress } from "@mui/material";
 Chartjs.register(...registerables);
 Chartjs.register(zoomPlugin);
 
-type LineGraphProps = {
+type AreaGraphProps = {
   data: {
     datasets: {
       items: [];
@@ -46,7 +46,7 @@ const LineGraph = ({
   options,
   graphID,
   dashboardName,
-}: LineGraphProps) => {
+}: AreaGraphProps) => {
   const theme = useContext(ThemeContext);
   const { user } = useContext(AuthContext);
   const { allDashboards, setDashboards } = useContext(GraphsContext);
@@ -97,6 +97,7 @@ const LineGraph = ({
           return dataset.dataName === processedItem.name;
         });
         return {
+          fill: true,
           data: processedItem.items,
           label: relatedGraph?.label,
           backgroundColor: relatedGraph?.datasetBackgroundColor,
@@ -113,7 +114,7 @@ const LineGraph = ({
     getData1();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
-  
+
   const optionsFinal: ChartOptions<"line"> = {
     elements: {
       line: {

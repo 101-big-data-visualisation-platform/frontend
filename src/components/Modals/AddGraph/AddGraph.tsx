@@ -14,6 +14,7 @@ import GraphsContext, { Dataset } from "../../../contexts/GraphsContext";
 import { updateUserSettingsAWS } from "../../../api/dashboard";
 import AuthContext from "../../../contexts/AuthContext";
 import { v4 as uuidv4 } from "uuid";
+import { AREACHART, LINECHART } from "../../../constants";
 
 const AddGraph = ({
   open,
@@ -213,6 +214,7 @@ const AddGraph = ({
               minTimestamp: 0,
               dataSelector: "",
               datasets: datasets,
+              graphType: LINECHART,
             }}
             validate={(values): Object => {
               type Errors = {
@@ -220,12 +222,14 @@ const AddGraph = ({
                 minTimestamp: string;
                 dataSelector: string;
                 datasets: string;
+                graphType: string;
               };
               const errors: Errors = {
                 graphTitleText: "",
                 minTimestamp: "",
                 dataSelector: "",
                 datasets: "",
+                graphType: "",
               };
 
               if (!values.graphTitleText) {
@@ -291,6 +295,7 @@ const AddGraph = ({
                         minTimestamp: finalMinTimestamp,
                         dataSelector: values.dataSelector,
                         decimationSamples: 5000,
+                        graphType: values.graphType,
                       },
                     ],
                   };
@@ -371,6 +376,16 @@ const AddGraph = ({
                     onBlur={handleBlur}
                     value={values.dataSelector}
                   />
+                  <span>Graph Type</span>
+                  <select
+                    name="graphType"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.graphType}
+                  >
+                    <option value={LINECHART}>Line</option>
+                    <option value={AREACHART}>Area</option>
+                  </select>
                   <h3>
                     Datasets{" "}
                     <span style={{ color: "orange" }}>
