@@ -1,4 +1,3 @@
-import { navbarHeight } from "./../../constants";
 import styled from "styled-components";
 
 export const StyledDiv1 = styled("div")`
