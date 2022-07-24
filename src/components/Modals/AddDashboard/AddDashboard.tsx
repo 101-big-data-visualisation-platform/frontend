@@ -74,7 +74,6 @@ const AddDashboard = ({
               ];
               try {
                 await updateUserSettingsAWS(
-                  localStorage.getItem("authorization") || "",
                   user?.username || "",
                   updatedDashboards
                 );

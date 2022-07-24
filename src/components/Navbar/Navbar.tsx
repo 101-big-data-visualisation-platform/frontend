@@ -82,7 +82,6 @@ const Navbar: React.FC<Props> = ({ setSelectedTheme, selectedTheme }) => {
     setData([]);
     setLoggingOut(false);
     handleClose();
-    localStorage.removeItem("authorization");
     navigate("/");
   };
   const handleAuthButtonClick = (

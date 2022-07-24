@@ -47,7 +47,6 @@ const DeleteDashboard = ({
               setSubmitting(true);
               try {
                 await updateUserSettingsAWS(
-                  localStorage.getItem("authorization") || "",
                   user?.username || "",
                   updatedDashboards
                 );

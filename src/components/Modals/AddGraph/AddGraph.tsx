@@ -301,7 +301,6 @@ const AddGraph = ({
 
               try {
                 await updateUserSettingsAWS(
-                  localStorage.getItem("authorization") || "",
                   user?.username || "",
                   dashboardsModified
                 );

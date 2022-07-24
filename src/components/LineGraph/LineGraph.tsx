@@ -235,11 +235,7 @@ const LineGraph = ({
             }
           });
 
-          await updateUserSettingsAWS(
-            localStorage.getItem("authorization") || "",
-            user?.username || "",
-            dashboardsModified
-          );
+          await updateUserSettingsAWS(user?.username || "", dashboardsModified);
 
           setDeleting(false);
           setDashboards(dashboardsModified);

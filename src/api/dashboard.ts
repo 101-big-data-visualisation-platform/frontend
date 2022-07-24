@@ -1,5 +1,10 @@
 import { apiAWS } from ".";
 import { Dashboard } from "../contexts/GraphsContext";
+import { Auth } from "aws-amplify";
+
+const getIdToken = async () => {
+  return (await Auth.currentSession()).getIdToken().getJwtToken();
+};
 
 export const getWeatherData = async (
   deviceID: string,
@@ -10,15 +15,11 @@ export const getWeatherData = async (
     .then((response) => response.data);
 };
 
-export const getTankData = async (
-  deviceID: string,
-  minTimeStamp: number,
-  jwt: string
-) => {
+export const getTankData = async (deviceID: string, minTimeStamp: number) => {
   return await apiAWS
     .get(`/data/tank?deviceID=${deviceID}&min=${minTimeStamp}`, {
       headers: {
-        authorization: jwt,
+        authorization: await getIdToken(),
       },
     })
     .then((response) => response.data);
@@ -27,14 +28,13 @@ export const getTankData = async (
 export const getAWSData = async (
   deviceID: string,
   minTimeStamp: number,
-  jwt: string,
   endpointURL: string
 ) => {
   try {
     return await apiAWS
       .get(`${endpointURL}?deviceID=${deviceID}&min=${minTimeStamp}`, {
         headers: {
-          authorization: jwt,
+          authorization: await getIdToken(),
         },
       })
       .then((response) => response.data);
@@ -45,17 +45,17 @@ export const getAWSData = async (
   }
 };
 
-export const getAWSDashboard = async (jwt: string, username: string) => {
+export const getAWSDashboard = async (username: string) => {
   return await apiAWS
     .get(`/data/dashboard?username=${username}`, {
       headers: {
-        authorization: jwt,
+        authorization: await getIdToken(),
       },
     })
     .then((response) => response.data);
 };
 
-export const addUserSettingsAWS = async (jwt: string, username: string) => {
+export const addUserSettingsAWS = async (username: string) => {
   return await apiAWS.post(
     "/data/dashboard",
     {
@@ -63,14 +63,13 @@ export const addUserSettingsAWS = async (jwt: string, username: string) => {
     },
     {
       headers: {
-        authorization: jwt,
+        authorization: await getIdToken(),
       },
     }
   );
 };
 
 export const updateUserSettingsAWS = async (
-  jwt: string,
   username: string,
   dashboard: Dashboard[] | undefined
 ) => {
@@ -82,7 +81,7 @@ export const updateUserSettingsAWS = async (
     },
     {
       headers: {
-        authorization: jwt,
+        authorization: await getIdToken(),
       },
     }
   );

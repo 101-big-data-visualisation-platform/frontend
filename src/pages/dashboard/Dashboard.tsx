@@ -180,7 +180,6 @@ const Dashboard: React.FC = () => {
     const dataObj: ReturnedDataObjAWS = await getAWSData(
       deviceID,
       minTimestamp,
-      localStorage.getItem("authorization") || "",
       link
     );
     // check if arg name does not match any of the allData names before appending new data to to allData
@@ -200,11 +199,9 @@ const Dashboard: React.FC = () => {
 
   const fetchDashboard = async () => {
     setLoadingDashboard(true);
+
     try {
-      const dashboardData = await getAWSDashboard(
-        localStorage.getItem("authorization") || "",
-        user?.username || ""
-      );
+      const dashboardData = await getAWSDashboard(user?.username || "");
       console.log(dashboardData);
       if (typeof dashboardData.items === "string") {
         if (!dashboardName) {
