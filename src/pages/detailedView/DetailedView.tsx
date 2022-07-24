@@ -120,7 +120,7 @@ const DetailedView: FC = () => {
     getGraphs();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allDashboards, allData]);
-
+ 
   const optionsFinal: ChartOptions<"line"> = {
     elements: {
       line: {

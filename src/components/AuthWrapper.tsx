@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { Navigate, useLocation } from "react-router-dom";
 import { Auth } from "aws-amplify";
 import { CenteredDiv } from "./CenteredDiv";
+import DataContext from "../contexts/DataContext";
 const AuthWrapper = ({ children }: { children: JSX.Element }) => {
+  const location = useLocation();
+  const { allData } = useContext(DataContext);
   const [fetchingUser, setFetchingUser] = useState(true);
   const [user, setUser] = useState();
   const fetchUserInfo = async () => {
@@ -22,6 +25,8 @@ const AuthWrapper = ({ children }: { children: JSX.Element }) => {
     );
   } else if (!fetchingUser && !user) {
     return <Navigate to="/login" />;
+  } else if (location.pathname.includes("detailed") && allData?.length === 0) {
+    return <Navigate to="/dashboard" />;
   } else {
     return children;
   }
