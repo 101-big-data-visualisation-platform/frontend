@@ -84,11 +84,3 @@ export const AddGraphButton = styled("button")`
     background: ${({ theme }) => theme.colors.tertiary};
   }
 `;
-
-export const LoadingDiv = styled("div")`
-  width: 100vw;
-  height: calc(100vh - ${navbarHeight});
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;

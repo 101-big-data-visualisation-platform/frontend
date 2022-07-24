@@ -11,13 +11,13 @@ import AddGraph from "../../components/Modals/AddGraph/AddGraph";
 import {
   AddGraphButton,
   DeleteButton,
-  LoadingDiv,
   StyledButton,
   StyledOption,
   StyledSelect,
 } from "./styled";
 import AddDashboard from "../../components/Modals/AddDashboard";
 import DeleteDashboard from "../../components/Modals/DeleteDashboard/DeleteDashboard";
+import { CenteredDiv } from "../../components/CenteredDiv";
 
 const Dashboard: React.FC = () => {
   const { allData, setData, updatingData } = useContext(DataContext);
@@ -271,15 +271,15 @@ const Dashboard: React.FC = () => {
   }, []);
   if (!dashboardName && loadingDashboard) {
     return (
-      <LoadingDiv>
+      <CenteredDiv>
         <h1>Loading Dashboard...</h1>
-      </LoadingDiv>
+      </CenteredDiv>
     );
   } else if (!dashboardName && !loadingDashboard) {
     return (
-      <LoadingDiv>
+      <CenteredDiv>
         <h1>Your dashboard could not be loaded. Please sign in again.</h1>
-      </LoadingDiv>
+      </CenteredDiv>
     );
   }
   return (
