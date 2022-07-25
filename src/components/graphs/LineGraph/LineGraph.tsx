@@ -208,9 +208,7 @@ const LineGraph = ({
       </StyledButton>
       <StyledLink
         style={deleting ? { pointerEvents: "none" } : {}}
-        to={`/detailed?dataName=${encodeURIComponent(
-          JSON.stringify(options.datasetOptions)
-        )}&dataSelector=${options.dataSelector}&graphID=${graphID}`}
+        to={`/detailed?dataSelector=${options.dataSelector}&graphID=${graphID}`}
       >
         Detailed View
       </StyledLink>
