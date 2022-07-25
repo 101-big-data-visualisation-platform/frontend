@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import LineGraph from "../../components/LineGraph";
 import { Container } from "../../components/Container";
 import { getAWSDashboard, getAWSData } from "../../api/dashboard";
 import DataContext from "../../contexts/DataContext";
@@ -18,6 +17,7 @@ import {
 import AddDashboard from "../../components/Modals/AddDashboard";
 import DeleteDashboard from "../../components/Modals/DeleteDashboard/DeleteDashboard";
 import { CenteredDiv } from "../../components/CenteredDiv";
+import GraphSelector from "../../components/graphs/GraphSelector";
 
 const Dashboard: React.FC = () => {
   const { allData, setData, updatingData } = useContext(DataContext);
@@ -222,31 +222,31 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    getDataFromJson("./lambda-results-full-300.json", "weatherDataIALBAN250");
-    getDataFromJson("./tiny-data.json", "tiny-dataIALBAN250");
-    getDataFromJsonAndCompress(
-      "./lambda-results-full-300.json",
-      "inTemp:weatherDataCompressedIALBAN250"
-    );
-    getDataFromJsonAndCompress(
-      "./lambda-results-full-300.json",
-      "absBaro:weatherDataCompressedIALBAN250"
-    );
-    getDataFromJsonAndCompress(
-      "./lambda-results-full-300.json",
-      "dailyRain:weatherDataCompressedIALBAN250"
-    );
-    getDataFromJsonAndCompress(
-      "./lambda-results-full-300.json",
-      "dewPoint:weatherDataCompressedIALBAN250"
-    );
-    getDataFromJsonAndCompress(
-      "./lambda-results-full-300.json",
-      "inHumi:weatherDataCompressedIALBAN250"
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   getDataFromJson("./lambda-results-full-300.json", "weatherDataIALBAN250");
+  //   getDataFromJson("./tiny-data.json", "tiny-dataIALBAN250");
+  //   getDataFromJsonAndCompress(
+  //     "./lambda-results-full-300.json",
+  //     "inTemp:weatherDataCompressedIALBAN250"
+  //   );
+  //   getDataFromJsonAndCompress(
+  //     "./lambda-results-full-300.json",
+  //     "absBaro:weatherDataCompressedIALBAN250"
+  //   );
+  //   getDataFromJsonAndCompress(
+  //     "./lambda-results-full-300.json",
+  //     "dailyRain:weatherDataCompressedIALBAN250"
+  //   );
+  //   getDataFromJsonAndCompress(
+  //     "./lambda-results-full-300.json",
+  //     "dewPoint:weatherDataCompressedIALBAN250"
+  //   );
+  //   getDataFromJsonAndCompress(
+  //     "./lambda-results-full-300.json",
+  //     "inHumi:weatherDataCompressedIALBAN250"
+  //   );
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
   useEffect(() => {
     allDashboards
       ?.find((dashboard) => dashboard.name === dashboardName)
@@ -321,7 +321,9 @@ const Dashboard: React.FC = () => {
             {allDashboards
               ?.find((dashboard) => dashboard.name === dashboardName)
               ?.allGraphs?.map((graphData) => (
-                <LineGraph
+                <GraphSelector
+                  detailed={false}
+                  graphType={graphData.graphType}
                   dashboardName={dashboardName}
                   graphID={graphData.graphID}
                   data={{
@@ -336,13 +338,7 @@ const Dashboard: React.FC = () => {
                     }),
                   }}
                   options={{
-                    graphTitleText: `${graphData.graphTitleText}  since:${
-                      (graphData?.minTimestamp || 0) > 0
-                        ? new Date(
-                            graphData?.minTimestamp || "invalid date"
-                          ).toLocaleDateString()
-                        : "all time"
-                    }`,
+                    graphTitleText: graphData.graphTitleText,
                     datasetOptions: graphData.datasets.map((dataset) => {
                       return {
                         datasetBackgroundColor: dataset.datasetBackgroundColor,

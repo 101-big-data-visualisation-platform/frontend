@@ -15,6 +15,7 @@ export type Graph = {
   minTimestamp?: number;
   decimationSamples: number;
   dataSelector: string;
+  graphType: string;
   // Make these properties required once backend is finalized
 };
 

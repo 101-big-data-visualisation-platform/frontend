@@ -14,6 +14,12 @@ import GraphsContext, { Dataset } from "../../../contexts/GraphsContext";
 import { updateUserSettingsAWS } from "../../../api/dashboard";
 import AuthContext from "../../../contexts/AuthContext";
 import { v4 as uuidv4 } from "uuid";
+import {
+  AREACHART,
+  LINECHART,
+  SCATTERCHART,
+  SINGLESTATISTIC,
+} from "../../../constants";
 
 const AddGraph = ({
   open,
@@ -51,7 +57,6 @@ const AddGraph = ({
               validateOnBlur={false}
               initialValues={{
                 dataName: "",
-                datasetBackgroundColor: "#ff0000",
                 datasetBorderColor: "#ff0000",
                 dataURL: "",
                 deviceID: "",
@@ -59,14 +64,12 @@ const AddGraph = ({
               validate={(values): Object => {
                 type Errors = {
                   dataName: string;
-                  datasetBackgroundColor: string;
                   datasetBorderColor: string;
                   dataURL: string;
                   deviceID: string;
                 };
                 const errors: Errors = {
                   dataName: "",
-                  datasetBackgroundColor: "",
                   datasetBorderColor: "",
                   dataURL: "",
                   deviceID: "",
@@ -74,9 +77,6 @@ const AddGraph = ({
 
                 if (!values.dataName) {
                   errors.dataName = "Required";
-                }
-                if (!values.datasetBackgroundColor) {
-                  errors.datasetBackgroundColor = "Required";
                 }
                 if (!values.datasetBorderColor) {
                   errors.datasetBorderColor = "Required";
@@ -90,7 +90,6 @@ const AddGraph = ({
 
                 if (
                   errors.dataName.length > 0 ||
-                  errors.datasetBackgroundColor.length > 0 ||
                   errors.datasetBorderColor.length > 0 ||
                   errors.dataURL.length > 0 ||
                   errors.deviceID.length > 0
@@ -105,7 +104,7 @@ const AddGraph = ({
                   ...prevState,
                   {
                     dataName: values.dataName,
-                    datasetBackgroundColor: values.datasetBackgroundColor,
+                    datasetBackgroundColor: values.datasetBorderColor + "7d",
                     datasetBorderColor: values.datasetBorderColor,
                     dataURL: values.dataURL,
                     deviceID: values.deviceID,
@@ -138,22 +137,6 @@ const AddGraph = ({
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.dataName}
-                  />
-                  <br />
-                  <span>
-                    Dataset Background Color{" "}
-                    <span style={{ color: "orange" }}>
-                      {errors.datasetBackgroundColor &&
-                        touched.datasetBackgroundColor &&
-                        errors.datasetBackgroundColor}
-                    </span>
-                  </span>
-                  <input
-                    type="color"
-                    name="datasetBackgroundColor"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.datasetBackgroundColor}
                   />
                   <br />
                   <span>
@@ -213,6 +196,7 @@ const AddGraph = ({
               minTimestamp: 0,
               dataSelector: "",
               datasets: datasets,
+              graphType: LINECHART,
             }}
             validate={(values): Object => {
               type Errors = {
@@ -220,12 +204,14 @@ const AddGraph = ({
                 minTimestamp: string;
                 dataSelector: string;
                 datasets: string;
+                graphType: string;
               };
               const errors: Errors = {
                 graphTitleText: "",
                 minTimestamp: "",
                 dataSelector: "",
                 datasets: "",
+                graphType: "",
               };
 
               if (!values.graphTitleText) {
@@ -291,6 +277,7 @@ const AddGraph = ({
                         minTimestamp: finalMinTimestamp,
                         dataSelector: values.dataSelector,
                         decimationSamples: 5000,
+                        graphType: values.graphType,
                       },
                     ],
                   };
@@ -371,6 +358,18 @@ const AddGraph = ({
                     onBlur={handleBlur}
                     value={values.dataSelector}
                   />
+                  <span>Graph Type</span>
+                  <select
+                    name="graphType"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.graphType}
+                  >
+                    <option value={LINECHART}>Line</option>
+                    <option value={AREACHART}>Area</option>
+                    <option value={SCATTERCHART}>Scatter</option>
+                    <option value={SINGLESTATISTIC}>Latest Values</option>
+                  </select>
                   <h3>
                     Datasets{" "}
                     <span style={{ color: "orange" }}>

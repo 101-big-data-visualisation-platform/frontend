@@ -29,6 +29,7 @@ import {
 } from "./styled";
 import { Close, Menu } from "@mui/icons-material";
 import ContentToggler from "../../components/ContentToggler";
+import GraphSelector from "../../components/graphs/GraphSelector";
 
 Chartjs.register(...registerables);
 Chartjs.register(zoomPlugin);
@@ -36,8 +37,7 @@ Chartjs.register(zoomPlugin);
 const DetailedView: FC = () => {
   const [searchParams] = useSearchParams();
   const { allData } = useContext(DataContext);
-  const { allDashboards } = useContext(GraphsContext);
-  const dataNames = searchParams.get("dataName") || "";
+  const { allDashboards, selectedDashboard } = useContext(GraphsContext);
   const dataSelector = searchParams.get("dataSelector") || "";
   const graphID = searchParams.get("graphID") || "";
   const theme = useContext(ThemeContext);
@@ -51,15 +51,17 @@ const DetailedView: FC = () => {
   const getData1 = () => {
     // const dataObj = await getWeatherData("IALBAN25", 15000000000000);
     // const dataObj: Data = JSON.parse(JSON.stringify(dataMain));
-    console.log(JSON.parse(dataNames));
-    const arrayOfitemsArray = JSON.parse(dataNames).map((dataObj: Dataset) => {
-      const itemsArray: [] =
-        allData?.find((data) => data.name === dataObj.dataName)?.items || [];
-      return {
-        items: itemsArray,
-        name: dataObj.dataName,
-      };
-    });
+    const arrayOfitemsArray = allDashboards
+      ?.find((dashboard) => dashboard.name === selectedDashboard)
+      ?.allGraphs.find((graph) => graph.graphID === graphID)
+      ?.datasets.map((dataObj: Dataset) => {
+        const itemsArray: [] =
+          allData?.find((data) => data.name === dataObj.dataName)?.items || [];
+        return {
+          items: itemsArray,
+          name: dataObj.dataName,
+        };
+      });
 
     type Item = {
       timeStamp: string;
@@ -67,7 +69,7 @@ const DetailedView: FC = () => {
     interface IItem {
       [key: string]: string;
     }
-    const processedItems = arrayOfitemsArray.map(
+    const processedItems = arrayOfitemsArray?.map(
       (arrayOfItems: { items: []; name: string }) => {
         return {
           items: arrayOfItems.items.map((item: Item) => {
@@ -81,8 +83,8 @@ const DetailedView: FC = () => {
       }
     );
     setFinalData({
-      datasets: processedItems.map(
-        (processedItem: { items: []; name: string }) => {
+      datasets:
+        processedItems?.map((processedItem: { items: any[]; name: string }) => {
           const relatedGraph = graphSettings?.datasets.find((dataset) => {
             return dataset.dataName === processedItem.name;
           });
@@ -95,8 +97,7 @@ const DetailedView: FC = () => {
             pointRadius: 1,
             borderWidth: 1,
           };
-        }
-      ),
+        }) || [],
     });
   };
   const getGraphs = () => {
@@ -120,7 +121,7 @@ const DetailedView: FC = () => {
     getGraphs();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allDashboards, allData]);
- 
+
   const optionsFinal: ChartOptions<"line"> = {
     elements: {
       line: {
@@ -212,14 +213,43 @@ const DetailedView: FC = () => {
     <StyledDiv2>
       <Container>
         <StyledDiv1>
-          <button
-            onClick={() => {
-              chartRef?.current?.resetZoom();
-            }}
-          >
-            Reset Zoom
-          </button>
-          <Line data={finalData} options={optionsFinal} ref={chartRef} />
+          {allDashboards
+            ?.find((dashboard) => dashboard.name === selectedDashboard)
+            ?.allGraphs?.filter((graph) => graph.graphID === graphID)
+            .map((graphData) => (
+              <GraphSelector
+                detailed={true}
+                graphType={graphData.graphType}
+                dashboardName={selectedDashboard}
+                graphID={graphData.graphID}
+                data={{
+                  datasets: graphData.datasets.map((dataset) => {
+                    return {
+                      items:
+                        allData?.find((data) => {
+                          return data.name === dataset.dataName;
+                        })?.items || [],
+                      name: dataset.dataName,
+                    };
+                  }),
+                }}
+                options={{
+                  graphTitleText: graphData.graphTitleText,
+                  datasetOptions: graphData.datasets.map((dataset) => {
+                    return {
+                      datasetBackgroundColor: dataset.datasetBackgroundColor,
+                      datasetBorderColor: dataset.datasetBorderColor,
+                      label: `Device: ${dataset.deviceID}`,
+                      dataName: dataset.dataName,
+                      deviceID: dataset.deviceID || "",
+                    };
+                  }),
+                  decimationSamples: graphData.decimationSamples,
+                  dataSelector: graphData.dataSelector,
+                  minTimestamp: graphData.minTimestamp || 0,
+                }}
+              />
+            ))}
         </StyledDiv1>
       </Container>
       <StyledDiv4>
