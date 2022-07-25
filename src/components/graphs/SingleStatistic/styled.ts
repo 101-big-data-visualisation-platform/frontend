@@ -41,6 +41,20 @@ export const StyledButton = styled("button")`
   font-size: 0.8rem;
 `;
 
+export const StyledButton2 = styled("button")`
+  background: transparent;
+  color: ${({ theme }) => theme.colors.secondary};
+  border: 2px solid ${({ theme }) => theme.colors.secondary};
+  padding: 5px;
+  border-radius: 5px;
+  margin-right: 10px;
+  &:hover {
+    background: ${({ theme }) => theme.colors.secondary};
+    color: ${({ theme }) => theme.colors.primary};
+  }
+  font-size: 0.8rem;
+`;
+
 export const StyledLink = styled(Link)`
   background: transparent;
   color: ${({ theme }) => theme.colors.primary};

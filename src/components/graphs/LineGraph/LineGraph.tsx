@@ -244,9 +244,8 @@ const LineGraph = ({
         {deleting && (
           <LinearProgress style={{ marginTop: "10px" }} color="inherit" />
         )}
-        <GraphWrapperDiv>
-          <Line data={finalData} options={optionsFinal} ref={chartRef} />
-        </GraphWrapperDiv>
+
+        <Line data={finalData} options={optionsFinal} ref={chartRef} />
       </>
     );
   } else {

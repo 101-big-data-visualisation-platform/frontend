@@ -15,6 +15,7 @@ import AuthContext from "../../../contexts/AuthContext";
 import GraphsContext from "../../../contexts/GraphsContext";
 import { LinearProgress } from "@mui/material";
 import { GraphWrapperDiv } from "../../GraphWrapperDiv";
+import { useNavigate } from "react-router-dom";
 Chartjs.register(...registerables);
 Chartjs.register(zoomPlugin);
 
@@ -50,6 +51,7 @@ const ScatterPlot = ({
   detailed,
   dashboardName,
 }: ScatterPlotProps) => {
+  const navigate = useNavigate();
   const theme = useContext(ThemeContext);
   const { user } = useContext(AuthContext);
   const { allDashboards, setDashboards } = useContext(GraphsContext);
@@ -199,55 +201,107 @@ const ScatterPlot = ({
       },
     },
   };
-  return (
-    <StyledDiv1>
-      <StyledButton
-        onClick={() => {
-          chartRef?.current?.resetZoom();
-        }}
-      >
-        Reset Zoom
-      </StyledButton>
-      <StyledLink
-        style={deleting ? { pointerEvents: "none" } : {}}
-        to={`/detailed?dataSelector=${options.dataSelector}&graphID=${graphID}`}
-      >
-        Detailed View
-      </StyledLink>
-      <StyledButton
-        onClick={async () => {
-          setDeleting(true);
+  if (detailed) {
+    return (
+      <>
+        <StyledButton
+          onClick={() => {
+            chartRef?.current?.resetZoom();
+          }}
+        >
+          Reset Zoom
+        </StyledButton>
+        <StyledButton
+          onClick={async () => {
+            setDeleting(true);
 
-          const dashboardsModified = allDashboards?.map((dashboard) => {
-            if (dashboardName === dashboard.name) {
-              return {
-                name: dashboard.name,
-                allGraphs: dashboard.allGraphs.filter(
-                  (graph) => graph.graphID !== graphID
-                ),
-              };
-            } else {
-              return dashboard;
-            }
-          });
+            const dashboardsModified = allDashboards?.map((dashboard) => {
+              if (dashboardName === dashboard.name) {
+                return {
+                  name: dashboard.name,
+                  allGraphs: dashboard.allGraphs.filter(
+                    (graph) => graph.graphID !== graphID
+                  ),
+                };
+              } else {
+                return dashboard;
+              }
+            });
 
-          await updateUserSettingsAWS(user?.username || "", dashboardsModified);
+            await updateUserSettingsAWS(
+              user?.username || "",
+              dashboardsModified
+            );
 
-          setDeleting(false);
-          setDashboards(dashboardsModified);
-        }}
-        disabled={deleting}
-      >
-        Delete
-      </StyledButton>
-      {deleting && (
-        <LinearProgress style={{ marginTop: "10px" }} color="inherit" />
-      )}
-      <GraphWrapperDiv>
+            setDeleting(false);
+            setDashboards(dashboardsModified);
+            navigate("/dashboard");
+          }}
+          disabled={deleting}
+        >
+          Delete
+        </StyledButton>
+        {deleting && (
+          <LinearProgress style={{ marginTop: "10px" }} color="inherit" />
+        )}
+
         <Scatter data={finalData} options={optionsFinal} ref={chartRef} />
-      </GraphWrapperDiv>
-    </StyledDiv1>
-  );
+      </>
+    );
+  } else {
+    return (
+      <StyledDiv1>
+        <StyledButton
+          onClick={() => {
+            chartRef?.current?.resetZoom();
+          }}
+        >
+          Reset Zoom
+        </StyledButton>
+        <StyledLink
+          style={deleting ? { pointerEvents: "none" } : {}}
+          to={`/detailed?dataSelector=${options.dataSelector}&graphID=${graphID}`}
+        >
+          Detailed View
+        </StyledLink>
+        <StyledButton
+          onClick={async () => {
+            setDeleting(true);
+
+            const dashboardsModified = allDashboards?.map((dashboard) => {
+              if (dashboardName === dashboard.name) {
+                return {
+                  name: dashboard.name,
+                  allGraphs: dashboard.allGraphs.filter(
+                    (graph) => graph.graphID !== graphID
+                  ),
+                };
+              } else {
+                return dashboard;
+              }
+            });
+
+            await updateUserSettingsAWS(
+              user?.username || "",
+              dashboardsModified
+            );
+
+            setDeleting(false);
+            setDashboards(dashboardsModified);
+          }}
+          disabled={deleting}
+        >
+          Delete
+        </StyledButton>
+        {deleting && (
+          <LinearProgress style={{ marginTop: "10px" }} color="inherit" />
+        )}
+        <GraphWrapperDiv>
+          <Scatter data={finalData} options={optionsFinal} ref={chartRef} />
+        </GraphWrapperDiv>
+      </StyledDiv1>
+    );
+  }
 };
 
 export default ScatterPlot;
