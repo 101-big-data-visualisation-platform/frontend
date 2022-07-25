@@ -85,7 +85,7 @@ const SingleStatistic = ({
           <LinearProgress style={{ marginTop: "10px" }} color="inherit" />
         )}
         <StyledDiv2>
-          <div style={{ width: "300px", marginLeft: "50px" }}>
+          <div style={{ width: "300px", textAlign: "center" }}>
             <h1>{options.graphTitleText}</h1>
             <p>latest {options.dataSelector} data</p>
           </div>
@@ -169,9 +169,9 @@ const SingleStatistic = ({
           <LinearProgress style={{ marginTop: "10px" }} color="inherit" />
         )}
         <StyledDiv2>
-          <div style={{ width: "300px", marginLeft: "50px" }}>
-            <h1>{options.graphTitleText}</h1>
-            <p>latest {options.dataSelector} data</p>
+          <div style={{ width: "300px", textAlign: "center" }}>
+            <h1 style={{ marginBottom: "0" }}>{options.graphTitleText}</h1>
+            <p style={{ marginTop: "0" }}>latest {options.dataSelector} data</p>
           </div>
 
           <div style={{ display: "flex", flexWrap: "wrap" }}>

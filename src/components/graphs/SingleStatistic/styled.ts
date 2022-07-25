@@ -16,6 +16,7 @@ export const StyledDiv2 = styled("div")`
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 `;
 
 export const StyledDiv3 = styled("div")`
@@ -25,6 +26,7 @@ export const StyledDiv3 = styled("div")`
   color: ${({ theme }) => theme.colors.secondary};
   width: 200px;
   border-radius: 5px;
+  flex-grow: 1;
 `;
 
 export const StyledButton = styled("button")`
