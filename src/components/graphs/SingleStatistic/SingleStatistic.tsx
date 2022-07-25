@@ -13,6 +13,7 @@ import {
 } from "./styled";
 
 type SingleStatisticProps = {
+  detailed: boolean;
   data: {
     datasets: {
       items: [];
@@ -36,6 +37,7 @@ type SingleStatisticProps = {
 
 const SingleStatistic = ({
   data,
+  detailed,
   options,
   graphID,
   dashboardName,

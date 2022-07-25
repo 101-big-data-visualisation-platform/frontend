@@ -19,6 +19,7 @@ Chartjs.register(...registerables);
 Chartjs.register(zoomPlugin);
 
 type ScatterPlotProps = {
+  detailed: boolean;
   data: {
     datasets: {
       items: [];
@@ -46,6 +47,7 @@ const ScatterPlot = ({
   data,
   options,
   graphID,
+  detailed,
   dashboardName,
 }: ScatterPlotProps) => {
   const theme = useContext(ThemeContext);

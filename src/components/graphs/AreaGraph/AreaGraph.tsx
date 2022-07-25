@@ -19,6 +19,7 @@ Chartjs.register(...registerables);
 Chartjs.register(zoomPlugin);
 
 type AreaGraphProps = {
+  detailed: boolean;
   data: {
     datasets: {
       items: [];
@@ -46,6 +47,7 @@ const LineGraph = ({
   data,
   options,
   graphID,
+  detailed,
   dashboardName,
 }: AreaGraphProps) => {
   const theme = useContext(ThemeContext);

@@ -29,6 +29,7 @@ import {
 } from "./styled";
 import { Close, Menu } from "@mui/icons-material";
 import ContentToggler from "../../components/ContentToggler";
+import GraphSelector from "../../components/graphs/GraphSelector";
 
 Chartjs.register(...registerables);
 Chartjs.register(zoomPlugin);
@@ -212,14 +213,43 @@ const DetailedView: FC = () => {
     <StyledDiv2>
       <Container>
         <StyledDiv1>
-          <button
-            onClick={() => {
-              chartRef?.current?.resetZoom();
-            }}
-          >
-            Reset Zoom
-          </button>
-          <Line data={finalData} options={optionsFinal} ref={chartRef} />
+          {allDashboards
+            ?.find((dashboard) => dashboard.name === selectedDashboard)
+            ?.allGraphs?.filter((graph) => graph.graphID === graphID)
+            .map((graphData) => (
+              <GraphSelector
+                detailed={true}
+                graphType={graphData.graphType}
+                dashboardName={selectedDashboard}
+                graphID={graphData.graphID}
+                data={{
+                  datasets: graphData.datasets.map((dataset) => {
+                    return {
+                      items:
+                        allData?.find((data) => {
+                          return data.name === dataset.dataName;
+                        })?.items || [],
+                      name: dataset.dataName,
+                    };
+                  }),
+                }}
+                options={{
+                  graphTitleText: graphData.graphTitleText,
+                  datasetOptions: graphData.datasets.map((dataset) => {
+                    return {
+                      datasetBackgroundColor: dataset.datasetBackgroundColor,
+                      datasetBorderColor: dataset.datasetBorderColor,
+                      label: `Device: ${dataset.deviceID}`,
+                      dataName: dataset.dataName,
+                      deviceID: dataset.deviceID || "",
+                    };
+                  }),
+                  decimationSamples: graphData.decimationSamples,
+                  dataSelector: graphData.dataSelector,
+                  minTimestamp: graphData.minTimestamp || 0,
+                }}
+              />
+            ))}
         </StyledDiv1>
       </Container>
       <StyledDiv4>

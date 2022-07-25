@@ -11,6 +11,7 @@ import ScatterPlot from "../ScatterPlot";
 import SingleStatistic from "../SingleStatistic";
 type GraphSelectorProps = {
   graphType: string;
+  detailed: boolean;
   data: {
     datasets: {
       items: [];
@@ -36,6 +37,7 @@ type GraphSelectorProps = {
 const GraphSelector = ({
   data,
   dashboardName,
+  detailed,
   graphID,
   options,
   graphType,
@@ -43,6 +45,7 @@ const GraphSelector = ({
   if (graphType === LINECHART) {
     return (
       <LineGraph
+        detailed={detailed}
         data={data}
         dashboardName={dashboardName}
         graphID={graphID}
@@ -52,6 +55,7 @@ const GraphSelector = ({
   } else if (graphType === AREACHART) {
     return (
       <AreaGraph
+        detailed={detailed}
         data={data}
         dashboardName={dashboardName}
         graphID={graphID}
@@ -61,6 +65,7 @@ const GraphSelector = ({
   } else if (graphType === SCATTERCHART) {
     return (
       <ScatterPlot
+        detailed={detailed}
         data={data}
         dashboardName={dashboardName}
         graphID={graphID}
@@ -70,6 +75,7 @@ const GraphSelector = ({
   } else if (graphType === SINGLESTATISTIC) {
     return (
       <SingleStatistic
+        detailed={detailed}
         data={data}
         dashboardName={dashboardName}
         graphID={graphID}

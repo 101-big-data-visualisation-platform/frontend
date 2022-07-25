@@ -322,6 +322,7 @@ const Dashboard: React.FC = () => {
               ?.find((dashboard) => dashboard.name === dashboardName)
               ?.allGraphs?.map((graphData) => (
                 <GraphSelector
+                  detailed={false}
                   graphType={graphData.graphType}
                   dashboardName={dashboardName}
                   graphID={graphData.graphID}

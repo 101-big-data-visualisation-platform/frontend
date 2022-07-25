@@ -15,6 +15,7 @@ import AuthContext from "../../../contexts/AuthContext";
 import GraphsContext from "../../../contexts/GraphsContext";
 import { LinearProgress } from "@mui/material";
 import { GraphWrapperDiv } from "../../GraphWrapperDiv";
+import { useNavigate } from "react-router-dom";
 Chartjs.register(...registerables);
 Chartjs.register(zoomPlugin);
 
@@ -25,6 +26,7 @@ type LineGraphProps = {
       name: string;
     }[];
   };
+  detailed: boolean;
   options: {
     graphTitleText: string;
     datasetOptions: {
@@ -44,10 +46,12 @@ type LineGraphProps = {
 
 const LineGraph = ({
   data,
+  detailed,
   options,
   graphID,
   dashboardName,
 }: LineGraphProps) => {
+  const navigate = useNavigate();
   const theme = useContext(ThemeContext);
   const { user } = useContext(AuthContext);
   const { allDashboards, setDashboards } = useContext(GraphsContext);
@@ -103,7 +107,7 @@ const LineGraph = ({
           backgroundColor: relatedGraph?.datasetBackgroundColor,
           borderColor: relatedGraph?.datasetBorderColor,
           yAxisID: "y",
-          pointRadius: 0,
+          pointRadius: detailed ? 1 : 0,
           borderWidth: 1,
         };
       }),
@@ -197,55 +201,108 @@ const LineGraph = ({
       },
     },
   };
-  return (
-    <StyledDiv1>
-      <StyledButton
-        onClick={() => {
-          chartRef?.current?.resetZoom();
-        }}
-      >
-        Reset Zoom
-      </StyledButton>
-      <StyledLink
-        style={deleting ? { pointerEvents: "none" } : {}}
-        to={`/detailed?dataSelector=${options.dataSelector}&graphID=${graphID}`}
-      >
-        Detailed View
-      </StyledLink>
-      <StyledButton
-        onClick={async () => {
-          setDeleting(true);
+  if (detailed) {
+    return (
+      <>
+        <StyledButton
+          onClick={() => {
+            chartRef?.current?.resetZoom();
+          }}
+        >
+          Reset Zoom
+        </StyledButton>
+        <StyledButton
+          onClick={async () => {
+            setDeleting(true);
 
-          const dashboardsModified = allDashboards?.map((dashboard) => {
-            if (dashboardName === dashboard.name) {
-              return {
-                name: dashboard.name,
-                allGraphs: dashboard.allGraphs.filter(
-                  (graph) => graph.graphID !== graphID
-                ),
-              };
-            } else {
-              return dashboard;
-            }
-          });
+            const dashboardsModified = allDashboards?.map((dashboard) => {
+              if (dashboardName === dashboard.name) {
+                return {
+                  name: dashboard.name,
+                  allGraphs: dashboard.allGraphs.filter(
+                    (graph) => graph.graphID !== graphID
+                  ),
+                };
+              } else {
+                return dashboard;
+              }
+            });
 
-          await updateUserSettingsAWS(user?.username || "", dashboardsModified);
+            await updateUserSettingsAWS(
+              user?.username || "",
+              dashboardsModified
+            );
 
-          setDeleting(false);
-          setDashboards(dashboardsModified);
-        }}
-        disabled={deleting}
-      >
-        Delete
-      </StyledButton>
-      {deleting && (
-        <LinearProgress style={{ marginTop: "10px" }} color="inherit" />
-      )}
-      <GraphWrapperDiv>
-        <Line data={finalData} options={optionsFinal} ref={chartRef} />
-      </GraphWrapperDiv>
-    </StyledDiv1>
-  );
+            setDeleting(false);
+            setDashboards(dashboardsModified);
+            navigate("/dashboard");
+          }}
+          disabled={deleting}
+        >
+          Delete
+        </StyledButton>
+        {deleting && (
+          <LinearProgress style={{ marginTop: "10px" }} color="inherit" />
+        )}
+        <GraphWrapperDiv>
+          <Line data={finalData} options={optionsFinal} ref={chartRef} />
+        </GraphWrapperDiv>
+      </>
+    );
+  } else {
+    return (
+      <StyledDiv1>
+        <StyledButton
+          onClick={() => {
+            chartRef?.current?.resetZoom();
+          }}
+        >
+          Reset Zoom
+        </StyledButton>
+        <StyledLink
+          style={deleting ? { pointerEvents: "none" } : {}}
+          to={`/detailed?dataSelector=${options.dataSelector}&graphID=${graphID}`}
+        >
+          Detailed View
+        </StyledLink>
+        <StyledButton
+          onClick={async () => {
+            setDeleting(true);
+
+            const dashboardsModified = allDashboards?.map((dashboard) => {
+              if (dashboardName === dashboard.name) {
+                return {
+                  name: dashboard.name,
+                  allGraphs: dashboard.allGraphs.filter(
+                    (graph) => graph.graphID !== graphID
+                  ),
+                };
+              } else {
+                return dashboard;
+              }
+            });
+
+            await updateUserSettingsAWS(
+              user?.username || "",
+              dashboardsModified
+            );
+
+            setDeleting(false);
+            setDashboards(dashboardsModified);
+          }}
+          disabled={deleting}
+        >
+          Delete
+        </StyledButton>
+        {deleting && (
+          <LinearProgress style={{ marginTop: "10px" }} color="inherit" />
+        )}
+        <GraphWrapperDiv>
+          <Line data={finalData} options={optionsFinal} ref={chartRef} />
+        </GraphWrapperDiv>
+      </StyledDiv1>
+    );
+  }
 };
 
 export default LineGraph;
