@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { Line } from "react-chartjs-2";
+import { Scatter } from "react-chartjs-2";
 import {
   Chart as Chartjs,
   registerables,
@@ -18,7 +18,7 @@ import { GraphWrapperDiv } from "../../GraphWrapperDiv";
 Chartjs.register(...registerables);
 Chartjs.register(zoomPlugin);
 
-type LineGraphProps = {
+type ScatterPlotProps = {
   data: {
     datasets: {
       items: [];
@@ -42,17 +42,17 @@ type LineGraphProps = {
   dashboardName: string;
 };
 
-const LineGraph = ({
+const ScatterPlot = ({
   data,
   options,
   graphID,
   dashboardName,
-}: LineGraphProps) => {
+}: ScatterPlotProps) => {
   const theme = useContext(ThemeContext);
   const { user } = useContext(AuthContext);
   const { allDashboards, setDashboards } = useContext(GraphsContext);
-  const chartRef = useRef<Chartjs<"line">>();
-  const [finalData, setFinalData] = useState<ChartData<"line">>({
+  const chartRef = useRef<Chartjs<"scatter">>();
+  const [finalData, setFinalData] = useState<ChartData<"scatter">>({
     datasets: [],
   });
   const [deleting, setDeleting] = useState(false);
@@ -103,7 +103,7 @@ const LineGraph = ({
           backgroundColor: relatedGraph?.datasetBackgroundColor,
           borderColor: relatedGraph?.datasetBorderColor,
           yAxisID: "y",
-          pointRadius: 0,
+          pointRadius: 1,
           borderWidth: 1,
         };
       }),
@@ -115,7 +115,7 @@ const LineGraph = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
-  const optionsFinal: ChartOptions<"line"> = {
+  const optionsFinal: ChartOptions<"scatter"> = {
     elements: {
       line: {
         tension: 0,
@@ -244,10 +244,10 @@ const LineGraph = ({
         <LinearProgress style={{ marginTop: "10px" }} color="inherit" />
       )}
       <GraphWrapperDiv>
-        <Line data={finalData} options={optionsFinal} ref={chartRef} />
+        <Scatter data={finalData} options={optionsFinal} ref={chartRef} />
       </GraphWrapperDiv>
     </StyledDiv1>
   );
 };
 
-export default LineGraph;
+export default ScatterPlot;

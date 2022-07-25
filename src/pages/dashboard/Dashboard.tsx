@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import LineGraph from "../../components/graphs/LineGraph";
 import { Container } from "../../components/Container";
 import { getAWSDashboard, getAWSData } from "../../api/dashboard";
 import DataContext from "../../contexts/DataContext";

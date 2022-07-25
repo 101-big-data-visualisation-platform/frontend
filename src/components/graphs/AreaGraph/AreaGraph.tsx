@@ -14,6 +14,7 @@ import { updateUserSettingsAWS } from "../../../api/dashboard";
 import AuthContext from "../../../contexts/AuthContext";
 import GraphsContext from "../../../contexts/GraphsContext";
 import { LinearProgress } from "@mui/material";
+import { GraphWrapperDiv } from "../../GraphWrapperDiv";
 Chartjs.register(...registerables);
 Chartjs.register(zoomPlugin);
 
@@ -243,8 +244,9 @@ const LineGraph = ({
       {deleting && (
         <LinearProgress style={{ marginTop: "10px" }} color="inherit" />
       )}
-
-      <Line data={finalData} options={optionsFinal} ref={chartRef} />
+      <GraphWrapperDiv>
+        <Line data={finalData} options={optionsFinal} ref={chartRef} />
+      </GraphWrapperDiv>
     </StyledDiv1>
   );
 };

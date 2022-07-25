@@ -1,7 +1,14 @@
 import React from "react";
-import { AREACHART, LINECHART } from "../../../constants";
+import {
+  AREACHART,
+  LINECHART,
+  SCATTERCHART,
+  SINGLESTATISTIC,
+} from "../../../constants";
 import AreaGraph from "../AreaGraph";
 import LineGraph from "../LineGraph";
+import ScatterPlot from "../ScatterPlot";
+import SingleStatistic from "../SingleStatistic";
 type GraphSelectorProps = {
   graphType: string;
   data: {
@@ -45,6 +52,24 @@ const GraphSelector = ({
   } else if (graphType === AREACHART) {
     return (
       <AreaGraph
+        data={data}
+        dashboardName={dashboardName}
+        graphID={graphID}
+        options={options}
+      />
+    );
+  } else if (graphType === SCATTERCHART) {
+    return (
+      <ScatterPlot
+        data={data}
+        dashboardName={dashboardName}
+        graphID={graphID}
+        options={options}
+      />
+    );
+  } else if (graphType === SINGLESTATISTIC) {
+    return (
+      <SingleStatistic
         data={data}
         dashboardName={dashboardName}
         graphID={graphID}
