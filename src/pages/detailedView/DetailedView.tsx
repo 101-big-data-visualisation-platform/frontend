@@ -4,17 +4,14 @@ import DataContext from "../../contexts/DataContext";
 import { Chart as Chartjs, registerables } from "chart.js";
 import zoomPlugin from "chartjs-plugin-zoom";
 import "chartjs-adapter-moment";
-import GraphsContext, { Dashboard } from "../../contexts/GraphsContext";
+import GraphsContext from "../../contexts/GraphsContext";
 import { Container } from "../../components/Container";
 import {
-  MinorSeparator,
   StyledButton,
-  StyledButton2,
   StyledDiv1,
   StyledDiv2,
   StyledDiv3,
   StyledDiv4,
-  StyledDiv5,
 } from "./styled";
 import { Close, Menu } from "@mui/icons-material";
 import ContentToggler from "../../components/ContentToggler";
@@ -27,6 +24,7 @@ import {
 } from "../../constants";
 import { updateUserSettingsAWS } from "../../api/dashboard";
 import AuthContext from "../../contexts/AuthContext";
+import SelectedTimespan from "./SelectedTimespan";
 
 Chartjs.register(...registerables);
 Chartjs.register(zoomPlugin);
@@ -104,22 +102,7 @@ const DetailedView: FC = () => {
         {menuDisplayed && (
           <StyledDiv3>
             <ContentToggler title="Selected Timespan">
-              <>
-                <StyledDiv5>
-                  <StyledButton>1 day</StyledButton>
-                  <StyledButton>1 week</StyledButton>
-                  <StyledButton>1 month</StyledButton>
-                  <StyledButton>1 year</StyledButton>
-                  <StyledButton>All Time</StyledButton>
-                </StyledDiv5>
-                <MinorSeparator>
-                  <span style={{ marginRight: "10px" }}>OR</span>
-                  <input type={"date"} />
-                  <StyledButton2 style={{ marginLeft: "10px" }}>
-                    Update
-                  </StyledButton2>
-                </MinorSeparator>
-              </>
+              <SelectedTimespan graphID={graphID} />
             </ContentToggler>
             <ContentToggler title="Data Displayed">
               <p>Content</p>

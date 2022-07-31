@@ -244,7 +244,11 @@ const AddGraph = ({
                 return {
                   ...dataset,
                   dataName:
-                    dataset.dataName + dataset.deviceID + values.minTimestamp,
+                    dataset.dataName +
+                    "-" +
+                    dataset.deviceID +
+                    "-" +
+                    values.minTimestamp,
                 };
               });
               const finalMinTimestamp =

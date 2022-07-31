@@ -191,13 +191,6 @@ const Dashboard: React.FC = () => {
           { items: dataObj.Items, name: name },
         ]);
       }
-      var delay = 0.3; //seconds
-      var now = new Date();
-      var desiredTime = new Date().setSeconds(now.getSeconds() + delay);
-
-      while (now.getTime() < desiredTime) {
-        now = new Date(); // update the current time
-      }
     }
   };
 
@@ -251,7 +244,7 @@ const Dashboard: React.FC = () => {
     // );
     getArrayFromJson(
       "./lambda-results-inTemp-with-nulls.json",
-      "inTemp-withNullsIALBAN250"
+      "inTemp:withNullsIALBAN250"
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
