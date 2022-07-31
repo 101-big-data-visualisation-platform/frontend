@@ -148,17 +148,16 @@ const DetailedView: FC = () => {
                         if (selectedDashboard === dashboard.name) {
                           return {
                             name: dashboard.name,
-                            allGraphs: [
-                              {
-                                ...dashboard.allGraphs.find(
-                                  (graph) => graph.graphID === graphID
-                                ),
-                                graphType: selectedGraphType,
-                              },
-                              ...dashboard.allGraphs.filter(
-                                (graph) => graph.graphID !== graphID
-                              ),
-                            ] as any,
+                            allGraphs: dashboard.allGraphs.map((graph) => {
+                              if (graph.graphID === graphID) {
+                                return {
+                                  ...graph,
+                                  graphType: selectedGraphType,
+                                };
+                              } else {
+                                return graph;
+                              }
+                            }) as any,
                           };
                         } else {
                           return dashboard;

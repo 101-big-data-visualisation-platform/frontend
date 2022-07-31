@@ -62,31 +62,30 @@ const Dashboard: React.FC = () => {
     items: [];
     name: string;
   };
-  // const getArrayFromJson = async (link: string, name: string) => {
-  //   // const dataObj = await getWeatherData("IALBAN25", 15000000000000);
-  //   const dataArray: [] = await fetch(link, {
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Accept: "application/json",
-  //     },
-  //   }).then((response) => response.json());
-  //   console.log(dataArray);
+  const getArrayFromJson = async (link: string, name: string) => {
+    // const dataObj = await getWeatherData("IALBAN25", 15000000000000);
+    const dataArray: [] = await fetch(link, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    }).then((response) => response.json());
+    console.log(dataArray);
 
-  //   // check if arg name does not match any of the allData names before appending new data to to allData
-  //   if (
-  //     !allData?.find((data) => {
-  //       return data.name === name;
-  //     })
-  //   ) {
-  //     setData((prevState: Data[]) => [
-  //       ...prevState,
-  //       { items: dataArray, name: name },
-  //     ]);
-  //   } else {
-  //     console.log("Object Found");
-  //   }
-  // };
-
+    // check if arg name does not match any of the allData names before appending new data to to allData
+    if (
+      !allData?.find((data) => {
+        return data.name === name;
+      })
+    ) {
+      setData((prevState: Data[]) => [
+        ...prevState,
+        { items: dataArray, name: name },
+      ]);
+    } else {
+      console.log("Object Found");
+    }
+  };
   const getDataFromJsonAndCompress = async (link: string, name: string) => {
     // const dataObj = await getWeatherData("IALBAN25", 15000000000000);
     let dataObj: any = await fetch(link, {
@@ -184,15 +183,20 @@ const Dashboard: React.FC = () => {
     );
     // check if arg name does not match any of the allData names before appending new data to to allData
     if (dataObj) {
-      if (
-        !allData?.find((data) => {
-          return data.name === name;
-        })
-      ) {
+      const alreadyExists =
+        allData?.filter((data) => data.name === name)?.length || -1 > 0;
+      if (!alreadyExists) {
         setData((prevState: Data[]) => [
           ...prevState,
           { items: dataObj.Items, name: name },
         ]);
+      }
+      var delay = 0.3; //seconds
+      var now = new Date();
+      var desiredTime = new Date().setSeconds(now.getSeconds() + delay);
+
+      while (now.getTime() < desiredTime) {
+        now = new Date(); // update the current time
       }
     }
   };
@@ -222,31 +226,35 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  // useEffect(() => {
-  //   getDataFromJson("./lambda-results-full-300.json", "weatherDataIALBAN250");
-  //   getDataFromJson("./tiny-data.json", "tiny-dataIALBAN250");
-  //   getDataFromJsonAndCompress(
-  //     "./lambda-results-full-300.json",
-  //     "inTemp:weatherDataCompressedIALBAN250"
-  //   );
-  //   getDataFromJsonAndCompress(
-  //     "./lambda-results-full-300.json",
-  //     "absBaro:weatherDataCompressedIALBAN250"
-  //   );
-  //   getDataFromJsonAndCompress(
-  //     "./lambda-results-full-300.json",
-  //     "dailyRain:weatherDataCompressedIALBAN250"
-  //   );
-  //   getDataFromJsonAndCompress(
-  //     "./lambda-results-full-300.json",
-  //     "dewPoint:weatherDataCompressedIALBAN250"
-  //   );
-  //   getDataFromJsonAndCompress(
-  //     "./lambda-results-full-300.json",
-  //     "inHumi:weatherDataCompressedIALBAN250"
-  //   );
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  useEffect(() => {
+    // getDataFromJson("./lambda-results-full-300.json", "weatherDataIALBAN250");
+    // getDataFromJson("./tiny-data.json", "tiny-dataIALBAN250");
+    // getDataFromJsonAndCompress(
+    //   "./lambda-results-full-300.json",
+    //   "inTemp:weatherDataCompressedIALBAN250"
+    // );
+    // getDataFromJsonAndCompress(
+    //   "./lambda-results-full-300.json",
+    //   "absBaro:weatherDataCompressedIALBAN250"
+    // );
+    // getDataFromJsonAndCompress(
+    //   "./lambda-results-full-300.json",
+    //   "dailyRain:weatherDataCompressedIALBAN250"
+    // );
+    // getDataFromJsonAndCompress(
+    //   "./lambda-results-full-300.json",
+    //   "dewPoint:weatherDataCompressedIALBAN250"
+    // );
+    // getDataFromJsonAndCompress(
+    //   "./lambda-results-full-300.json",
+    //   "inHumi:weatherDataCompressedIALBAN250"
+    // );
+    getArrayFromJson(
+      "./lambda-results-inTemp-with-nulls.json",
+      "inTemp-withNullsIALBAN250"
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   useEffect(() => {
     allDashboards
       ?.find((dashboard) => dashboard.name === dashboardName)
