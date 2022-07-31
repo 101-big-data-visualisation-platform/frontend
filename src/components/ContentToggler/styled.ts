@@ -8,7 +8,7 @@ export const StyledButton = styled("button")`
 `;
 
 export const StyledUL = styled("ul")`
-  border: 2px solid ${({ theme }) => theme.colors.secondary};
+  border: 1px solid ${({ theme }) => theme.colors.secondary};
   margin-top: 0;
   margin-bottom: 0;
 `;

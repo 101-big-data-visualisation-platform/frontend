@@ -1,3 +1,4 @@
+import { LinearProgress } from "@mui/material";
 import React, { FC, useContext, useState } from "react";
 import { getAWSData, updateUserSettingsAWS } from "../../../api/dashboard";
 import AuthContext from "../../../contexts/AuthContext";
@@ -13,8 +14,10 @@ const SelectedTimespan: FC<{ graphID: string }> = ({ graphID }) => {
   const { allData, setData } = useContext(DataContext);
 
   const [minTimestamp, setMinTimestamp] = useState("");
+  const [updating, setUpdating] = useState(false);
 
   const changeTimespan = async (timespan: string) => {
+    setUpdating(true);
     let timestamp = 0;
     const msInS = 1000;
     const sInMin = 60;
@@ -62,6 +65,7 @@ const SelectedTimespan: FC<{ graphID: string }> = ({ graphID }) => {
                           items: [];
                           name: string;
                         };
+
                         const dataObj: ReturnedDataObjAWS = await getAWSData(
                           dataset.deviceID || "",
                           timestamp,
@@ -107,31 +111,42 @@ const SelectedTimespan: FC<{ graphID: string }> = ({ graphID }) => {
       }) as any
     );
 
-    console.log(dashboardsDataModified);
-
-    updateUserSettingsAWS(user?.username || "", dashboardsDataModified);
+    await updateUserSettingsAWS(user?.username || "", dashboardsDataModified);
     setDashboards(dashboardsDataModified);
+    setUpdating(false);
   };
   return (
     <>
       <StyledDiv5>
-        <StyledButton onClick={() => changeTimespan("day")}>1 day</StyledButton>
-        <StyledButton onClick={() => changeTimespan("week")}>
+        <StyledButton disabled={updating} onClick={() => changeTimespan("day")}>
+          1 day
+        </StyledButton>
+        <StyledButton
+          disabled={updating}
+          onClick={() => changeTimespan("week")}
+        >
           1 week
         </StyledButton>
-        <StyledButton onClick={() => changeTimespan("month")}>
+        <StyledButton
+          disabled={updating}
+          onClick={() => changeTimespan("month")}
+        >
           1 month
         </StyledButton>
-        <StyledButton onClick={() => changeTimespan("year")}>
+        <StyledButton
+          disabled={updating}
+          onClick={() => changeTimespan("year")}
+        >
           1 year
         </StyledButton>
-        <StyledButton onClick={() => changeTimespan("all")}>
+        <StyledButton disabled={updating} onClick={() => changeTimespan("all")}>
           All Time
         </StyledButton>
       </StyledDiv5>
       <MinorSeparator>
         <span style={{ marginRight: "10px" }}>OR</span>
         <input
+          disabled={updating}
           type={"datetime-local"}
           max={`${new Date(Date.now()).toLocaleDateString("sv")} 00:00:00`}
           onChange={(evt) => setMinTimestamp(evt.target.value)}
@@ -145,6 +160,11 @@ const SelectedTimespan: FC<{ graphID: string }> = ({ graphID }) => {
           Update
         </StyledButton2>
       </MinorSeparator>
+      {updating && (
+        <MinorSeparator>
+          <LinearProgress color="inherit" />
+        </MinorSeparator>
+      )}
     </>
   );
 };

@@ -16,32 +16,19 @@ import {
 import { Close, Menu } from "@mui/icons-material";
 import ContentToggler from "../../components/ContentToggler";
 import GraphSelector from "../../components/graphs/GraphSelector";
-import {
-  AREACHART,
-  LINECHART,
-  SCATTERCHART,
-  SINGLESTATISTIC,
-} from "../../constants";
-import { updateUserSettingsAWS } from "../../api/dashboard";
 import AuthContext from "../../contexts/AuthContext";
 import SelectedTimespan from "./SelectedTimespan";
+import GraphSelection from "./GraphSelection";
 
 Chartjs.register(...registerables);
 Chartjs.register(zoomPlugin);
 
 const DetailedView: FC = () => {
   const [searchParams] = useSearchParams();
-  const { user } = useContext(AuthContext);
   const { allData } = useContext(DataContext);
-  const { allDashboards, selectedDashboard, setDashboards } =
-    useContext(GraphsContext);
+  const { allDashboards, selectedDashboard } = useContext(GraphsContext);
   const graphID = searchParams.get("graphID") || "";
   const [menuDisplayed, setMenuDisplayed] = useState(false);
-  const [selectedGraphType, setSelectedGraphType] = useState(
-    allDashboards
-      ?.find((dashboard) => dashboard.name === selectedDashboard)
-      ?.allGraphs?.filter((graph) => graph.graphID === graphID)[0].graphType
-  );
 
   const toggleMenu = () => {
     setMenuDisplayed(!menuDisplayed);
@@ -114,54 +101,7 @@ const DetailedView: FC = () => {
               <p>Content</p>
             </ContentToggler>
             <ContentToggler title="Graph Selection">
-              <>
-                <select
-                  onChange={(evt) => setSelectedGraphType(evt.target.value)}
-                  defaultValue={selectedGraphType}
-                >
-                  <option value={LINECHART}>Line</option>
-                  <option value={AREACHART}>Area</option>
-                  <option value={SCATTERCHART}>Scatter</option>
-                  <option value={SINGLESTATISTIC}>Latest Values</option>
-                </select>
-                <button
-                  onClick={async () => {
-                    const dashboardsModified = allDashboards?.map(
-                      (dashboard) => {
-                        if (selectedDashboard === dashboard.name) {
-                          return {
-                            name: dashboard.name,
-                            allGraphs: dashboard.allGraphs.map((graph) => {
-                              if (graph.graphID === graphID) {
-                                return {
-                                  ...graph,
-                                  graphType: selectedGraphType,
-                                };
-                              } else {
-                                return graph;
-                              }
-                            }) as any,
-                          };
-                        } else {
-                          return dashboard;
-                        }
-                      }
-                    );
-                    try {
-                      await updateUserSettingsAWS(
-                        user?.username || "",
-                        dashboardsModified
-                      );
-                    } catch (err) {
-                      console.log(err);
-                    } finally {
-                      setDashboards(dashboardsModified);
-                    }
-                  }}
-                >
-                  Apply
-                </button>
-              </>
+              <GraphSelection graphID={graphID} />
             </ContentToggler>
             <ContentToggler title="Graph Exporting">
               <p>Content</p>
