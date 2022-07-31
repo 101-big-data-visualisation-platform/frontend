@@ -9,6 +9,7 @@ import {
 } from "../../../constants";
 import AuthContext from "../../../contexts/AuthContext";
 import GraphsContext from "../../../contexts/GraphsContext";
+import { MinorSeparator, StyledButton2 } from "../styled";
 
 const GraphSelection: FC<{ graphID: string }> = ({ graphID }) => {
   const { user } = useContext(AuthContext);
@@ -21,8 +22,9 @@ const GraphSelection: FC<{ graphID: string }> = ({ graphID }) => {
   );
   const [updating, setUpdating] = useState(false);
   return (
-    <>
+    <MinorSeparator>
       <select
+        style={{ marginRight: "10px" }}
         onChange={(evt) => setSelectedGraphType(evt.target.value)}
         defaultValue={selectedGraphType}
       >
@@ -31,7 +33,7 @@ const GraphSelection: FC<{ graphID: string }> = ({ graphID }) => {
         <option value={SCATTERCHART}>Scatter</option>
         <option value={SINGLESTATISTIC}>Latest Values</option>
       </select>
-      <button
+      <StyledButton2
         onClick={async () => {
           setUpdating(true);
           const dashboardsModified = allDashboards?.map((dashboard) => {
@@ -67,13 +69,13 @@ const GraphSelection: FC<{ graphID: string }> = ({ graphID }) => {
         }}
       >
         Apply
-      </button>
+      </StyledButton2>
       {updating && (
-        <div style={{ marginTop: "5px" }}>
+        <MinorSeparator>
           <LinearProgress color="inherit" />
-        </div>
+        </MinorSeparator>
       )}
-    </>
+    </MinorSeparator>
   );
 };
 

@@ -339,7 +339,13 @@ const Dashboard: React.FC = () => {
                     }),
                   }}
                   options={{
-                    graphTitleText: graphData.graphTitleText,
+                    graphTitleText: `${graphData.graphTitleText} since: ${
+                      (graphData?.minTimestamp || 0) > 0
+                        ? new Date(
+                            graphData.minTimestamp || 0
+                          ).toLocaleDateString()
+                        : "all time"
+                    }`,
                     datasetOptions: graphData.datasets.map((dataset) => {
                       return {
                         datasetBackgroundColor: dataset.datasetBackgroundColor,

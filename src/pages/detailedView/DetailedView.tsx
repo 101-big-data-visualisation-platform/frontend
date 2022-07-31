@@ -16,7 +16,6 @@ import {
 import { Close, Menu } from "@mui/icons-material";
 import ContentToggler from "../../components/ContentToggler";
 import GraphSelector from "../../components/graphs/GraphSelector";
-import AuthContext from "../../contexts/AuthContext";
 import SelectedTimespan from "./SelectedTimespan";
 import GraphSelection from "./GraphSelection";
 
@@ -59,7 +58,13 @@ const DetailedView: FC = () => {
                   }),
                 }}
                 options={{
-                  graphTitleText: graphData.graphTitleText,
+                  graphTitleText: `${graphData.graphTitleText} since: ${
+                    (graphData?.minTimestamp || 0) > 0
+                      ? new Date(
+                          graphData.minTimestamp || 0
+                        ).toLocaleDateString()
+                      : "all time"
+                  }`,
                   datasetOptions: graphData.datasets.map((dataset) => {
                     return {
                       datasetBackgroundColor: dataset.datasetBackgroundColor,

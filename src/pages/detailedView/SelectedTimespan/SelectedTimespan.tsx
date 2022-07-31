@@ -5,7 +5,8 @@ import AuthContext from "../../../contexts/AuthContext";
 import DataContext from "../../../contexts/DataContext";
 import GraphsContext from "../../../contexts/GraphsContext";
 import { StyledButton } from "../styled";
-import { MinorSeparator, StyledButton2, StyledDiv5 } from "./styled";
+import { StyledDiv5 } from "./styled";
+import { MinorSeparator, StyledButton2 } from "../styled";
 
 const SelectedTimespan: FC<{ graphID: string }> = ({ graphID }) => {
   const { allDashboards, setDashboards, selectedDashboard } =
