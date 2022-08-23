@@ -11,7 +11,6 @@ import {
   StyledDiv2,
   StyledDiv3,
   StyledLink,
-  ValueH1,
 } from "./styled";
 
 type SingleStatisticProps = {
@@ -48,6 +47,8 @@ const SingleStatistic = ({
   const [deleting, setDeleting] = useState(false);
   const { user } = useContext(AuthContext);
   const { allDashboards, setDashboards } = useContext(GraphsContext);
+  console.log(data);
+
   if (detailed) {
     return (
       <>
@@ -107,13 +108,31 @@ const SingleStatistic = ({
                       )?.label
                     }
                   </p>
-                  <ValueH1>
-                    {parseFloat(
+                  {/* <Arced
+                    value={parseFloat(
                       dataset.items[dataset.items.length - 1]?.[
                         options.dataSelector
                       ]
-                    ).toFixed(2)}
-                  </ValueH1>
+                    )}
+                    min={(() => {
+                      let min = Number.MAX_SAFE_INTEGER;
+                      for (let i = 0; i < dataset.items.length; i++) {
+                        if (dataset.items[i][options.dataSelector] < min) {
+                          min = dataset.items[i][options.dataSelector];
+                        }
+                      }
+                      return min;
+                    })()}
+                    max={(() => {
+                      let max = 0;
+                      for (let i = 0; i < dataset.items.length; i++) {
+                        if (dataset.items[i][options.dataSelector] > max) {
+                          max = dataset.items[i][options.dataSelector];
+                        }
+                      }
+                      return max;
+                    })()}
+                  /> */}
                   <p>
                     {new Date(
                       parseInt(
@@ -191,13 +210,31 @@ const SingleStatistic = ({
                       )?.label
                     }
                   </p>
-                  <ValueH1>
-                    {parseFloat(
+                  {/* <Arced
+                    value={parseFloat(
                       dataset.items[dataset.items.length - 1]?.[
                         options.dataSelector
                       ]
-                    ).toFixed(2)}
-                  </ValueH1>
+                    )}
+                    min={(() => {
+                      let min = Number.MAX_SAFE_INTEGER;
+                      for (let i = 0; i < dataset.items.length; i++) {
+                        if (dataset.items[i][options.dataSelector] < min) {
+                          min = dataset.items[i][options.dataSelector];
+                        }
+                      }
+                      return min;
+                    })()}
+                    max={(() => {
+                      let max = 0;
+                      for (let i = 0; i < dataset.items.length; i++) {
+                        if (dataset.items[i][options.dataSelector] > max) {
+                          max = dataset.items[i][options.dataSelector];
+                        }
+                      }
+                      return max;
+                    })()}
+                  /> */}
                   <p>
                     {new Date(
                       parseInt(

@@ -242,10 +242,10 @@ const Dashboard: React.FC = () => {
     //   "./lambda-results-full-300.json",
     //   "inHumi:weatherDataCompressedIALBAN250"
     // );
-    getArrayFromJson(
-      "./lambda-results-inTemp-with-nulls.json",
-      "inTemp:withNullsIALBAN250"
-    );
+    // getArrayFromJson(
+    //   "./lambda-results-inTemp-with-nulls.json",
+    //   "inTemp:withNullsIALBAN250"
+    // );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
