@@ -10,6 +10,7 @@ import AddGraph from "../../components/Modals/AddGraph/AddGraph";
 import {
   AddGraphButton,
   DeleteButton,
+  GraphsWrapper,
   StyledButton,
   StyledOption,
   StyledSelect,
@@ -318,7 +319,7 @@ const Dashboard: React.FC = () => {
 
       {allData && !updatingData ? (
         <>
-          <div style={{ display: "flex", flexWrap: "wrap" }}>
+          <GraphsWrapper>
             {allDashboards
               ?.find((dashboard) => dashboard.name === dashboardName)
               ?.allGraphs?.map((graphData) => (
@@ -361,7 +362,7 @@ const Dashboard: React.FC = () => {
                   }}
                 />
               ))}
-          </div>
+          </GraphsWrapper>
         </>
       ) : (
         "Loading Data"

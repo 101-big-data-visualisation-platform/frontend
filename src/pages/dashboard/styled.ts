@@ -9,6 +9,13 @@ export const StyledDiv1 = styled("div")`
   border-radius: 15px;
 `;
 
+export const GraphsWrapper = styled("div")`
+  display: grid;
+  margin-top:20px;
+  grid-template-columns: auto auto auto;
+  grid-gap: 10px;
+`;
+
 export const StyledSelect = styled("select")`
   border: 2px solid ${({ theme }) => theme.colors.secondary};
   background: transparent;

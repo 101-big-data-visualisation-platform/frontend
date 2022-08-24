@@ -12,6 +12,8 @@ import {
   StyledDiv3,
   StyledLink,
 } from "./styled";
+import ReactSpeedometer from "react-d3-speedometer";
+import { ThemeContext } from "styled-components";
 
 type SingleStatisticProps = {
   detailed: boolean;
@@ -47,7 +49,7 @@ const SingleStatistic = ({
   const [deleting, setDeleting] = useState(false);
   const { user } = useContext(AuthContext);
   const { allDashboards, setDashboards } = useContext(GraphsContext);
-  console.log(data);
+  const theme = useContext(ThemeContext);
 
   if (detailed) {
     return (
@@ -91,7 +93,7 @@ const SingleStatistic = ({
             <p>latest {options.dataSelector} data</p>
           </div>
 
-          <div style={{ display: "flex", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", width: "100%" }}>
             {data.datasets.map((dataset: { items: any[]; name: string }) => {
               var dateOptions: any = {
                 weekday: "long",
@@ -108,31 +110,42 @@ const SingleStatistic = ({
                       )?.label
                     }
                   </p>
-                  {/* <Arced
+                  <ReactSpeedometer
+                    needleColor={theme.name === "light" ? "black" : "white"}
+                    textColor={theme.name === "light" ? "black" : "white"}
+                    maxSegmentLabels={1}
+                    forceRender={true}
                     value={parseFloat(
                       dataset.items[dataset.items.length - 1]?.[
                         options.dataSelector
                       ]
                     )}
-                    min={(() => {
-                      let min = Number.MAX_SAFE_INTEGER;
-                      for (let i = 0; i < dataset.items.length; i++) {
-                        if (dataset.items[i][options.dataSelector] < min) {
-                          min = dataset.items[i][options.dataSelector];
+                    fluidWidth
+                    minValue={(() => {
+                      let min = dataset?.items[0]?.[options.dataSelector];
+
+                      for (let i = 1; i < dataset.items.length; i++) {
+                        if (dataset?.items[i]?.[options.dataSelector] < min) {
+                          min = parseFloat(
+                            dataset?.items[i]?.[options.dataSelector]
+                          );
                         }
                       }
                       return min;
                     })()}
-                    max={(() => {
-                      let max = 0;
-                      for (let i = 0; i < dataset.items.length; i++) {
-                        if (dataset.items[i][options.dataSelector] > max) {
-                          max = dataset.items[i][options.dataSelector];
+                    maxValue={(() => {
+                      let max = dataset?.items[0]?.[options.dataSelector];
+                      for (let i = 1; i < dataset.items.length; i++) {
+                        if (dataset?.items[i]?.[options.dataSelector] > max) {
+                          max = parseFloat(
+                            dataset?.items[i]?.[options.dataSelector]
+                          );
                         }
                       }
                       return max;
                     })()}
-                  /> */}
+                    segments={20}
+                  />
                   <p>
                     {new Date(
                       parseInt(
@@ -193,7 +206,7 @@ const SingleStatistic = ({
             <p style={{ marginTop: "0" }}>latest {options.dataSelector} data</p>
           </div>
 
-          <div style={{ display: "flex", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", width: "100%" }}>
             {data.datasets.map((dataset: { items: any[]; name: string }) => {
               var dateOptions: any = {
                 weekday: "long",
@@ -210,31 +223,41 @@ const SingleStatistic = ({
                       )?.label
                     }
                   </p>
-                  {/* <Arced
+                  <ReactSpeedometer
+                    needleColor={theme.name === "light" ? "black" : "white"}
+                    textColor={theme.name === "light" ? "black" : "white"}
+                    maxSegmentLabels={1}
+                    forceRender={true}
                     value={parseFloat(
                       dataset.items[dataset.items.length - 1]?.[
                         options.dataSelector
                       ]
                     )}
-                    min={(() => {
-                      let min = Number.MAX_SAFE_INTEGER;
-                      for (let i = 0; i < dataset.items.length; i++) {
-                        if (dataset.items[i][options.dataSelector] < min) {
-                          min = dataset.items[i][options.dataSelector];
+                    minValue={(() => {
+                      let min = dataset?.items[0]?.[options.dataSelector];
+
+                      for (let i = 1; i < dataset.items.length; i++) {
+                        if (dataset?.items[i]?.[options.dataSelector] < min) {
+                          min = parseFloat(
+                            dataset?.items[i]?.[options.dataSelector]
+                          );
                         }
                       }
                       return min;
                     })()}
-                    max={(() => {
-                      let max = 0;
-                      for (let i = 0; i < dataset.items.length; i++) {
-                        if (dataset.items[i][options.dataSelector] > max) {
-                          max = dataset.items[i][options.dataSelector];
+                    maxValue={(() => {
+                      let max = dataset?.items[0]?.[options.dataSelector];
+                      for (let i = 1; i < dataset.items.length; i++) {
+                        if (dataset?.items[i]?.[options.dataSelector] > max) {
+                          max = parseFloat(
+                            dataset?.items[i]?.[options.dataSelector]
+                          );
                         }
                       }
                       return max;
                     })()}
-                  /> */}
+                    segments={20}
+                  />
                   <p>
                     {new Date(
                       parseInt(

@@ -6,7 +6,7 @@ export const StyledDiv1 = styled("div")`
   padding: 10px;
   background: ${({ theme }) => theme.colors.secondary};
   color: ${({ theme }) => theme.colors.primary};
-  margin: 10px;
+  
   flex-grow: 1;
   border-radius: 15px;
   border: 2px solid ${({ theme }) => theme.colors.secondary};
@@ -24,7 +24,7 @@ export const StyledDiv3 = styled("div")`
   padding: 20px;
   background: ${({ theme }) => theme.colors.primary};
   color: ${({ theme }) => theme.colors.secondary};
-  width: 200px;
+  width: fit-content;
   border-radius: 5px;
   flex-grow: 1;
 `;
