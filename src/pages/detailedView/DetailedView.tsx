@@ -18,6 +18,7 @@ import ContentToggler from "../../components/ContentToggler";
 import GraphSelector from "../../components/graphs/GraphSelector";
 import SelectedTimespan from "./SelectedTimespan";
 import GraphSelection from "./GraphSelection";
+import DataDisplayed from "./DataDisplayed";
 
 Chartjs.register(...registerables);
 Chartjs.register(zoomPlugin);
@@ -97,13 +98,7 @@ const DetailedView: FC = () => {
               <SelectedTimespan graphID={graphID} />
             </ContentToggler>
             <ContentToggler title="Data Displayed">
-              <p>Content</p>
-            </ContentToggler>
-            <ContentToggler title="Granularity">
-              <p>Content</p>
-            </ContentToggler>
-            <ContentToggler title="Style Settings">
-              <p>Content</p>
+              <DataDisplayed graphID={graphID} />
             </ContentToggler>
             <ContentToggler title="Graph Selection">
               <GraphSelection graphID={graphID} />

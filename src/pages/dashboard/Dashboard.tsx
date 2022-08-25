@@ -10,6 +10,7 @@ import AddGraph from "../../components/Modals/AddGraph/AddGraph";
 import {
   AddGraphButton,
   DeleteButton,
+  GraphsWrapper,
   StyledButton,
   StyledOption,
   StyledSelect,
@@ -242,10 +243,10 @@ const Dashboard: React.FC = () => {
     //   "./lambda-results-full-300.json",
     //   "inHumi:weatherDataCompressedIALBAN250"
     // );
-    getArrayFromJson(
-      "./lambda-results-inTemp-with-nulls.json",
-      "inTemp:withNullsIALBAN250"
-    );
+    // getArrayFromJson(
+    //   "./lambda-results-inTemp-with-nulls.json",
+    //   "inTemp:withNullsIALBAN250"
+    // );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
@@ -318,7 +319,7 @@ const Dashboard: React.FC = () => {
 
       {allData && !updatingData ? (
         <>
-          <div style={{ display: "flex", flexWrap: "wrap" }}>
+          <GraphsWrapper>
             {allDashboards
               ?.find((dashboard) => dashboard.name === dashboardName)
               ?.allGraphs?.map((graphData) => (
@@ -361,7 +362,7 @@ const Dashboard: React.FC = () => {
                   }}
                 />
               ))}
-          </div>
+          </GraphsWrapper>
         </>
       ) : (
         "Loading Data"

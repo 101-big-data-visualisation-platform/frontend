@@ -9,6 +9,11 @@ export const StyledDiv1 = styled("div")`
   border-radius: 15px;
 `;
 
+export const GraphsWrapper = styled("div")`
+  display: flex;
+  flex-wrap: wrap;
+`;
+
 export const StyledSelect = styled("select")`
   border: 2px solid ${({ theme }) => theme.colors.secondary};
   background: transparent;

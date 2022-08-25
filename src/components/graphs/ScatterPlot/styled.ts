@@ -5,7 +5,7 @@ export const StyledDiv1 = styled("div")`
   width: 500px;
   padding: 10px;
   border: 2px solid ${({ theme }) => theme.colors.secondary};
-  margin: 10px;
+  margin:10px;
   flex-grow: 1;
   border-radius: 15px;
 `;
