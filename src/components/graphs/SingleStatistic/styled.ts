@@ -2,11 +2,15 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 export const StyledDiv1 = styled("div")`
-  width: 500px;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
   padding: 10px;
   background: ${({ theme }) => theme.colors.secondary};
   color: ${({ theme }) => theme.colors.primary};
-  
+  margin:10px;
   flex-grow: 1;
   border-radius: 15px;
   border: 2px solid ${({ theme }) => theme.colors.secondary};
@@ -34,8 +38,8 @@ export const StyledButton = styled("button")`
   color: ${({ theme }) => theme.colors.primary};
   border: 2px solid ${({ theme }) => theme.colors.primary};
   padding: 5px;
+  width: 114px;
   border-radius: 5px;
-  margin-right: 10px;
   &:hover {
     background: ${({ theme }) => theme.colors.primary};
     color: ${({ theme }) => theme.colors.secondary};
@@ -59,9 +63,12 @@ export const StyledButton2 = styled("button")`
 
 export const StyledLink = styled(Link)`
   background: transparent;
+  text-align: center;
   color: ${({ theme }) => theme.colors.primary};
   border: 2px solid ${({ theme }) => theme.colors.primary};
   padding: 5px;
+  margin-bottom: 10px;
+  width: 100px;
   text-decoration: none;
   border-radius: 5px;
   &:hover {
@@ -69,7 +76,6 @@ export const StyledLink = styled(Link)`
     color: ${({ theme }) => theme.colors.secondary};
   }
   font-size: 0.8rem;
-  margin-right: 10px;
 `;
 
 export const ValueH1 = styled("h1")`

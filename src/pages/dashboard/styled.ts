@@ -10,10 +10,8 @@ export const StyledDiv1 = styled("div")`
 `;
 
 export const GraphsWrapper = styled("div")`
-  display: grid;
-  margin-top:20px;
-  grid-template-columns: auto auto auto;
-  grid-gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
 `;
 
 export const StyledSelect = styled("select")`

@@ -54,223 +54,222 @@ const SingleStatistic = ({
   if (detailed) {
     return (
       <>
-        <StyledButton2
-          onClick={async () => {
-            setDeleting(true);
+        <div style={{ width: "100%", textAlign: "center" }}>
+          <h1 style={{ marginBottom: "0", fontSize: "1.5rem" }}>
+            {options.graphTitleText}
+          </h1>
+          <p>latest {options.dataSelector} data</p>
+          <StyledButton2
+            onClick={async () => {
+              setDeleting(true);
 
-            const dashboardsModified = allDashboards?.map((dashboard) => {
-              if (dashboardName === dashboard.name) {
-                return {
-                  name: dashboard.name,
-                  allGraphs: dashboard.allGraphs.filter(
-                    (graph) => graph.graphID !== graphID
-                  ),
-                };
-              } else {
-                return dashboard;
-              }
-            });
+              const dashboardsModified = allDashboards?.map((dashboard) => {
+                if (dashboardName === dashboard.name) {
+                  return {
+                    name: dashboard.name,
+                    allGraphs: dashboard.allGraphs.filter(
+                      (graph) => graph.graphID !== graphID
+                    ),
+                  };
+                } else {
+                  return dashboard;
+                }
+              });
 
-            await updateUserSettingsAWS(
-              user?.username || "",
-              dashboardsModified
-            );
+              await updateUserSettingsAWS(
+                user?.username || "",
+                dashboardsModified
+              );
 
-            setDeleting(false);
-            setDashboards(dashboardsModified);
-            navigate("/dashboard");
-          }}
-          disabled={deleting}
-        >
-          Delete
-        </StyledButton2>
+              setDeleting(false);
+              setDashboards(dashboardsModified);
+              navigate("/dashboard");
+            }}
+            disabled={deleting}
+          >
+            Delete
+          </StyledButton2>
+        </div>
+
         {deleting && (
           <LinearProgress style={{ marginTop: "10px" }} color="inherit" />
         )}
-        <StyledDiv2>
-          <div style={{ width: "300px", textAlign: "center" }}>
-            <h1>{options.graphTitleText}</h1>
-            <p>latest {options.dataSelector} data</p>
-          </div>
+        <div style={{ display: "flex", flexWrap: "wrap" }}>
+          {data.datasets.map((dataset: { items: any[]; name: string }) => {
+            var dateOptions: any = {
+              weekday: "long",
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            };
+            return (
+              <StyledDiv1>
+                <p>
+                  {
+                    options.datasetOptions.find(
+                      (option) => option.dataName === dataset.name
+                    )?.label
+                  }
+                </p>
+                <ReactSpeedometer
+                  height={200}
+                  needleColor={theme.name === "light" ? "white" : "black"}
+                  textColor={theme.name === "light" ? "white" : "black"}
+                  maxSegmentLabels={1}
+                  forceRender={true}
+                  value={parseFloat(
+                    dataset.items[dataset.items.length - 1]?.[
+                      options.dataSelector
+                    ]
+                  )}
+                  minValue={(() => {
+                    let min = dataset?.items[0]?.[options.dataSelector];
 
-          <div style={{ display: "flex", flexWrap: "wrap", width: "100%" }}>
-            {data.datasets.map((dataset: { items: any[]; name: string }) => {
-              var dateOptions: any = {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              };
-              return (
-                <StyledDiv3>
-                  <p>
-                    {
-                      options.datasetOptions.find(
-                        (option) => option.dataName === dataset.name
-                      )?.label
+                    for (let i = 1; i < dataset.items.length; i++) {
+                      if (dataset?.items[i]?.[options.dataSelector] < min) {
+                        min = parseFloat(
+                          dataset?.items[i]?.[options.dataSelector]
+                        );
+                      }
                     }
-                  </p>
-                  <ReactSpeedometer
-                    needleColor={theme.name === "light" ? "black" : "white"}
-                    textColor={theme.name === "light" ? "black" : "white"}
-                    maxSegmentLabels={1}
-                    forceRender={true}
-                    value={parseFloat(
-                      dataset.items[dataset.items.length - 1]?.[
-                        options.dataSelector
-                      ]
-                    )}
-                    fluidWidth
-                    minValue={(() => {
-                      let min = dataset?.items[0]?.[options.dataSelector];
-
-                      for (let i = 1; i < dataset.items.length; i++) {
-                        if (dataset?.items[i]?.[options.dataSelector] < min) {
-                          min = parseFloat(
-                            dataset?.items[i]?.[options.dataSelector]
-                          );
-                        }
+                    return min;
+                  })()}
+                  maxValue={(() => {
+                    let max = dataset?.items[0]?.[options.dataSelector];
+                    for (let i = 1; i < dataset.items.length; i++) {
+                      if (dataset?.items[i]?.[options.dataSelector] > max) {
+                        max = parseFloat(
+                          dataset?.items[i]?.[options.dataSelector]
+                        );
                       }
-                      return min;
-                    })()}
-                    maxValue={(() => {
-                      let max = dataset?.items[0]?.[options.dataSelector];
-                      for (let i = 1; i < dataset.items.length; i++) {
-                        if (dataset?.items[i]?.[options.dataSelector] > max) {
-                          max = parseFloat(
-                            dataset?.items[i]?.[options.dataSelector]
-                          );
-                        }
-                      }
-                      return max;
-                    })()}
-                    segments={20}
-                  />
-                  <p>
-                    {new Date(
-                      parseInt(
-                        dataset.items[dataset.items.length - 1]?.timeStamp
-                      )
-                    ).toLocaleDateString("en-US", dateOptions)}
-                  </p>
-                </StyledDiv3>
-              );
-            })}
-          </div>
-        </StyledDiv2>
+                    }
+                    return max;
+                  })()}
+                  segments={20}
+                />
+                <p>
+                  {new Date(
+                    parseInt(dataset.items[dataset.items.length - 1]?.timeStamp)
+                  ).toLocaleDateString("en-US", dateOptions)}
+                </p>
+              </StyledDiv1>
+            );
+          })}
+        </div>
       </>
     );
   } else {
     return (
-      <StyledDiv1>
-        <StyledLink
-          to={`/detailed?dataSelector=${options.dataSelector}&graphID=${graphID}`}
-        >
-          Detailed View
-        </StyledLink>
-        <StyledButton
-          onClick={async () => {
-            setDeleting(true);
+      <>
+        {data.datasets.map((dataset: { items: any[]; name: string }) => {
+          var dateOptions: any = {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          };
+          return (
+            <StyledDiv1>
+              <div style={{ width: "300px", textAlign: "center" }}>
+                <h1 style={{ marginBottom: "0", fontSize: "1.5rem" }}>
+                  {options.graphTitleText}
+                </h1>
+                <p style={{ marginTop: "0" }}>
+                  latest {options.dataSelector} data
+                </p>
+              </div>
+              <StyledLink
+                to={`/detailed?dataSelector=${options.dataSelector}&graphID=${graphID}`}
+              >
+                Detailed View
+              </StyledLink>
+              <StyledButton
+                onClick={async () => {
+                  setDeleting(true);
 
-            const dashboardsModified = allDashboards?.map((dashboard) => {
-              if (dashboardName === dashboard.name) {
-                return {
-                  name: dashboard.name,
-                  allGraphs: dashboard.allGraphs.filter(
-                    (graph) => graph.graphID !== graphID
-                  ),
-                };
-              } else {
-                return dashboard;
-              }
-            });
-
-            await updateUserSettingsAWS(
-              user?.username || "",
-              dashboardsModified
-            );
-
-            setDeleting(false);
-            setDashboards(dashboardsModified);
-          }}
-          disabled={deleting}
-        >
-          Delete
-        </StyledButton>
-        {deleting && (
-          <LinearProgress style={{ marginTop: "10px" }} color="inherit" />
-        )}
-        <StyledDiv2>
-          <div style={{ width: "300px", textAlign: "center" }}>
-            <h1 style={{ marginBottom: "0" }}>{options.graphTitleText}</h1>
-            <p style={{ marginTop: "0" }}>latest {options.dataSelector} data</p>
-          </div>
-
-          <div style={{ display: "flex", flexWrap: "wrap", width: "100%" }}>
-            {data.datasets.map((dataset: { items: any[]; name: string }) => {
-              var dateOptions: any = {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              };
-              return (
-                <StyledDiv3>
-                  <p>
-                    {
-                      options.datasetOptions.find(
-                        (option) => option.dataName === dataset.name
-                      )?.label
+                  const dashboardsModified = allDashboards?.map((dashboard) => {
+                    if (dashboardName === dashboard.name) {
+                      return {
+                        name: dashboard.name,
+                        allGraphs: dashboard.allGraphs.filter(
+                          (graph) => graph.graphID !== graphID
+                        ),
+                      };
+                    } else {
+                      return dashboard;
                     }
-                  </p>
-                  <ReactSpeedometer
-                    needleColor={theme.name === "light" ? "black" : "white"}
-                    textColor={theme.name === "light" ? "black" : "white"}
-                    maxSegmentLabels={1}
-                    forceRender={true}
-                    value={parseFloat(
-                      dataset.items[dataset.items.length - 1]?.[
-                        options.dataSelector
-                      ]
-                    )}
-                    minValue={(() => {
-                      let min = dataset?.items[0]?.[options.dataSelector];
+                  });
 
-                      for (let i = 1; i < dataset.items.length; i++) {
-                        if (dataset?.items[i]?.[options.dataSelector] < min) {
-                          min = parseFloat(
-                            dataset?.items[i]?.[options.dataSelector]
-                          );
-                        }
-                      }
-                      return min;
-                    })()}
-                    maxValue={(() => {
-                      let max = dataset?.items[0]?.[options.dataSelector];
-                      for (let i = 1; i < dataset.items.length; i++) {
-                        if (dataset?.items[i]?.[options.dataSelector] > max) {
-                          max = parseFloat(
-                            dataset?.items[i]?.[options.dataSelector]
-                          );
-                        }
-                      }
-                      return max;
-                    })()}
-                    segments={20}
-                  />
-                  <p>
-                    {new Date(
-                      parseInt(
-                        dataset.items[dataset.items.length - 1]?.timeStamp
-                      )
-                    ).toLocaleDateString("en-US", dateOptions)}
-                  </p>
-                </StyledDiv3>
-              );
-            })}
-          </div>
-        </StyledDiv2>
-      </StyledDiv1>
+                  await updateUserSettingsAWS(
+                    user?.username || "",
+                    dashboardsModified
+                  );
+
+                  setDeleting(false);
+                  setDashboards(dashboardsModified);
+                }}
+                disabled={deleting}
+              >
+                Delete
+              </StyledButton>
+              {deleting && (
+                <LinearProgress
+                  style={{ marginTop: "10px", width: "300px" }}
+                  color="inherit"
+                />
+              )}
+              <p>
+                {
+                  options.datasetOptions.find(
+                    (option) => option.dataName === dataset.name
+                  )?.label
+                }
+              </p>
+              <ReactSpeedometer
+                height={200}
+                needleColor={theme.name === "light" ? "white" : "black"}
+                textColor={theme.name === "light" ? "white" : "black"}
+                maxSegmentLabels={1}
+                forceRender={true}
+                value={parseFloat(
+                  dataset.items[dataset.items.length - 1]?.[
+                    options.dataSelector
+                  ]
+                )}
+                minValue={(() => {
+                  let min = dataset?.items[0]?.[options.dataSelector];
+
+                  for (let i = 1; i < dataset.items.length; i++) {
+                    if (dataset?.items[i]?.[options.dataSelector] < min) {
+                      min = parseFloat(
+                        dataset?.items[i]?.[options.dataSelector]
+                      );
+                    }
+                  }
+                  return min;
+                })()}
+                maxValue={(() => {
+                  let max = dataset?.items[0]?.[options.dataSelector];
+                  for (let i = 1; i < dataset.items.length; i++) {
+                    if (dataset?.items[i]?.[options.dataSelector] > max) {
+                      max = parseFloat(
+                        dataset?.items[i]?.[options.dataSelector]
+                      );
+                    }
+                  }
+                  return max;
+                })()}
+                segments={20}
+              />
+              <p>
+                {new Date(
+                  parseInt(dataset.items[dataset.items.length - 1]?.timeStamp)
+                ).toLocaleDateString("en-US", dateOptions)}
+              </p>
+            </StyledDiv1>
+          );
+        })}
+      </>
     );
   }
 };
