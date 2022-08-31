@@ -100,16 +100,29 @@ const AddGraph = ({
                 }
               }}
               onSubmit={async (values): Promise<void> => {
-                setDatasets((prevState) => [
-                  ...prevState,
-                  {
-                    dataName: values.dataName,
-                    datasetBackgroundColor: values.datasetBorderColor + "7d",
-                    datasetBorderColor: values.datasetBorderColor,
-                    dataURL: values.dataURL,
-                    deviceID: values.deviceID,
-                  },
-                ]);
+                setDatasets((prevState) => {
+                  let idIsNotUnique = false;
+                  let uniqueID;
+                  do {
+                    uniqueID = uuidv4();
+                    for (let i = 0; i < prevState.length; i++) {
+                      if (prevState[i].ID === uniqueID) {
+                        idIsNotUnique = true;
+                      }
+                    }
+                  } while (idIsNotUnique);
+                  return [
+                    ...prevState,
+                    {
+                      dataName: values.dataName,
+                      datasetBackgroundColor: values.datasetBorderColor + "7d",
+                      datasetBorderColor: values.datasetBorderColor,
+                      dataURL: values.dataURL,
+                      deviceID: values.deviceID,
+                      ID: uniqueID,
+                    },
+                  ];
+                });
               }}
             >
               {({

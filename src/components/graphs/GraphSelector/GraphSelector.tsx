@@ -16,6 +16,9 @@ type GraphSelectorProps = {
     datasets: {
       items: [];
       name: string;
+      ID: string;
+      customMin: number;
+      customMax: number;
     }[];
   };
   options: {

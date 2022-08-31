@@ -55,6 +55,9 @@ const DetailedView: FC = () => {
                           return data.name === dataset.dataName;
                         })?.items || [],
                       name: dataset.dataName,
+                      ID: dataset.ID,
+                      customMax: dataset.singleStatisticMax as any,
+                      customMin: dataset.singleStatisticMin as any,
                     };
                   }),
                 }}

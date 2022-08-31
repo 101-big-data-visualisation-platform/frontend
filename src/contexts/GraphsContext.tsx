@@ -2,10 +2,13 @@ import React, { Dispatch, SetStateAction } from "react";
 
 export type Dataset = {
   dataName: string;
+  ID: string;
   datasetBackgroundColor: string;
   datasetBorderColor: string;
   dataURL?: string;
   deviceID?: string;
+  singleStatisticMin?: number;
+  singleStatisticMax?: number;
 };
 
 export type Graph = {
