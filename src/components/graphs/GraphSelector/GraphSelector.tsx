@@ -5,21 +5,24 @@ import {
   SCATTERCHART,
   SINGLESTATISTIC,
 } from "../../../constants";
+import { GaugeDetails } from "../../../contexts/GraphsContext";
 import AreaGraph from "../AreaGraph";
 import LineGraph from "../LineGraph";
 import ScatterPlot from "../ScatterPlot";
 import SingleStatistic from "../SingleStatistic";
+export type Dataset = {
+  items: [];
+  name: string;
+  ID: string;
+  customMin?: number;
+  customMax?: number;
+  customDetails?: GaugeDetails;
+};
 type GraphSelectorProps = {
   graphType: string;
   detailed: boolean;
   data: {
-    datasets: {
-      items: [];
-      name: string;
-      ID: string;
-      customMin: number;
-      customMax: number;
-    }[];
+    datasets: Dataset[];
   };
   options: {
     graphTitleText: string;
@@ -76,6 +79,7 @@ const GraphSelector = ({
       />
     );
   } else if (graphType === SINGLESTATISTIC) {
+    //console.log(data);
     return (
       <SingleStatistic
         detailed={detailed}

@@ -1,4 +1,21 @@
 import React, { Dispatch, SetStateAction } from "react";
+export type Step = {
+  range: number[];
+  color: string;
+  ID: string;
+};
+export type Threshold = {
+  line: {
+    color: string;
+    width: number;
+  };
+  thickness: number;
+  value: number;
+};
+export type GaugeDetails = {
+  steps: Step[];
+  threshold: Threshold;
+};
 
 export type Dataset = {
   dataName: string;
@@ -9,6 +26,7 @@ export type Dataset = {
   deviceID?: string;
   singleStatisticMin?: number;
   singleStatisticMax?: number;
+  singleStatisticDetails?: GaugeDetails;
 };
 
 export type Graph = {

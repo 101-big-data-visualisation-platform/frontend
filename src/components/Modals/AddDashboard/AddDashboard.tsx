@@ -78,7 +78,7 @@ const AddDashboard = ({
                   updatedDashboards
                 );
               } catch (err) {
-                console.log(err);
+                //console.log(err);
               } finally {
                 setSubmitting(false);
                 setDashboards(updatedDashboards);

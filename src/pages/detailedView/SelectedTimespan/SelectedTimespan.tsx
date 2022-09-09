@@ -42,7 +42,7 @@ const SelectedTimespan: FC<{ graphID: string }> = ({ graphID }) => {
     } else if (timespan === "all") {
       timestamp = 0;
     } else {
-      console.log(timespan);
+      //console.log(timespan);
       timestamp = new Date(timespan).getTime();
     }
 

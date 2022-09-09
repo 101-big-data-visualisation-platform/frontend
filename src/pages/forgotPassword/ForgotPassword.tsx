@@ -53,7 +53,7 @@ const ForgotPassword: React.FC = () => {
           setErrorSubmitting(false);
           try {
             const response = await Auth.forgotPassword(values.username);
-            console.log(response);
+            //console.log(response);
             setSubmitting(false);
             setSubmitted(true);
           } catch {
@@ -169,7 +169,7 @@ const ForgotPassword: React.FC = () => {
               values.code,
               values.password
             );
-            console.log(response);
+            //console.log(response);
             setSubmitting(false);
             setChangeSubmitted(true);
           } catch {

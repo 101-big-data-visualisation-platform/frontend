@@ -309,7 +309,7 @@ const AddGraph = ({
                   dashboardsModified
                 );
               } catch (err) {
-                console.log(err);
+                //console.log(err);
               } finally {
                 setSubmitting(false);
                 setDashboards(dashboardsModified);

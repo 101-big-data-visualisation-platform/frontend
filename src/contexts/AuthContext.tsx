@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction } from "react";
-type UserInfo = {
+export type UserInfo = {
   attributes: {
     email: string;
     email_verified: boolean;

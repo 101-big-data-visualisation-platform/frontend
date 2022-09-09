@@ -43,6 +43,7 @@ const DetailedView: FC = () => {
             ?.allGraphs?.filter((graph) => graph.graphID === graphID)
             .map((graphData) => (
               <GraphSelector
+                key={graphData.graphID}
                 detailed={true}
                 graphType={graphData.graphType}
                 dashboardName={selectedDashboard}
@@ -56,8 +57,9 @@ const DetailedView: FC = () => {
                         })?.items || [],
                       name: dataset.dataName,
                       ID: dataset.ID,
-                      customMax: dataset.singleStatisticMax as any,
-                      customMin: dataset.singleStatisticMin as any,
+                      customMax: dataset.singleStatisticMax,
+                      customMin: dataset.singleStatisticMin,
+                      customDetails: dataset.singleStatisticDetails,
                     };
                   }),
                 }}

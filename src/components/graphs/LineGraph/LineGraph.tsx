@@ -74,30 +74,36 @@ const LineGraph = ({
       timeStamp: string;
     };
     interface IItem {
-      [key: string]: string;
+      [key: string]: string | number;
     }
 
-    console.log(data);
+    //console.log(data);
 
     const processedItems = dataObj.datasets.map(
       (arrayOfItems: { items: []; name: string }) => {
         return {
           items: arrayOfItems.items.map((item: Item) => {
             if (options.graphTitleText === "Tiny Data  since:all time") {
-              console.log(parseInt(item.timeStamp));
-              console.log(typeof item.timeStamp);
+              //console.log(parseInt(item.timeStamp));
+              //console.log(typeof item.timeStamp);
             }
             return {
               x: parseInt(item.timeStamp),
-              y: parseFloat((item as IItem)[options.dataSelector]),
+              y:
+                typeof (item as IItem)[options.dataSelector] === "string"
+                  ? parseFloat((item as IItem)[options.dataSelector] as string)
+                  : ((item as IItem)[options.dataSelector] as number),
             };
           }),
           name: arrayOfItems.name,
         };
       }
     );
+        
     setFinalData({
       datasets: processedItems.map((processedItem) => {
+        //console.log(processedItem.items);
+        
         const relatedGraph = options.datasetOptions.find((dataset) => {
           return dataset.dataName === processedItem.name;
         });

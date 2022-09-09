@@ -71,7 +71,7 @@ const Dashboard: React.FC = () => {
         Accept: "application/json",
       },
     }).then((response) => response.json());
-    console.log(dataArray);
+    //console.log(dataArray);
 
     // check if arg name does not match any of the allData names before appending new data to to allData
     if (
@@ -84,7 +84,7 @@ const Dashboard: React.FC = () => {
         { items: dataArray, name: name },
       ]);
     } else {
-      console.log("Object Found");
+      //console.log("Object Found");
     }
   };
   const getDataFromJsonAndCompress = async (link: string, name: string) => {
@@ -144,7 +144,7 @@ const Dashboard: React.FC = () => {
         { items: dataCompressed, name: name },
       ]);
     } else {
-      console.log("Object Found");
+      //console.log("Object Found");
     }
   };
 
@@ -167,7 +167,7 @@ const Dashboard: React.FC = () => {
         { items: dataObj.items, name: name },
       ]);
     } else {
-      console.log("Object Found");
+      //console.log("Object Found");
     }
   };
 
@@ -200,7 +200,7 @@ const Dashboard: React.FC = () => {
 
     try {
       const dashboardData = await getAWSDashboard(user?.username || "");
-      console.log(dashboardData);
+      //console.log(dashboardData);
       if (typeof dashboardData.items === "string") {
         if (!dashboardName) {
           const dashboardJSON: DashboardType[] = JSON.parse(
@@ -243,10 +243,11 @@ const Dashboard: React.FC = () => {
     //   "./lambda-results-full-300.json",
     //   "inHumi:weatherDataCompressedIALBAN250"
     // );
-    // getArrayFromJson(
-    //   "./lambda-results-inTemp-with-nulls.json",
-    //   "inTemp:withNullsIALBAN250"
-    // );
+    getArrayFromJson("seasonality-breakdown.json", "inTemp-IALBAN25-0");
+    getArrayFromJson(
+      "lambda-results-inTemp-compressed.json",
+      "inTempCompressed-IALBAN25-0"
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
@@ -337,8 +338,9 @@ const Dashboard: React.FC = () => {
                           })?.items || [],
                         name: dataset.dataName,
                         ID: dataset.ID,
-                        customMax: dataset.singleStatisticMax as any,
-                        customMin: dataset.singleStatisticMin as any,
+                        customMax: dataset.singleStatisticMax,
+                        customMin: dataset.singleStatisticMin,
+                        customDetails: dataset.singleStatisticDetails,
                       };
                     }),
                   }}

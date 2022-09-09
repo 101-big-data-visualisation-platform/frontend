@@ -77,15 +77,15 @@ const ScatterPlot = ({
       [key: string]: string;
     }
 
-    console.log(data);
+    //console.log(data);
 
     const processedItems = dataObj.datasets.map(
       (arrayOfItems: { items: []; name: string }) => {
         return {
           items: arrayOfItems.items.map((item: Item) => {
             if (options.graphTitleText === "Tiny Data  since:all time") {
-              console.log(parseInt(item.timeStamp));
-              console.log(typeof item.timeStamp);
+              //console.log(parseInt(item.timeStamp));
+              //console.log(typeof item.timeStamp);
             }
             return {
               x: parseInt(item.timeStamp),
@@ -98,6 +98,7 @@ const ScatterPlot = ({
     );
     setFinalData({
       datasets: processedItems.map((processedItem) => {
+        //console.log(processedItem.items);
         const relatedGraph = options.datasetOptions.find((dataset) => {
           return dataset.dataName === processedItem.name;
         });

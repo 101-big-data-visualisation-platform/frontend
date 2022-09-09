@@ -61,7 +61,7 @@ const GraphSelection: FC<{ graphID: string }> = ({ graphID }) => {
               dashboardsModified
             );
           } catch (err) {
-            console.log(err);
+            //console.log(err);
           } finally {
             setDashboards(dashboardsModified);
             setUpdating(false);
