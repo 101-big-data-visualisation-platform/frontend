@@ -228,6 +228,7 @@ const LineGraph = ({
                   allGraphs: dashboard.allGraphs.filter(
                     (graph) => graph.graphID !== graphID
                   ),
+                  allDailyReports: dashboard.allDailyReports,
                 };
               } else {
                 return dashboard;
@@ -281,6 +282,7 @@ const LineGraph = ({
                   allGraphs: dashboard.allGraphs.filter(
                     (graph) => graph.graphID !== graphID
                   ),
+                  allDailyReports: dashboard.allDailyReports,
                 };
               } else {
                 return dashboard;

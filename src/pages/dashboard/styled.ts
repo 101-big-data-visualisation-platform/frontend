@@ -88,3 +88,63 @@ export const AddGraphButton = styled("button")`
     background: ${({ theme }) => theme.colors.tertiary};
   }
 `;
+
+export const AddDailyReportingButton = styled("button")`
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin-right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid transparent;
+  background: ${({ theme }) => theme.colors.purple100};
+  color: white;
+  &:hover {
+    background: ${({ theme }) => theme.colors.purple100Hover};
+  }
+`;
+
+export const DashboardContentWrapper = styled("div")`
+  padding-top: 50px;
+`;
+
+export const DashboardHeading = styled("h1")`
+  text-decoration: underline;
+`;
+
+export const DailyReportsWrapper = styled("div")`
+  display: flex;
+  flex-wrap: wrap;
+`;
+
+export const DailyReportWrapper = styled("div")`
+  padding: 20px;
+  border: 2px solid ${({ theme }) => theme.colors.secondary};
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  min-width: 300px;
+  margin: 10px;
+  position: relative;
+`;
+
+export const DailyReportBarGauge = styled("div")`
+  height: 20px;
+  width: 100%;
+  padding:2px;
+  background: ${({ theme }) => theme.colors.secondary};
+`;
+
+export const BarGaugeContent = styled("div")`
+  height: 100%;
+  width: 50%;
+  background: green;
+`;
+
+export const DailyReportDelete = styled("button")`
+  position: absolute;
+  top: 10px;
+  left: 10px;
+`;

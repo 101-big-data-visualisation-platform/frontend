@@ -285,6 +285,7 @@ const AddGraph = ({
                 if (dashboardName === dashboard.name) {
                   return {
                     name: dashboard.name,
+                    allDailyReports: dashboard.allDailyReports,
                     allGraphs: [
                       ...dashboard.allGraphs,
                       {

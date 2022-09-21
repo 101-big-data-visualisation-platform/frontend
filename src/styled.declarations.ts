@@ -16,6 +16,8 @@ declare module "styled-components" {
       tertiary: string;
       tertiary2: string;
       tertiary3: string;
+      purple100: string;
+      purple100Hover: string;
     };
   }
 }

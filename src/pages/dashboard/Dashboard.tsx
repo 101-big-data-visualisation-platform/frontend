@@ -8,7 +8,15 @@ import GraphsContext, {
 import AuthContext from "../../contexts/AuthContext";
 import AddGraph from "../../components/Modals/AddGraph/AddGraph";
 import {
+  AddDailyReportingButton,
   AddGraphButton,
+  BarGaugeContent,
+  DailyReportBarGauge,
+  DailyReportDelete,
+  DailyReportsWrapper,
+  DailyReportWrapper,
+  DashboardContentWrapper,
+  DashboardHeading,
   DeleteButton,
   GraphsWrapper,
   StyledButton,
@@ -19,6 +27,7 @@ import AddDashboard from "../../components/Modals/AddDashboard";
 import DeleteDashboard from "../../components/Modals/DeleteDashboard/DeleteDashboard";
 import { CenteredDiv } from "../../components/CenteredDiv";
 import GraphSelector from "../../components/graphs/GraphSelector";
+import AddDailyReport from "../../components/Modals/AddDailyReport";
 
 const Dashboard: React.FC = () => {
   const { allData, setData, updatingData } = useContext(DataContext);
@@ -30,7 +39,7 @@ const Dashboard: React.FC = () => {
     setSelectedDashboard: setDashboardName,
   } = useContext(GraphsContext);
 
-  // MODAL START
+  // MODALS START
   const [openAddGraph, setOpenAddGraph] = useState(false);
 
   const handleOpenAdd = () => setOpenAddGraph(true);
@@ -46,7 +55,12 @@ const Dashboard: React.FC = () => {
   const handleOpenDeleteDash = () => setOpenDeleteDash(true);
   const handleCloseDeleteDash = () => setOpenDeleteDash(false);
 
-  // MODAL END
+  const [openAddDaily, setOpenAddDaily] = useState(false);
+
+  const handleOpenAddDaily = () => setOpenAddDaily(true);
+  const handleCloseAddDaily = () => setOpenAddDaily(false);
+
+  // MODALS END
 
   const [loadingDashboard, setLoadingDashboard] = useState(false);
 
@@ -148,6 +162,25 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  const getDailyReportFromJson = async (link: string, name: string) => {
+    const dataObj: ReturnedDataObj = await fetch(link, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    }).then((response) => response.json());
+    if (
+      !allData?.find((data) => {
+        return data.name === name;
+      })
+    ) {
+      setData((prevState: Data[]) => [
+        ...prevState,
+        { dailyReport: dataObj, name: name },
+      ]);
+    }
+  };
+
   const getDataFromJson = async (link: string, name: string) => {
     // const dataObj = await getWeatherData("IALBAN25", 15000000000000);
     const dataObj: ReturnedDataObj = await fetch(link, {
@@ -156,6 +189,8 @@ const Dashboard: React.FC = () => {
         Accept: "application/json",
       },
     }).then((response) => response.json());
+    console.log(dataObj);
+
     // check if arg name does not match any of the allData names before appending new data to to allData
     if (
       !allData?.find((data) => {
@@ -243,6 +278,10 @@ const Dashboard: React.FC = () => {
     //   "./lambda-results-full-300.json",
     //   "inHumi:weatherDataCompressedIALBAN250"
     // );
+    getDailyReportFromJson(
+      "daily-reporting-updated.json",
+      "dailyReport-weatherData"
+    );
     getArrayFromJson("seasonality-breakdown.json", "inTemp-IALBAN25-0");
     getArrayFromJson(
       "lambda-results-inTemp-compressed.json",
@@ -310,6 +349,9 @@ const Dashboard: React.FC = () => {
           Delete Dashboard
         </DeleteButton>
         <AddGraphButton onClick={handleOpenAdd}>Add Graph</AddGraphButton>
+        <AddDailyReportingButton onClick={handleOpenAddDaily}>
+          Add Daily Reporting
+        </AddDailyReportingButton>
       </div>
       <AddDashboard open={openAddDash} handleClose={handleCloseAddDash} />
       <DeleteDashboard
@@ -317,58 +359,95 @@ const Dashboard: React.FC = () => {
         handleClose={handleCloseDeleteDash}
       />
       <AddGraph open={openAddGraph} handleClose={handleCloseAdd} />
-
+      <AddDailyReport open={openAddDaily} handleClose={handleCloseAddDaily} />
       {allData && !updatingData ? (
-        <>
+        <DashboardContentWrapper>
+          <DashboardHeading>Daily Reporting</DashboardHeading>
+          <DailyReportsWrapper>
+            {Array.from(Array(10).keys()).map((number) => {
+              return (
+                <DailyReportWrapper>
+                  <DailyReportDelete>Delete</DailyReportDelete>
+                  <h4>Daily Report #{number}</h4>
+                  <h1 style={{ color: "green" }}>+50%</h1>
+                  <DailyReportBarGauge>
+                    <BarGaugeContent />
+                  </DailyReportBarGauge>
+                  <p>Rainfall today compared to 7 days ago (Monday)</p>
+
+                  <span style={{ fontSize: "0.7rem" }}>
+                    All daily reports are updated only at 3:00am NZT
+                  </span>
+                </DailyReportWrapper>
+              );
+            })}
+          </DailyReportsWrapper>
+
+          <DashboardHeading>Graphs</DashboardHeading>
           <GraphsWrapper>
-            {allDashboards
-              ?.find((dashboard) => dashboard.name === dashboardName)
-              ?.allGraphs?.map((graphData) => (
-                <GraphSelector
-                  detailed={false}
-                  graphType={graphData.graphType}
-                  dashboardName={dashboardName}
-                  graphID={graphData.graphID}
-                  data={{
-                    datasets: graphData.datasets.map((dataset) => {
-                      return {
-                        items:
-                          allData.find((data) => {
-                            return data.name === dataset.dataName;
-                          })?.items || [],
-                        name: dataset.dataName,
-                        ID: dataset.ID,
-                        customMax: dataset.singleStatisticMax,
-                        customMin: dataset.singleStatisticMin,
-                        customDetails: dataset.singleStatisticDetails,
-                      };
-                    }),
-                  }}
-                  options={{
-                    graphTitleText: `${graphData.graphTitleText} since: ${
-                      (graphData?.minTimestamp || 0) > 0
-                        ? new Date(
-                            graphData.minTimestamp || 0
-                          ).toLocaleDateString()
-                        : "all time"
-                    }`,
-                    datasetOptions: graphData.datasets.map((dataset) => {
-                      return {
-                        datasetBackgroundColor: dataset.datasetBackgroundColor,
-                        datasetBorderColor: dataset.datasetBorderColor,
-                        label: `Device: ${dataset.deviceID}`,
-                        dataName: dataset.dataName,
-                        deviceID: dataset.deviceID || "",
-                      };
-                    }),
-                    decimationSamples: graphData.decimationSamples,
-                    dataSelector: graphData.dataSelector,
-                    minTimestamp: graphData.minTimestamp || 0,
-                  }}
-                />
-              ))}
+            {(allDashboards?.find(
+              (dashboard) => dashboard.name === dashboardName
+            )?.allGraphs?.length || -1) > 0 ? (
+              allDashboards
+                ?.find((dashboard) => dashboard.name === dashboardName)
+                ?.allGraphs?.map((graphData) => (
+                  <GraphSelector
+                    detailed={false}
+                    graphType={graphData.graphType}
+                    dashboardName={dashboardName}
+                    graphID={graphData.graphID}
+                    data={{
+                      datasets: graphData.datasets.map((dataset) => {
+                        return {
+                          items:
+                            allData.find((data) => {
+                              return data.name === dataset.dataName;
+                            })?.items || [],
+                          name: dataset.dataName,
+                          ID: dataset.ID,
+                          customMax: dataset.singleStatisticMax,
+                          customMin: dataset.singleStatisticMin,
+                          customDetails: dataset.singleStatisticDetails,
+                        };
+                      }),
+                    }}
+                    options={{
+                      graphTitleText: `${graphData.graphTitleText} since: ${
+                        (graphData?.minTimestamp || 0) > 0
+                          ? new Date(
+                              graphData.minTimestamp || 0
+                            ).toLocaleDateString()
+                          : "all time"
+                      }`,
+                      datasetOptions: graphData.datasets.map((dataset) => {
+                        return {
+                          datasetBackgroundColor:
+                            dataset.datasetBackgroundColor,
+                          datasetBorderColor: dataset.datasetBorderColor,
+                          label: `Device: ${dataset.deviceID}`,
+                          dataName: dataset.dataName,
+                          deviceID: dataset.deviceID || "",
+                        };
+                      }),
+                      decimationSamples: graphData.decimationSamples,
+                      dataSelector: graphData.dataSelector,
+                      minTimestamp: graphData.minTimestamp || 0,
+                    }}
+                  />
+                ))
+            ) : (
+              <p>
+                You have no graphs present. Create one{" "}
+                <span
+                  style={{ textDecoration: "underline" }}
+                  onClick={handleOpenAdd}
+                >
+                  here!
+                </span>
+              </p>
+            )}
           </GraphsWrapper>
-        </>
+        </DashboardContentWrapper>
       ) : (
         "Loading Data"
       )}
