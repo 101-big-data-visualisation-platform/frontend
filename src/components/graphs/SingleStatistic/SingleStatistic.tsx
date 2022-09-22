@@ -84,6 +84,7 @@ const SingleStatistic = ({
                 if (dashboardName === dashboard.name) {
                   return {
                     name: dashboard.name,
+                    allDailyReports: dashboard.allDailyReports,
                     allGraphs: dashboard.allGraphs.filter(
                       (graph) => graph.graphID !== graphID
                     ),
@@ -487,6 +488,7 @@ const SingleStatisticGauge: FC<{
               if (dashboardName === dashboard.name) {
                 return {
                   name: dashboard.name,
+                  allDailyReports: dashboard.allDailyReports,
                   allGraphs: dashboard.allGraphs.filter(
                     (graph) => graph.graphID !== graphID
                   ),
@@ -663,6 +665,7 @@ const GaugeDetailsInput: FC<{
               if (dashboardName === dashboard.name) {
                 return {
                   name: dashboard.name,
+                  allDailyReports: dashboard.allDailyReports,
                   allGraphs: dashboard.allGraphs.map((graph) => {
                     return {
                       ...graph,
@@ -717,6 +720,7 @@ const GaugeDetailsInput: FC<{
               if (dashboardName === dashboard.name) {
                 return {
                   name: dashboard.name,
+                  allDailyReports: dashboard.allDailyReports,
                   allGraphs: dashboard.allGraphs.map((graph) => {
                     return {
                       ...graph,

@@ -285,6 +285,7 @@ const AddGraph = ({
                 if (dashboardName === dashboard.name) {
                   return {
                     name: dashboard.name,
+                    allDailyReports: dashboard.allDailyReports,
                     allGraphs: [
                       ...dashboard.allGraphs,
                       {
@@ -354,6 +355,9 @@ const AddGraph = ({
                   </span>
                   <input
                     type="datetime-local"
+                    max={`${new Date(Date.now()).toLocaleDateString(
+                      "sv"
+                    )} 00:00:00`}
                     name="minTimestamp"
                     onChange={handleChange}
                     onBlur={handleBlur}

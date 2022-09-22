@@ -1,0 +1,98 @@
+{
+    "oneDay": [
+        {
+            "timeStamp": "1653469517000",
+            "deviceID": "IALBAN25",
+            "absBaro": "01011.4",
+            "dailyRain": "00.3",
+            "dewPoint": "010.1",
+            "inHumi": "076",
+            "inTemp": "016.7",
+            "light": "00.0",
+            "monthlyRain": "042.9",
+            "outHumi": "085",
+            "outTemp": "012.5",
+            "rainRate": "00.0",
+            "relBaro": "0998.8",
+            "UV": "00",
+            "weeklyRain": "02.1",
+            "windChill": "012.5",
+            "windDir": "0199",
+            "windGust": "00.0",
+            "windSpeed": "00.0",
+            "yearlyRain": "0346.5"
+        }
+    ],
+    "oneWeek": [
+        {
+            "timeStamp": "1652951077000",
+            "deviceID": "IALBAN25",
+            "absBaro": "01004.6",
+            "dailyRain": "011.1",
+            "dewPoint": "015.1",
+            "inHumi": "082",
+            "inTemp": "018.5",
+            "light": "00.0",
+            "monthlyRain": "028.5",
+            "outHumi": "097",
+            "outTemp": "015.6",
+            "rainRate": "00.0",
+            "relBaro": "0992.0",
+            "UV": "00",
+            "weeklyRain": "020.1",
+            "windChill": "015.6",
+            "windDir": "0145",
+            "windGust": "00.0",
+            "windSpeed": "00.0",
+            "yearlyRain": "0332.1"
+        }
+    ],
+    "oneMonth": [
+        {
+            "timeStamp": "1652129181000",
+            "deviceID": "IALBAN25",
+            "absBaro": "01008.0",
+            "dailyRain": "02.1",
+            "dewPoint": "012.9",
+            "inHumi": "076",
+            "inTemp": "016.7",
+            "light": "01236.1",
+            "monthlyRain": "08.4",
+            "outHumi": "098",
+            "outTemp": "013.2",
+            "rainRate": "00.0",
+            "relBaro": "0995.4",
+            "UV": "0184",
+            "weeklyRain": "05.4",
+            "windChill": "013.2",
+            "windDir": "0194",
+            "windGust": "00.0",
+            "windSpeed": "00.0",
+            "yearlyRain": "0312.0"
+        }
+    ],
+    "oneYear": [
+        {
+            "timeStamp": "1625127072000",
+            "deviceID": "IALBAN25",
+            "absBaro": "0",
+            "dailyRain": "00.0",
+            "dewPoint": "07.2",
+            "inHumi": "0",
+            "inTemp": "0",
+            "light": "00.0",
+            "monthlyRain": "017.7",
+            "outHumi": "086",
+            "outTemp": "09.4",
+            "rainRate": "00.0",
+            "relBaro": "0",
+            "UV": "00",
+            "weeklyRain": "00.6",
+            "windChill": "09.4",
+            "windDir": "042",
+            "windGust": "00.0",
+            "windSpeed": "00.0",
+            "yearlyRain": "0994.2"
+        }
+    ]
+}

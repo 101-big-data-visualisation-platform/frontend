@@ -12,7 +12,10 @@
         "secondaryHover": "#575757",
         "tertiary": "#0036F6",
         "tertiary2": "#0c36cc",
-        "tertiary3": "#0c2991"
+        "tertiary3": "#0c2991",
+        "purple100": "#7b03fc",
+        "purple100Hover": "#9d42ff"
+
       }
     },
     "dark": {
@@ -27,7 +30,9 @@
         "secondaryHover": "#cfcfcf",
         "tertiary": "#0036F6",
         "tertiary2": "#0c36cc",
-        "tertiary3": "#0c2991"
+        "tertiary3": "#0c2991",
+        "purple100": "#a857ff",
+        "purple100Hover": "#be83fc"
       }
     }
   }

@@ -40,6 +40,7 @@ const GraphSelection: FC<{ graphID: string }> = ({ graphID }) => {
             if (selectedDashboard === dashboard.name) {
               return {
                 name: dashboard.name,
+                allDailyReports: dashboard.allDailyReports,
                 allGraphs: dashboard.allGraphs.map((graph) => {
                   if (graph.graphID === graphID) {
                     return {

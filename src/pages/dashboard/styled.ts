@@ -88,3 +88,33 @@ export const AddGraphButton = styled("button")`
     background: ${({ theme }) => theme.colors.tertiary};
   }
 `;
+
+export const AddDailyReportingButton = styled("button")`
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin-right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid transparent;
+  background: ${({ theme }) => theme.colors.purple100};
+  color: white;
+  &:hover {
+    background: ${({ theme }) => theme.colors.purple100Hover};
+  }
+`;
+
+export const DashboardContentWrapper = styled("div")`
+  padding-top: 50px;
+`;
+
+export const DashboardHeading = styled("h1")`
+  text-decoration: underline;
+`;
+
+export const DailyReportsWrapper = styled("div")`
+  display: flex;
+  flex-wrap: wrap;
+`;
+
+

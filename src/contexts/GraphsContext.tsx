@@ -40,9 +40,36 @@ export type Graph = {
   // Make these properties required once backend is finalized
 };
 
+export type ReportDataset = {
+  ID: string;
+  dataURL?: string;
+  deviceID?: string;
+  dataName: string;
+};
+
+export type DatasetComparison = {
+  ID: string;
+  commonDataset?: ReportDataset;
+  commonDataSelector?: string;
+  datasetA?: ReportDataset;
+  datasetB?: ReportDataset;
+  uniqueSelectorA?: string;
+  uniqueSelectorB?: string;
+  timeToCompareA?: string;
+  timeToCompareB?: string;
+  commonTime?: string;
+};
+
+export type DailyReport = {
+  dailyReportID: string;
+  dailyReportTitle: string;
+  datasetComparisons: DatasetComparison[];
+};
+
 export type Dashboard = {
   name: string;
   allGraphs: Graph[];
+  allDailyReports: DailyReport[];
 };
 
 type GraphsContextType = {
