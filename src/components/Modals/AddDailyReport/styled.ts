@@ -6,10 +6,13 @@ export const ModalDiv = styled("div")`
   padding: 50px;
   min-width: 300px;
   border-radius: 10px;
+  max-height: 100vh;
+  overflow-y: scroll;
 `;
 
 export const ModalDivInner = styled("div")`
   display: flex;
+  flex-direction: column;
   margin-bottom: 30px;
 `;
 

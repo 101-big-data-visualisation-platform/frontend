@@ -355,6 +355,9 @@ const AddGraph = ({
                   </span>
                   <input
                     type="datetime-local"
+                    max={`${new Date(Date.now()).toLocaleDateString(
+                      "sv"
+                    )} 00:00:00`}
                     name="minTimestamp"
                     onChange={handleChange}
                     onBlur={handleBlur}

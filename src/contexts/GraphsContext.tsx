@@ -48,20 +48,21 @@ export type ReportDataset = {
 };
 
 export type DatasetComparison = {
-  commonDataset: ReportDataset;
+  ID: string;
+  commonDataset?: ReportDataset;
   commonDataSelector?: string;
   datasetA?: ReportDataset;
   datasetB?: ReportDataset;
   uniqueSelectorA?: string;
   uniqueSelectorB?: string;
-  timeToCompareA: string;
-  timeToCompareB: string;
+  timeToCompareA?: string;
+  timeToCompareB?: string;
+  commonTime?: string;
 };
 
 export type DailyReport = {
   dailyReportID: string;
   dailyReportTitle: string;
-  datasets: ReportDataset[];
   datasetComparisons: DatasetComparison[];
 };
 

@@ -364,23 +364,25 @@ const Dashboard: React.FC = () => {
         <DashboardContentWrapper>
           <DashboardHeading>Daily Reporting</DashboardHeading>
           <DailyReportsWrapper>
-            {Array.from(Array(10).keys()).map((number) => {
-              return (
-                <DailyReportWrapper>
-                  <DailyReportDelete>Delete</DailyReportDelete>
-                  <h4>Daily Report #{number}</h4>
-                  <h1 style={{ color: "green" }}>+50%</h1>
-                  <DailyReportBarGauge>
-                    <BarGaugeContent />
-                  </DailyReportBarGauge>
-                  <p>Rainfall today compared to 7 days ago (Monday)</p>
-
-                  <span style={{ fontSize: "0.7rem" }}>
-                    All daily reports are updated only at 3:00am NZT
-                  </span>
-                </DailyReportWrapper>
-              );
-            })}
+            {(allDashboards?.find(
+              (dashboard) => dashboard.name === dashboardName
+            )?.allDailyReports?.length || -1) > 0 ? (
+              allDashboards
+                ?.find((dashboard) => dashboard.name === dashboardName)
+                ?.allDailyReports?.map((dailyReport) => {
+                  return <h1>{dailyReport.dailyReportTitle}</h1>;
+                })
+            ) : (
+              <p>
+                You have no daily reports present. Create one{" "}
+                <span
+                  style={{ textDecoration: "underline" }}
+                  onClick={handleOpenAddDaily}
+                >
+                  here!
+                </span>
+              </p>
+            )}
           </DailyReportsWrapper>
 
           <DashboardHeading>Graphs</DashboardHeading>
