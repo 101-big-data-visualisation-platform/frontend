@@ -10,11 +10,7 @@ import AddGraph from "../../components/Modals/AddGraph/AddGraph";
 import {
   AddDailyReportingButton,
   AddGraphButton,
-  BarGaugeContent,
-  DailyReportBarGauge,
-  DailyReportDelete,
   DailyReportsWrapper,
-  DailyReportWrapper,
   DashboardContentWrapper,
   DashboardHeading,
   DeleteButton,
@@ -28,9 +24,12 @@ import DeleteDashboard from "../../components/Modals/DeleteDashboard/DeleteDashb
 import { CenteredDiv } from "../../components/CenteredDiv";
 import GraphSelector from "../../components/graphs/GraphSelector";
 import AddDailyReport from "../../components/Modals/AddDailyReport";
+import DailyReport from "../../components/DailyReport";
+import { ThemeContext } from "styled-components";
 
 const Dashboard: React.FC = () => {
   const { allData, setData, updatingData } = useContext(DataContext);
+  const theme = useContext(ThemeContext);
   const { user } = useContext(AuthContext);
   const {
     allDashboards,
@@ -326,7 +325,17 @@ const Dashboard: React.FC = () => {
   }
   return (
     <Container>
-      <div style={{ display: "flex", alignItems: "center" }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          position: "sticky",
+          top: 0,
+          background: theme.colors.primary,
+          zIndex: 100,
+          padding: "10px 0",
+        }}
+      >
         <StyledSelect
           value={dashboardName}
           onChange={(evt) => {
@@ -370,7 +379,14 @@ const Dashboard: React.FC = () => {
               allDashboards
                 ?.find((dashboard) => dashboard.name === dashboardName)
                 ?.allDailyReports?.map((dailyReport) => {
-                  return <h1>{dailyReport.dailyReportTitle}</h1>;
+                  return (
+                    <DailyReport
+                      dashboardName={dashboardName}
+                      dailyReportID={dailyReport.dailyReportID}
+                      datasetComparisons={dailyReport.datasetComparisons}
+                      dailyReportTitle={dailyReport.dailyReportTitle}
+                    />
+                  );
                 })
             ) : (
               <p>

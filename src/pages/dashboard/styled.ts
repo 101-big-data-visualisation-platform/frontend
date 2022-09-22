@@ -117,34 +117,4 @@ export const DailyReportsWrapper = styled("div")`
   flex-wrap: wrap;
 `;
 
-export const DailyReportWrapper = styled("div")`
-  padding: 20px;
-  border: 2px solid ${({ theme }) => theme.colors.secondary};
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  min-width: 300px;
-  margin: 10px;
-  position: relative;
-`;
 
-export const DailyReportBarGauge = styled("div")`
-  height: 20px;
-  width: 100%;
-  padding:2px;
-  background: ${({ theme }) => theme.colors.secondary};
-`;
-
-export const BarGaugeContent = styled("div")`
-  height: 100%;
-  width: 50%;
-  background: green;
-`;
-
-export const DailyReportDelete = styled("button")`
-  position: absolute;
-  top: 10px;
-  left: 10px;
-`;

@@ -38,7 +38,6 @@ const AddDailyReport = ({
   const {
     allDashboards,
     setDashboards,
-    setSelectedDashboard,
     selectedDashboard: dashboardName,
   } = useContext(GraphsContext);
   return (
@@ -49,7 +48,10 @@ const AddDailyReport = ({
         justifyContent: "center",
       }}
       open={open}
-      onClose={handleClose}
+      onClose={() => {
+        handleClose();
+        setDatasets([]);
+      }}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
@@ -570,6 +572,7 @@ const AddDailyReport = ({
                       ...dashboard.allDailyReports,
                       {
                         ...values,
+                        datasetComparisons: datasets,
                         dailyReportID: uuidString,
                       },
                     ],
@@ -589,6 +592,7 @@ const AddDailyReport = ({
               } finally {
                 setSubmitting(false);
                 setDashboards(dashboardsModified);
+                setDatasets([]);
                 handleClose();
               }
             }}

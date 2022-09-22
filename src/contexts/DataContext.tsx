@@ -1,8 +1,9 @@
 import React, { Dispatch, SetStateAction } from "react";
 
 type Data = {
-  items: [];
+  items?: [];
   name: string;
+  dailyReport: any;
 };
 
 type DataContextType = {
