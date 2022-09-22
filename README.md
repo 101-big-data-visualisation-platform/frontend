@@ -1,5 +1,6 @@
-# Deployed on AWS S3 Bucket via CodePipeline CI/CD from this repository
+# Deployed on AWS S3 Bucket and AWS CloudFront via CodePipeline CI/CD from this repository
 http://101-frontend.s3-website-ap-southeast-2.amazonaws.com/
+https://d3n15oy655fuoe.cloudfront.net
 
 # Getting Started with Create React App
 
